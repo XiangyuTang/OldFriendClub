@@ -1,0 +1,25 @@
+<!--components/activaty-item/activaty-item.wxml-->
+<view class="acitem">
+	<view class="pic">
+		<image class="img" src="../../static/images/banner1.jpg" mode="aspectFill"/>
+	</view>
+	<view class="text">
+		<view class="title">
+			{{item.title}}
+		</view>
+		<view class="info">
+			<view class="block">
+				<van-icon name="clock-o" />
+				<text>{{item.publish_date}}</text>
+			</view>
+			<view class="block">
+				<van-icon name="friends-o" />
+				<text>10/{{item.view_count}}</text>
+			</view>
+			<view class="block">
+				<van-icon name="location-o" />
+				<text>北京-{{item.author}}</text>
+			</view>
+		</view>
+	</view>
+</view>

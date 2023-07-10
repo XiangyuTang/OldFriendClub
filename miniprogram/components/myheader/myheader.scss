@@ -1,0 +1,17 @@
+.header{
+	height: 120rpx;
+	border: 1px solid var(--line);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 20rpx;
+	.logo{
+		height:70rpx;
+		.pic{
+			height: 100%;
+		}
+	}
+	.search{
+
+	}
+}

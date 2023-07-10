@@ -1,0 +1,6 @@
+{
+	"usingComponents": {
+		"mp-tabs": "@miniprogram-component-plus/tabs",
+		"activaty-item":"../../components/activaty-item/activaty-item"
+	}
+}

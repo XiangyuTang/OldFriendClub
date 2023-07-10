@@ -1,0 +1,48 @@
+{
+	"pages": [
+		"pages/home/home",
+		"pages/activaty_page/activaty_page",
+		"pages/list/list",
+		"pages/club/club",
+		"pages/mine/mine"
+	],
+	"window": {
+		"navigationBarBackgroundColor": "#ef851a",
+		"navigationBarTitleText": "聚荟乐享社团",
+		"enablePullDownRefresh": true,
+		"backgroundColor": "#ee8633"
+	},
+	"useExtendedLib": {
+		"weui": true
+	},
+	"style": "v2",
+	"sitemapLocation": "sitemap.json",
+	"lazyCodeLoading": "requiredComponents",
+	"tabBar": {
+		"selectedColor": "#ef851a",
+		"color": "#8a8a8a",
+		"list": [{
+      "pagePath": "pages/home/home",
+			"text": "活动广场",
+			"iconPath": "static/images/icons/park.png",
+			"selectedIconPath": "static/images/icons/park_fill.png"
+    }, {
+      "pagePath": "pages/club/club",
+			"text": "社团",
+			"iconPath": "static/images/icons/club.png",
+			"selectedIconPath": "static/images/icons/club_fill.png"
+    },{
+      "pagePath": "pages/mine/mine",
+			"text": "我的",
+			"iconPath": "static/images/icons/user.png",
+			"selectedIconPath": "static/images/icons/user_fill.png"
+    }]
+	},
+	"usingComponents": {
+		"myheader":"components/myheader/myheader",
+		"myfooter":"components/myfooter/myfooter",
+		"van-button": "vant-weapp/button",
+		"van-icon":"vant-weapp/icon",
+		"van-loading": "vant-weapp/loading/index"
+	}
+}

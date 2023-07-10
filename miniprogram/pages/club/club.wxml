@@ -1,0 +1,16 @@
+<!--pages/club/club.wxml-->
+<myheader></myheader>
+<view class="nav_title">
+  <view class="nav_tab">
+    <view wx:for="{{list}}" class="{{selected==index?'hidden':'show'}}" data-index='{{index}}' bindtap="selected">{{item}}
+      <view class="{{selected==index?'nav_underline':''}}"></view>
+    </view>
+  </view>
+  <!-- tab框显示内容 -->
+  <view class="tab_view" wx:if="{{selected == 0}}" style="height:{{winHeight - 40}}rpx">
+		aaa
+	</view>
+  <view class="tab_view" wx:if="{{selected == 1}}" style="height:{{winHeight - 40}}rpx">
+		bbb
+	</view>
+</view>

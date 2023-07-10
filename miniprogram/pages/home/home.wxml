@@ -1,0 +1,79 @@
+<!--pages/home/home.wxml-->
+<myheader></myheader>
+<view class="banner">
+	<swiper 
+	previous-margin="30rpx" 
+	circular
+	autoplay
+	interval="3000"
+	indicator-dots
+	indicator-active-color="#ef851a"
+	indicator-color="rgba(255,255,255,0.3)">
+		<swiper-item>
+			<image src="/static/images/banner1.jpg" mode="" />
+		</swiper-item>
+		<swiper-item>
+			<image src="/static/images/banner2.jpg" mode="" />
+		</swiper-item>
+		<swiper-item>
+			<image src="/static/images/banner3.jpg" mode="" />
+		</swiper-item>
+		<swiper-item>
+			<image src="/static/images/banner4.png" mode="" />
+		</swiper-item>
+	</swiper>
+</view>
+
+<view class="scrollNav">
+<scroll-view scroll-x>
+	<navigator url="" class="item" wx:for="{{navArr}}" wx:key="index">
+		<view class="pic">
+			<!-- <image src="/static/images/icons/activaty.png" mode="" /> -->
+			<image src="{{item.icon}}" mode="" />
+		</view>
+		<view class="text">
+			{{item.classname}}
+		</view>
+	</navigator>
+</scroll-view>
+</view>
+
+<view class="page">
+	<mp-tabs 
+		tabs="{{tabs}}" 
+		activeTab="{{activeTab}}" 
+		swiperClass="weui-tabs-swiper"
+		bindtabclick="onTabClick"
+		bindchange="onChange"
+		activeClass="tab-bar-title__selected"
+		tab-underline-color="var(--themeColor)"
+		tab-inactive-text-color="var(--grayColor)"
+		tab-active-text-color="var(--themeColor)"
+	>
+		<block wx:for="{{tabs}}" wx:key="title">
+			<view class="tab-content" data-set="{{item}}" slot="tab-content-{{index}}" bind:tap="handleClick" >
+				<view class="content">
+					<view class="box" wx:for="{{activatiesArr}}" wx:key="index">
+						<activaty-item
+						item="{{item}}"
+						>
+						</activaty-item>
+				</view>
+			</view>
+				<!-- <image src="{{item.img}}" mode="widthFix"></image>
+				<view class="item-title">
+					{{item.title2}}
+				</view>
+				<view class="item-desc">
+					{{item.desc}}
+				</view> -->
+			</view>
+		</block>
+	</mp-tabs>
+	<view class="loadout">
+		<van-loading size="24px" wx:if="{{isLoading}}">加载中...</van-loading>
+		<view class="nodata" wx:if="{{finishLoading}}">没有更多数据了～</view>
+	</view>
+</view>
+
+<myfooter></myfooter>

@@ -1,0 +1,21 @@
+.header {
+  height: 120rpx;
+  border: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20rpx;
+}
+
+.header .logo {
+  height: 90rpx;
+}
+
+.search{
+	font-size: 60rpx;
+	color: var(--normalColor);
+}
+
+.header .logo .pic {
+  height: 100%;
+}

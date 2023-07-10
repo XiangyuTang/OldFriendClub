@@ -1,0 +1,12 @@
+<!--components/myfooter/myfooter.wxml-->
+<view class="footer">
+	<view class="row">解释权归ikun科技有限公司所有</view>
+	<view class="row">Copyright © {{year}} 版权所有</view>
+	<view class="row">北京市海淀区清华大学学生创客中心</view>
+</view>
+
+<view class="publishActivaty">
+	<button class="btn" open-type="contact" ></button>
+	<image src="../../static/images/icons/publish-white.png" mode="aspectFill" class="pic"/>
+	<view class="line"></view>
+</view>

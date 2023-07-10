@@ -1,0 +1,94 @@
+.banner {
+  padding-top: 30rpx;
+}
+
+.banner swiper {
+  height: 460rpx;
+}
+
+.banner swiper swiper-item image {
+  width: 690rpx;
+  height: 460rpx;
+  border-radius: 30rpx;
+}
+
+.scrollNav {
+  padding: 30rpx 30rpx;
+}
+
+.scrollNav scroll-view {
+  white-space: nowrap;
+}
+
+.scrollNav scroll-view .item {
+  display: inline-block;
+  padding: 0 25rpx;
+  text-align: center;
+}
+
+.scrollNav scroll-view .item .pic {
+  width: 105rpx;
+  height: 105rpx;
+}
+
+.scrollNav scroll-view .item .pic image {
+  width: 100%;
+  height: 100%;
+}
+
+.scrollNav scroll-view .item .text {
+  font-size: 32rpx;
+  color: var(--globalColor);
+  padding-top: 10rpx;
+}
+
+.scrollNav scroll-view .item:first-child {
+  padding-left: 0;
+}
+
+.scrollNav scroll-view .item:last-child {
+  padding-right: 0;
+}
+
+/*tab npm*/
+.weui-tabs-bar__wrp {
+  border-bottom: 1px solid #eee;
+}
+
+.weui-tabs-swiper {
+  width: 100%;
+  height: 1000rpx;
+}
+
+.tab-content {
+  height: 100rpx;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 30rpx;
+}
+
+.tab-content .content {
+  margin-top: auto;
+}
+
+.weui-tabs-bar__title {
+  margin: 0rpx 120rpx;
+}
+
+.tab-bar-title__selected {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.loadout {
+  text-align: center;
+  padding: 30rpx 0;
+}
+
+.loadout .nodata {
+  font-size: 30rpx;
+  color: #666;
+}
