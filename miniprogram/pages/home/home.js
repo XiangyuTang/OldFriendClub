@@ -12,27 +12,17 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
-		tabs: [],
 		activeTab: 0,
 		navArr:[],
 		activatiesArr:[],
 		isLoading:false,
-		finishLoading:false
+		finishLoading:false,
 	},
 	
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
-		const tabs = [
-      {
-        title: '即将开始',
-      },
-      {
-        title: '往期精彩',
-      }
-    ]
-		this.setData({ tabs })
 		this.getNavData();
 		this.getActivatiesList();
 	},
@@ -91,13 +81,21 @@ Page({
     this.setData({ 
       activeTab: index 
     })
-  },
-
+	},
+	
   onChange(e) {
-    const index = e.detail.index
+		const index = e.detail.index
     this.setData({ 
-      activeTab: index 
-    })
+			activeTab: Number(index), 
+			activatiesArr:[],
+			isLoading:false,
+			finishLoading:false,
+		})
+		wx.showToast({
+      title: `切换到标签 ${index + 1}`,
+      icon: 'none'
+		})
+		this.getActivatiesList();
   },
   handleClick(e) {
     wx.navigateTo({

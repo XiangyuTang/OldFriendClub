@@ -4,6 +4,7 @@
 		"pages/activaty_page/activaty_page",
 		"pages/list/list",
 		"pages/club/club",
+		"pages/earns/earns",
 		"pages/mine/mine"
 	],
 	"window": {
@@ -28,12 +29,17 @@
 			"selectedIconPath": "static/images/icons/park_fill.png"
     }, {
       "pagePath": "pages/club/club",
-			"text": "社团",
+			"text": "活力社团",
 			"iconPath": "static/images/icons/club.png",
 			"selectedIconPath": "static/images/icons/club_fill.png"
     },{
+      "pagePath": "pages/earns/earns",
+			"text": "资金渠道",
+			"iconPath": "static/images/icons/money.png",
+			"selectedIconPath": "static/images/icons/money_fill.png"
+		},{
       "pagePath": "pages/mine/mine",
-			"text": "我的",
+			"text": "个人中心",
 			"iconPath": "static/images/icons/user.png",
 			"selectedIconPath": "static/images/icons/user_fill.png"
     }]
@@ -43,6 +49,8 @@
 		"myfooter":"components/myfooter/myfooter",
 		"van-button": "vant-weapp/button",
 		"van-icon":"vant-weapp/icon",
-		"van-loading": "vant-weapp/loading/index"
+		"van-loading": "vant-weapp/loading/index",
+		"van-tab": "vant-weapp/tab/index",
+  	"van-tabs": "vant-weapp/tabs/index"
 	}
 }

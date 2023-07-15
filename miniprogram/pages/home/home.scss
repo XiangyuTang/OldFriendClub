@@ -39,6 +39,9 @@
 	}
 }
 
+.tab-class{
+	font-size: 32rpx;
+}
 /*tab npm*/
 .weui-tabs-bar__wrp {
 	border-bottom: 1px solid #eee;
@@ -46,11 +49,11 @@
 
 .weui-tabs-swiper {
 	width: 100%;
-	height: 700rpx;
+	height: 120vh;
 }
 
 .tab-content {
-	height: 100rpx;
+	// height: 100rpx;
 	width: 100%;
 	display: flex;
 	justify-content: center;
@@ -60,6 +63,8 @@
 }
 .tab-content .content{
 	margin-top: auto;
+	height: calc(100vh - 200rpx) !important;
+	overflow-y: auto !important;
 }
 .weui-tabs-bar__title {
 	margin: 0rpx 120rpx;

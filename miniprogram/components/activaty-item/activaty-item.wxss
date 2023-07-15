@@ -1,12 +1,15 @@
 .acitem {
   display: flex;
   justify-content: space-between;
-  padding-bottom: 20rpx;
+  padding-top: 20rpx;
+  padding-left: 30rpx;
+  padding-right: 30rpx;
+  border: 1px solid #eee;
 }
 
 .acitem .pic {
   width: 200rpx;
-  height: 150rpx;
+  height: 140rpx;
   margin-right: 10rpx;
 }
 
@@ -16,8 +19,8 @@
 }
 
 .acitem .text {
-  width: 440rpx;
-  height: 150rpx;
+  width: 470rpx;
+  height: 160rpx;
   text-align: justify;
   display: flex;
   flex-direction: column;
@@ -27,7 +30,7 @@
 .acitem .text .title {
   line-height: 1.4em;
   color: var(--globalColor);
-  font-size: 28rpx;
+  font-size: 30rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -41,6 +44,7 @@
   justify-content: space-between;
   font-size: 28rpx;
   color: var(--focusColor);
+  padding-bottom: 6rpx;
 }
 
 .acitem .text .info .block {
@@ -50,6 +54,7 @@
 
 .acitem .text .info .block van-icon {
   color: var(--themeColor);
+  padding-left: 2rpx;
   margin-right: 8rpx;
   margin-top: 10rpx;
   align-items: center;

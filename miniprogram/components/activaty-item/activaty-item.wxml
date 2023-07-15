@@ -1,11 +1,11 @@
 <!--components/activaty-item/activaty-item.wxml-->
-<view class="acitem">
+<navigator url="../../pages/activaty_page/activaty_page" class="acitem">
 	<view class="pic">
 		<image class="img" src="../../static/images/banner1.jpg" mode="aspectFill"/>
 	</view>
 	<view class="text">
 		<view class="title">
-			{{item.title}}
+			{{item.title}} 666填充标题测试填充标题测试填充标题测试
 		</view>
 		<view class="info">
 			<view class="block">
@@ -18,8 +18,8 @@
 			</view>
 			<view class="block">
 				<van-icon name="location-o" />
-				<text>北京-{{item.author}}</text>
+				<text>北京-东城区</text>
 			</view>
 		</view>
 	</view>
-</view>
+</navigator>
