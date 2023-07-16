@@ -21,12 +21,8 @@ Page({
 		tabsArr:['即将开始','往期精彩'],
 		activatiesArr:[],
 		isLoading:false,
-<<<<<<< HEAD
         finishLoading:false,
         isLogin: false
-=======
-		finishLoading:false,
->>>>>>> f4b1d12cb65e47205e1567cfa8377a8267227c24
 	},
 	
 	getUserInfo(event) {
@@ -40,7 +36,6 @@ Page({
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-<<<<<<< HEAD
 	onLoad: async function(option) {
         if (!await LoginBiz.loginSilence(this)) {
             console.log("fail to login")
@@ -55,9 +50,6 @@ Page({
       }
     ]
 		this.setData({ tabs })
-=======
-	onLoad(options) {
->>>>>>> f4b1d12cb65e47205e1567cfa8377a8267227c24
 		this.getNavData();
 		this.getActivatiesList();
 	},
