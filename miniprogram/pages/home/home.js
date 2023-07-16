@@ -1,6 +1,9 @@
 // pages/home/home.js
 import {formatNum,formatTime} from "../../utils/common.js"
 import {listNav,listActivities} from "../../api/apis"
+
+const LoginBiz = require('../../common_biz/login')
+
 Page({
 	onShareAppMessage() {
     return {
@@ -17,13 +20,18 @@ Page({
 		navArr:[],
 		activatiesArr:[],
 		isLoading:false,
-		finishLoading:false
+        finishLoading:false,
+        isLogin: false
 	},
 	
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad(options) {
+	onLoad: async function(option) {
+        if (!await LoginBiz.loginSilence(this)) {
+            console.log("fail to login")
+            return;
+        }
 		const tabs = [
       {
         title: '即将开始',

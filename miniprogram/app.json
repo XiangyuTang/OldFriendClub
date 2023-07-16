@@ -5,7 +5,10 @@
 		"pages/list/list",
 		"pages/club/club",
 		"pages/mine/mine"
-	],
+    ],
+    "requiredPrivateInfos": [
+        "getFuzzyLocation"
+    ],
 	"window": {
 		"navigationBarBackgroundColor": "#ef851a",
 		"navigationBarTitleText": "聚荟乐享社团",
