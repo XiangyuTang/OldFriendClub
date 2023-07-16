@@ -1,16 +1,55 @@
 <!--pages/club/club.wxml-->
 <myheader></myheader>
-<view class="nav_title">
+<view class='notice-bar'>
+	<van-notice-bar
+		left-icon="volume-o" 
+		text="这是一条Ikun公告这是一条Ikun公告这是一条Ikun公告这是一条Ikun公告这是一条Ikun公告"
+		custom-class="inform"
+		mode="closeable"
+	/>
+</view>
+
+<view class="page">
+	<van-tabs 
+	active="{{ activeTab }}" 
+	bind:change="onChange" 
+	swipeable
+	animated
+	color="#f09636"
+	>
+		<block wx:for="{{tabsArr}}" wx:for-item="tabs" wx:key="index">
+			<van-tab title="{{tabs}}">
+				<view class="content">
+					<view class="box" wx:for="{{clubList}}" wx:key="_id">
+						<club-item club="{{item}}"></club-item>
+					</view>
+				</view>
+			</van-tab>
+		</block>
+	</van-tabs>
+	<view class="loadout">
+		<van-loading size="24px" wx:if="{{isLoading}}">加载中...</van-loading>
+		<view class="nodata" wx:if="{{finishLoading}}">没有更多数据了～</view>
+	</view>
+</view>
+
+
+
+
+
+
+
+<!-- <view class="nav_title">
   <view class="nav_tab">
     <view wx:for="{{list}}" class="{{selected==index?'hidden':'show'}}" data-index='{{index}}' bindtap="selected">{{item}}
       <view class="{{selected==index?'nav_underline':''}}"></view>
     </view>
   </view>
-  <!-- tab框显示内容 -->
+  tab框显示内容 
   <view class="tab_view" wx:if="{{selected == 0}}" style="height:{{winHeight - 40}}rpx">
 		aaa
 	</view>
   <view class="tab_view" wx:if="{{selected == 1}}" style="height:{{winHeight - 40}}rpx">
 		bbb
 	</view>
-</view>
+</view>-->

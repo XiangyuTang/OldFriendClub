@@ -1,0 +1,45 @@
+<!--components/club-item/club-item.wxml-->
+<!-- <van-card
+  num="2"
+  tag="标签"
+  price="10.00"
+  desc="描述信息"
+  title="商品标题"
+  thumb="{{ imageURL }}"
+>
+  <view slot="footer">
+    <van-button size="mini">按钮</van-button>
+    <van-button size="mini">按钮</van-button>
+  </view>
+</van-card> -->
+
+<view class="club-item">
+	<view class="pic">
+		<image class="img" src="../../static/images/banner2.jpg" mode="aspectFill"/>
+	</view>
+	<view class="club-info">
+		<view class="club-name">
+			{{club.name}}
+		</view>
+		<view class="club-intro">
+			<view class="club-tag" >
+				<van-tag wx:for="{{club.tags}}"
+				color="#f09637"
+				round 
+				plain
+				type="danger" 
+				size="medium">
+				{{item}}
+				</van-tag>
+				<!-- color="#f09637" -->
+				<!-- <van-tag round type="danger">标签</van-tag> -->
+				<!-- color="#f09637"  -->
+			</view>
+			<view class="club-people">
+				<van-icon name="friends-o" />
+				<text>{{club.people_num}}人</text>
+			</view>
+		</view>
+	</view>
+
+</view>

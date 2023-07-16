@@ -1,4 +1,4 @@
-.acitem {
+.club-item {
   display: flex;
   justify-content: space-between;
   padding-top: 20rpx;
@@ -7,18 +7,18 @@
   border: 1px solid #eee;
 }
 
-.acitem .pic {
+.club-item .pic {
   width: 200rpx;
   height: 140rpx;
   margin-right: 10rpx;
 }
 
-.acitem .pic .img {
+.club-item .pic .img {
   width: 100%;
   height: 100%;
 }
 
-.acitem .text {
+.club-item .club-info {
   width: 470rpx;
   height: 160rpx;
   text-align: justify;
@@ -27,7 +27,7 @@
   justify-content: space-between;
 }
 
-.acitem .text .title {
+.club-item .club-info .club-name {
   line-height: 1.4em;
   color: var(--globalColor);
   font-size: 30rpx;
@@ -39,7 +39,7 @@
   -webkit-box-orient: vertical;
 }
 
-.acitem .text .info {
+.club-item .club-info .club-intro {
   display: flex;
   justify-content: space-between;
   font-size: 28rpx;
@@ -47,12 +47,22 @@
   padding-bottom: 6rpx;
 }
 
-.acitem .text .info .block {
+.club-item .club-info .club-intro .club-tag {
   display: flex;
   align-items: center;
 }
 
-.acitem .text .info .block van-icon {
+.club-item .club-info .club-intro .club-tag van-tag {
+  padding-right: 4rpx;
+  padding-bottom: 10rpx;
+}
+
+.club-item .club-info .club-intro .club-people {
+  display: flex;
+  align-items: center;
+}
+
+.club-item .club-info .club-intro .club-people van-icon {
   color: var(--themeColor);
   padding-left: 2rpx;
   margin-right: 8rpx;

@@ -1,10 +1,13 @@
-// components/myheader/myheader.js
+// components/club-item/club-item.js
 Component({
 	/**
 	 * 组件的属性列表
 	 */
 	properties: {
-
+		club:{
+			type:Object,
+			value:{}
+		}
 	},
 
 	/**
@@ -18,10 +21,6 @@ Component({
 	 * 组件的方法列表
 	 */
 	methods: {
-		callus(){
-			wx.makePhoneCall({
-				phoneNumber: '13872601314',
-			})
-		}
+
 	}
 })

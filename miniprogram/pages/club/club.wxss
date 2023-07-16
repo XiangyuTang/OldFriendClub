@@ -1,34 +1,12 @@
-/* pages/club/club.wxss */
-/* tab切换 方法二 */
-.nav_tab{
-  width:100%;
-  height:100rpx;
-  display:flex;
-  flex-direction:row;
+.inform {
+  font-size: 30rpx !important;
 }
-.show{
-  line-height:100rpx;
-  text-align:center;
-  flex:1;
-  color:var(--grayColor);
-  font-size:40rpx;
-  opacity: 0.8;
+
+.van-tab__title {
+  font-size: 35rpx;
 }
-.hidden{
-  line-height:100rpx;
-  text-align:center;
-  color:var(--themeColor);
-  flex:1;
-  font-size:40rpx;
-}
-.nav_underline{
-	background:var(--themeColor);
-  width:100rpx;
-  height:6rpx;
-  margin-top:-5rpx;
-  margin-left:135rpx;
-  border-radius:8rpx;
-}
-.tab_view{
-  width:100%;
+
+.van-tab--active .van-tab__title {
+  font-weight: 500;
+  color: #f09637;
 }

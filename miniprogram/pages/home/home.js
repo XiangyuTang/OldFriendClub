@@ -15,18 +15,32 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
-		tabs: [],
+		showPublishActivatyWindow:false,
 		activeTab: 0,
 		navArr:[],
+		tabsArr:['即将开始','往期精彩'],
 		activatiesArr:[],
 		isLoading:false,
+<<<<<<< HEAD
         finishLoading:false,
         isLogin: false
+=======
+		finishLoading:false,
+>>>>>>> f4b1d12cb65e47205e1567cfa8377a8267227c24
 	},
 	
+	getUserInfo(event) {
+    console.log(event.detail);
+  },
+
+  onClose() {
+    this.setData({ close: false });
+  },
+
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
+<<<<<<< HEAD
 	onLoad: async function(option) {
         if (!await LoginBiz.loginSilence(this)) {
             console.log("fail to login")
@@ -41,6 +55,9 @@ Page({
       }
     ]
 		this.setData({ tabs })
+=======
+	onLoad(options) {
+>>>>>>> f4b1d12cb65e47205e1567cfa8377a8267227c24
 		this.getNavData();
 		this.getActivatiesList();
 	},
@@ -50,17 +67,7 @@ Page({
 			console.log(res);
 			this.setData({navArr: res.data});
 		})
-		// wx.request({
-		// 	url: 'https://tea.qingnian8.com/nav/get',
-		// 	header:{
-		// 		"Content-Type":"application/json"
-		// 	},
-		// 	method:"POST",
-		// 	success:res=>{
-		// 		console.log(res);
-		// 		this.setData({navArr: res.data.data});
-		// 	}
-		// })
+		
 	},
 	//获取活动列表
 	getActivatiesList(size=0){
@@ -99,13 +106,21 @@ Page({
     this.setData({ 
       activeTab: index 
     })
-  },
-
+	},
+	
   onChange(e) {
-    const index = e.detail.index
+		const index = e.detail.index
     this.setData({ 
-      activeTab: index 
-    })
+			activeTab: Number(index), 
+			activatiesArr:[],
+			isLoading:false,
+			finishLoading:false,
+		})
+		wx.showToast({
+      title: `切换到标签 ${index + 1}`,
+      icon: 'none'
+		})
+		this.getActivatiesList();
   },
   handleClick(e) {
     wx.navigateTo({

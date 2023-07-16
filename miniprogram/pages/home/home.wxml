@@ -28,52 +28,53 @@
 <scroll-view scroll-x>
 	<navigator url="" class="item" wx:for="{{navArr}}" wx:key="index">
 		<view class="pic">
-			<!-- <image src="/static/images/icons/activaty.png" mode="" /> -->
-			<image src="{{item.icon}}" mode="" />
+			<image src="/static/images/icons/activaty.png" mode="" />
+			<!-- <image src="{{item.icon}}" mode="" /> -->
 		</view>
 		<view class="text">
-			{{item.classname}}
+			活动{{index+1}}
+			<!-- {{item.classname}} -->
 		</view>
 	</navigator>
 </scroll-view>
 </view>
 
 <view class="page">
-	<mp-tabs 
-		tabs="{{tabs}}" 
-		activeTab="{{activeTab}}" 
-		swiperClass="weui-tabs-swiper"
-		bindtabclick="onTabClick"
-		bindchange="onChange"
-		activeClass="tab-bar-title__selected"
-		tab-underline-color="var(--themeColor)"
-		tab-inactive-text-color="var(--grayColor)"
-		tab-active-text-color="var(--themeColor)"
+	<van-tabs 
+	active="{{ activeTab }}" 
+	bind:change="onChange" 
+	swipeable
+	animated
+	color="#f09636"
 	>
-		<block wx:for="{{tabs}}" wx:key="title">
-			<view class="tab-content" data-set="{{item}}" slot="tab-content-{{index}}" bind:tap="handleClick" >
+		<block wx:for="{{tabsArr}}" wx:for-item="tabs" wx:key="index">
+			<van-tab title="{{tabs}}">
 				<view class="content">
 					<view class="box" wx:for="{{activatiesArr}}" wx:key="index">
-						<activaty-item
-						item="{{item}}"
-						>
-						</activaty-item>
+						<activaty-item item="{{item}}"></activaty-item>
+					</view>
 				</view>
-			</view>
-				<!-- <image src="{{item.img}}" mode="widthFix"></image>
-				<view class="item-title">
-					{{item.title2}}
-				</view>
-				<view class="item-desc">
-					{{item.desc}}
-				</view> -->
-			</view>
+			</van-tab>
 		</block>
-	</mp-tabs>
+	</van-tabs>
 	<view class="loadout">
 		<van-loading size="24px" wx:if="{{isLoading}}">加载中...</van-loading>
 		<view class="nodata" wx:if="{{finishLoading}}">没有更多数据了～</view>
 	</view>
 </view>
+
+<!-- 发布活动弹出框 -->
+<!-- <van-dialog
+  use-slot
+  title="标题"
+  show="{{ showPublishActivatyWindow }}"
+  show-cancel-button
+  confirm-button-open-type="getUserInfo"
+  bind:close="onClose"
+  bind:getuserinfo="getUserInfo"
+>
+  <image src="https://img.yzcdn.cn/1.jpg" />
+</van-dialog> -->
+
 
 <myfooter></myfooter>
