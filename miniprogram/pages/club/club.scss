@@ -1,0 +1,12 @@
+.inform{
+	font-size: 30rpx !important;
+}
+.van-tab__title{
+	font-size: 35rpx;
+}
+.van-tab--active{
+	.van-tab__title{
+		font-weight: 500;
+		color: #f09637;
+	}
+}

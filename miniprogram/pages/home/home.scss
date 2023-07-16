@@ -38,41 +38,15 @@
 		.item:last-child{padding-right: 0;}
 	}
 }
-
-.tab-class{
-	font-size: 32rpx;
+//vant tabs
+.van-tab__title{
+	font-size: 35rpx;
 }
-/*tab npm*/
-.weui-tabs-bar__wrp {
-	border-bottom: 1px solid #eee;
-}
-
-.weui-tabs-swiper {
-	width: 100%;
-	height: 120vh;
-}
-
-.tab-content {
-	// height: 100rpx;
-	width: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	box-sizing: border-box;
-	padding: 30rpx;
-}
-.tab-content .content{
-	margin-top: auto;
-	height: calc(100vh - 200rpx) !important;
-	overflow-y: auto !important;
-}
-.weui-tabs-bar__title {
-	margin: 0rpx 120rpx;
-}
-
-.tab-bar-title__selected {
-	font-size: 20px;
-	font-weight: bold;
+.van-tab--active{
+	.van-tab__title{
+		font-weight: 500;
+		color: #f09637;
+	}
 }
 
 .loadout{

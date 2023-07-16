@@ -47,19 +47,34 @@
 	animated
 	color="#f09636"
 	>
-		<van-tab title="即将开始">
-			<view class="content">
-				<view class="box" wx:for="{{activatiesArr}}" wx:key="index">
-					<activaty-item item="{{item}}"></activaty-item>
+		<block wx:for="{{tabsArr}}" wx:for-item="tabs" wx:key="index">
+			<van-tab title="{{tabs}}">
+				<view class="content">
+					<view class="box" wx:for="{{activatiesArr}}" wx:key="index">
+						<activaty-item item="{{item}}"></activaty-item>
+					</view>
 				</view>
-			</view>
-		</van-tab>
-		<van-tab title="往期精彩">往期精彩</van-tab>
-</van-tabs>
+			</van-tab>
+		</block>
+	</van-tabs>
 	<view class="loadout">
 		<van-loading size="24px" wx:if="{{isLoading}}">加载中...</van-loading>
 		<view class="nodata" wx:if="{{finishLoading}}">没有更多数据了～</view>
 	</view>
 </view>
+
+<!-- 发布活动弹出框 -->
+<!-- <van-dialog
+  use-slot
+  title="标题"
+  show="{{ showPublishActivatyWindow }}"
+  show-cancel-button
+  confirm-button-open-type="getUserInfo"
+  bind:close="onClose"
+  bind:getuserinfo="getUserInfo"
+>
+  <image src="https://img.yzcdn.cn/1.jpg" />
+</van-dialog> -->
+
 
 <myfooter></myfooter>

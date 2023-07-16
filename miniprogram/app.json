@@ -34,7 +34,7 @@
 			"selectedIconPath": "static/images/icons/club_fill.png"
     },{
       "pagePath": "pages/earns/earns",
-			"text": "资金渠道",
+			"text": "享赚资金",
 			"iconPath": "static/images/icons/money.png",
 			"selectedIconPath": "static/images/icons/money_fill.png"
 		},{

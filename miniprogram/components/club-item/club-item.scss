@@ -1,0 +1,63 @@
+.club-item{
+	display:flex;
+	justify-content: space-between;
+	padding-top: 20rpx;
+	padding-left: 30rpx;
+	padding-right: 30rpx;
+	border: 1px solid #eee;
+	.pic{
+		width: 200rpx;
+		height: 140rpx;
+		margin-right: 10rpx;
+		.img{
+			width: 100%;
+			height: 100%;
+		}
+	}
+	.club-info{
+		width: 470rpx;
+		height: 160rpx;
+		text-align: justify;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		.club-name{
+			line-height: 1.4em;
+			color: var(--globalColor);
+			font-size: 30rpx;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			line-clamp: 2;
+			-webkit-box-orient: vertical;
+		}
+		.club-intro{
+			display: flex;
+			justify-content: space-between;
+			font-size: 28rpx;
+			color: var(--focusColor);
+			padding-bottom: 6rpx;
+			.club-tag{
+				display: flex;
+				align-items: center;
+				van-tag{
+					padding-right: 4rpx;
+					padding-bottom: 10rpx;
+				}
+			}
+			.club-people{
+				display: flex;
+				align-items: center;
+				van-icon{
+					color: var(--themeColor);
+					padding-left: 2rpx;
+					margin-right: 8rpx;
+					margin-top: 10rpx;
+					align-items: center;
+					font-size: 35rpx;
+				}
+			}
+		}
+	}
+}

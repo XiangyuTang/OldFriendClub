@@ -12,13 +12,23 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
+		showPublishActivatyWindow:false,
 		activeTab: 0,
 		navArr:[],
+		tabsArr:['即将开始','往期精彩'],
 		activatiesArr:[],
 		isLoading:false,
 		finishLoading:false,
 	},
 	
+	getUserInfo(event) {
+    console.log(event.detail);
+  },
+
+  onClose() {
+    this.setData({ close: false });
+  },
+
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
@@ -32,17 +42,7 @@ Page({
 			console.log(res);
 			this.setData({navArr: res.data});
 		})
-		// wx.request({
-		// 	url: 'https://tea.qingnian8.com/nav/get',
-		// 	header:{
-		// 		"Content-Type":"application/json"
-		// 	},
-		// 	method:"POST",
-		// 	success:res=>{
-		// 		console.log(res);
-		// 		this.setData({navArr: res.data.data});
-		// 	}
-		// })
+		
 	},
 	//获取活动列表
 	getActivatiesList(size=0){
