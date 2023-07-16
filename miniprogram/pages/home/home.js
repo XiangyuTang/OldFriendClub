@@ -41,15 +41,6 @@ Page({
             console.log("fail to login")
             return;
         }
-		const tabs = [
-      {
-        title: '即将开始',
-      },
-      {
-        title: '往期精彩',
-      }
-    ]
-		this.setData({ tabs })
 		this.getNavData();
 		this.getActivatiesList();
 	},
