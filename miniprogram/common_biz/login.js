@@ -25,30 +25,16 @@ class LoginBiz {
         utilsCache.set(constants.CACHE_TOKEN, token, constants.CACHE_TOKEN_EXPIRE);
     }
 
-    // 获取session_key
-    static getSessionKey() {
-        let session_key = utilsCache.get(constants.SESSION_KEY);
-        return session_key || null;
-    }
-
-    // 设置session_key
-    static setSessionKey(session_key) {
-        if (!session_key) return;
-        utilsCache.set(constants.SESSION_KEY, session_key, constants.SESSION_KEY_EXPIRE);
-    }
-
     // 是否登录 
     static isLogin() {
-        let session_key = LoginBiz.getSessionKey();
         let token = LoginBiz.getToken();
-        return (session_key.length > 0 && token.length > 0) ? true : false;
+        return (token.length > 0) ? true : false;
     }
 
     // 登录判断及处理
     static async loginCheck(that = null) {
-        let session_key = utilsCache.get(constants.SESSION_KEY);
         let token = utilsCache.get(constants.CACHE_TOKEN)
-        if (session_key && token) {
+        if (token) {
             if (that)
                 that.setData({
                     isLogin: true
@@ -80,7 +66,6 @@ class LoginBiz {
 
     // 清除登录缓存
     static clearToken() {
-        utilsCache.remove(constants.SESSION_KEY);
         utilsCache.remove(constants.CACHE_TOKEN)
     }
 }
