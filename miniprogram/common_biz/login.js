@@ -60,12 +60,10 @@ class LoginBiz {
             });
         }
 
-        let res = await serverBiz.code2Session().then(result => {
+        let res = await serverBiz.serverLogin().then(result => {
             LoginBiz.clearToken();
             if (result && utilsCommon.isDefined(result.data) && result.data &&
-                utilsCommon.isDefined(result.data.session_key) && result.data.session_key &&
                 utilsCommon.isDefined(result.data.token) && result.data.token) {
-                LoginBiz.setSessionKey(result.data.session_key)
                 LoginBiz.setToken(result.data.token);
                 if (that) that.setData({
                     isLogin: true
