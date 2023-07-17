@@ -2,7 +2,7 @@
 import {formatNum,formatTime} from "../../utils/common.js"
 import {listNav,listActivities} from "../../api/apis"
 
-const LoginBiz = require('../../common_biz/login')
+const LoginBiz = require('../../common_biz/login.js')
 
 Page({
 	onShareAppMessage() {
@@ -21,8 +21,8 @@ Page({
 		tabsArr:['即将开始','往期精彩'],
 		activatiesArr:[],
 		isLoading:false,
-        finishLoading:false,
-        isLogin: false
+		finishLoading:false,
+		isLogin: false
 	},
 	
 	getUserInfo(event) {
