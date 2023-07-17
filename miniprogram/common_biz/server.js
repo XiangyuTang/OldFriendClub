@@ -1,6 +1,6 @@
 const host = 'http://124.220.84.200'
 const port = '5455'
-const code2SessionInterface = '/wxApi/code2Session'
+const code2SessionInterface = '/wxApi/miniProgram/login'
 
 function getFuzzyLocation() {
     wx.getSetting({
