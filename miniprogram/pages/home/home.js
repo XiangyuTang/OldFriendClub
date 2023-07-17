@@ -42,6 +42,7 @@ Page({
 			console.log(res);
 			this.setData({navArr: res.data});
 		})
+
 		
 	},
 	//获取活动列表
