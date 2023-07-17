@@ -26,14 +26,17 @@
 
 <view class="scrollNav">
 <scroll-view scroll-x>
-	<navigator url="" class="item" wx:for="{{navArr}}" wx:key="index">
+	<navigator 
+	url="" 
+	class="item" 
+	wx:for="{{navArr}}" wx:key="index" 
+	bindtap="onClickNavi">
 		<view class="pic">
-			<image src="/static/images/icons/activaty.png" mode="" />
-			<!-- <image src="{{item.icon}}" mode="" /> -->
+			<!-- <image src="/static/images/icons/activaty.png" mode="" /> -->
+			<image src="{{item.pic_icon}}" mode="" />
 		</view>
 		<view class="text">
-			活动{{index+1}}
-			<!-- {{item.classname}} -->
+			{{item.name}}
 		</view>
 	</navigator>
 </scroll-view>

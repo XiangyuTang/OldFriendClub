@@ -27,8 +27,9 @@
 }
 
 .scrollNav scroll-view .item .pic {
-  width: 105rpx;
-  height: 105rpx;
+  width: 100rpx;
+  height: 100rpx;
+  margin-left: 18rpx;
 }
 
 .scrollNav scroll-view .item .pic image {

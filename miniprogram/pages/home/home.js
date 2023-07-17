@@ -1,7 +1,7 @@
 // pages/home/home.js
 import {formatNum,formatTime} from "../../utils/common.js"
 import {listNav,listActivities} from "../../api/apis"
-
+const db = wx.cloud.database()
 const LoginBiz = require('../../common_biz/login.js')
 
 Page({
@@ -37,21 +37,37 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad: async function(option) {
-        if (!await LoginBiz.loginSilence(this)) {
-            console.log("fail to login")
-            return;
-        }
-		this.getNavData();
+		if (!await LoginBiz.loginSilence(this)) {
+				console.log("fail to login")
+				return;
+		}
+		await this.getNavData();
 		this.getActivatiesList();
 	},
 	//获取导航数据
 	getNavData(){
-		listNav().then(res=>{
+		// listNav().then(res=>{
+		// 	console.log(res);
+		// 	this.setData({navArr: res.data});
+		// })
+		db.collection("navi_item").get().then(res=>{
 			console.log(res);
-			this.setData({navArr: res.data});
+			this.setData({
+				navArr: res.data
+			})
+			console.log("navArr:",this.data.navArr);
+		}).catch(err=>{
+			console.log(err);
 		})
-
 		
+	},
+	//点击导航栏
+	onClickNavi(){
+		wx.showToast({
+			title: '敬请期待!',
+			icon: 'success',
+  		duration: 800
+		})
 	},
 	//获取活动列表
 	getActivatiesList(size=0){

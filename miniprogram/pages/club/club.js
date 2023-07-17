@@ -24,12 +24,12 @@ Page({
 	getData(){
 		db.collection("community").get().then(res=>{
 			console.log(res);
-				this.setData({
-					clubList:res.data
-				})
-				console.log("clubList:",clubList);
+			this.setData({
+				clubList:res.data
+			})
+			console.log("clubList:",this.data.clubList);
 		}).catch(err=>{
-			
+			console.log(err);
 		})
 		
 	},
