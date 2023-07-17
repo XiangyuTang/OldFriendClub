@@ -1,6 +1,9 @@
 // pages/home/home.js
 import {formatNum,formatTime} from "../../utils/common.js"
 import {listNav,listActivities} from "../../api/apis"
+
+const LoginBiz = require('../../common_biz/login')
+
 Page({
 	onShareAppMessage() {
     return {
@@ -18,7 +21,8 @@ Page({
 		tabsArr:['即将开始','往期精彩'],
 		activatiesArr:[],
 		isLoading:false,
-		finishLoading:false,
+        finishLoading:false,
+        isLogin: false
 	},
 	
 	getUserInfo(event) {
@@ -32,7 +36,11 @@ Page({
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad(options) {
+	onLoad: async function(option) {
+        if (!await LoginBiz.loginSilence(this)) {
+            console.log("fail to login")
+            return;
+        }
 		this.getNavData();
 		this.getActivatiesList();
 	},

@@ -1,10 +1,10 @@
 //数量格式化 将数字格式化成k w形式
-export function formatNum(num) {
+function formatNum(num) {
 	return num >= 1e3 && num < 1e4 ? (num / 1e3).toFixed(1) + 'k' : num >= 1e4 ? (num / 1e4).toFixed(1) + 'w' : num
 }
 
 //日期格式化
-export function formatTime(value,type=0) { //type是指输出的格式数组下标
+function formatTime(value,type=0) { //type是指输出的格式数组下标
 	var time = new Date(value);
 	var year = time.getFullYear();
 	var month = time.getMonth() + 1;
@@ -26,4 +26,22 @@ export function formatTime(value,type=0) { //type是指输出的格式数组下�
 		month + "-" + date
 	]
 	return arr[type];
+}
+
+ /**
+  * 判断变量，参数，对象属性是否定义
+  * @param {*} val 
+  */
+ function isDefined(val) {
+    // ==  不能判断是否为null
+    if (val === undefined)
+        return false;
+    else
+        return true;
+}
+
+module.exports = {
+    formatNum,
+    formatTime,
+    isDefined
 }
