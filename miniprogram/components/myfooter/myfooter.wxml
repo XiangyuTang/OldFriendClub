@@ -6,7 +6,105 @@
 </view>
 
 <view class="publishActivaty">
-	<button class="btn" open-type="contact" ></button>
+	<button class="btn" bindtap="onclickPublish"></button>
+	<!-- open-type="contact"  -->
 	<image src="../../static/images/icons/publish-white.png" mode="aspectFill" class="pic"/>
 	<view class="line"></view>
 </view>
+
+<!-- 发布活动弹出框 -->
+<van-dialog
+  use-slot
+  title="发布活动"
+  show="{{ showPublishActivatyWindow }}"
+	messageAlign="left"
+	closeOnClickOverlay
+	showConfirmButton
+	showCancelButton
+  confirm-button-open-type="getUserInfo"
+  bind:close="onClose"
+  bind:getuserinfo="getUserInfo"
+	confirmButtonText="确认发布"
+	customStyle="myvan-dialog"
+>
+	<view class="cell-group">
+		<van-cell-group class="van-cell-group">
+			<van-field
+				value="{{ activity_title }}"
+				required
+				clearable
+				focus
+				label="活动标题"
+				icon="question-o"
+				placeholder="请输入活动标题"
+				bind:click-icon="onClickIcon"
+			/>
+			<van-field
+				value="{{ max_people_num }}"
+				label="参与人数"
+				placeholder="请输入最大参与人数"
+				required
+			/>
+			<van-field
+				required
+        name="datetimePicker"
+        label="报名开始时间"
+        placeholder="请选择报名开始时间"
+        bind:tap="choseTime"
+        input-align="left"
+        right-icon="arrow"
+        value="{{registrationTime}}"
+				data-idx="0"
+      />
+			<van-field
+				required
+        name="datetimePicker"
+        label="报名截止时间"
+        placeholder="请选择报名截止时间"
+        bind:tap="choseTime"
+        input-align="left"
+        right-icon="arrow"
+        value="{{unregistrationTime}}"
+				data-idx="1"
+      />
+			<van-field
+				required
+        name="datetimePicker"
+        label="活动开始时间"
+        placeholder="请选择活动开始时间"
+        bind:tap="choseTime"
+        input-align="left"
+        right-icon="arrow"
+        value="{{beginTime}}"
+				data-idx="2"
+      />
+			<van-field
+				required
+        name="datetimePicker"
+        label="活动截止时间"
+        placeholder="请选择活动截止时间"
+        bind:tap="choseTime"
+        input-align="left"
+        right-icon="arrow"
+        value="{{endTime}}"
+				data-idx="3"
+      />
+			<van-popup show="{{showPicker}}" position="bottom">
+				<van-datetime-picker
+					bind:cancel="onCancel"
+					bind:confirm="onConfirm"
+					type="datetime"
+					min-date="{{minDate}}"
+					max-date="{{maxDate}}"
+				/>
+			</van-popup>
+		</van-cell-group>
+	</view>
+</van-dialog>
+
+<!-- v-model="{{currentDate}}" -->
+<!-- 
+		 -->
+
+
+

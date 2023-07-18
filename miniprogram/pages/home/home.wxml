@@ -66,18 +66,7 @@
 	</view>
 </view>
 
-<!-- 发布活动弹出框 -->
-<!-- <van-dialog
-  use-slot
-  title="标题"
-  show="{{ showPublishActivatyWindow }}"
-  show-cancel-button
-  confirm-button-open-type="getUserInfo"
-  bind:close="onClose"
-  bind:getuserinfo="getUserInfo"
->
-  <image src="https://img.yzcdn.cn/1.jpg" />
-</van-dialog> -->
+
 
 
 <myfooter></myfooter>

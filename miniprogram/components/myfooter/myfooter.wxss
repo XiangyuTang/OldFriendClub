@@ -61,3 +61,11 @@
     transform: scale(1.4);
   }
 }
+
+.cell-group {
+  padding: 30rpx;
+}
+
+button {
+  width: 100% !important;
+}
