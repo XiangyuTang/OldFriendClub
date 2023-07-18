@@ -1,6 +1,6 @@
 const host = 'http://124.220.84.200'
 const port = '5455'
-const code2SessionInterface = '/wxApi/miniProgram/login'
+const serverLoginInterface = '/wxApi/miniProgram/login'
 
 function getFuzzyLocation() {
     wx.getSetting({
@@ -22,14 +22,14 @@ function getFuzzyLocation() {
     })
 }
 
-async function code2Session() {
+async function serverLogin() {
     return new Promise(function(resolve, reject) {
         wx.login({
             success: res => {
                 // 获取到用户的 code 之后：res.code
                 console.log("用户的code:" + res.code);
                 wx.request({
-                    url: host + ':'+ port + code2SessionInterface,
+                    url: host + ':'+ port + serverLoginInterface,
                     data: {
                         code: res.code
                     },
@@ -63,5 +63,5 @@ async function code2Session() {
 
 module.exports = {
     getFuzzyLocation,
-    code2Session
+    serverLogin
 }
