@@ -1,5 +1,5 @@
 <!--pages/earns/earns.wxml-->
-<text>pages/earns/earns.wxml</text>
+<myheader></myheader>
 <van-tabs active="{{ active }}" bind:change="onChange" swipeable>
 		<van-tab title="标签 1">内容 1</van-tab>
 		<van-tab title="标签 2">内容 2</van-tab>

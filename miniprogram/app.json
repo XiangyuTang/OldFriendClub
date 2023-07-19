@@ -6,7 +6,15 @@
 		"pages/club/club",
 		"pages/earns/earns",
 		"pages/mine/mine"
-    ],
+		],
+		"permission": {
+			"scope.userFuzzyLocation": {
+					"desc": "你的位置信息将用于小程序中的信息展示"
+			},
+			"scope.userLocation": {
+				"desc": "你的位置信息将用于小程序中的信息展示"
+			}
+		},
     "requiredPrivateInfos": [
         "getFuzzyLocation"
     ],
@@ -19,7 +27,6 @@
 	"useExtendedLib": {
 		"weui": true
 	},
-	"style": "v2",
 	"sitemapLocation": "sitemap.json",
 	"lazyCodeLoading": "requiredComponents",
 	"tabBar": {

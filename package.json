@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@miniprogram-component-plus/tabs": "^1.0.0",
+    "@vant/weapp": "^1.10.21",
     "vant-weapp": "^0.5.29"
   }
 }

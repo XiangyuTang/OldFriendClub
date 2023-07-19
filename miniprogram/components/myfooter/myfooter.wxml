@@ -42,7 +42,7 @@
 			<van-field
 				value="{{ max_people_num }}"
 				label="参与人数"
-				placeholder="请输入最大参与人数"
+				placeholder="请输入参与人数限制"
 				required
 			/>
 			<van-field
@@ -98,6 +98,34 @@
 					max-date="{{maxDate}}"
 				/>
 			</van-popup>
+			<van-field
+				value="{{ max_people_num }}"
+				label="活动举办地点"
+				placeholder="如：北京-东城区"
+				required
+				bindtap="onClickAddr"
+			/>
+			<view class="wrap">
+				<view class="img-wrap">
+					<!-- <view class="txt">上传活动封面</view> -->
+					<van-field
+						value=""
+						label="活动介绍图片"
+						disabled
+					/>
+					<view class="imglist">
+						<view class="item" wx:for="{{imgs}}" wx:key="item">
+							<image src="{{item}}" alt=""></image>
+							<view class='delete' bindtap='deleteImg' data-index="{{index}}">
+								<image src="../../static/images/icons/delete.png"></image>
+							</view>
+						</view>
+						<view class="last-item" wx:if="{{imgs.length >= 3 ? false : true}}" bindtap="bindUpload">
+							<text class="sign">+</text>
+						</view>
+					</view>
+				</view>
+			</view>
 		</van-cell-group>
 	</view>
 </van-dialog>
