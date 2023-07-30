@@ -32,7 +32,7 @@
 	wx:for="{{navArr}}" wx:key="index" 
 	bindtap="onClickNavi">
 		<view class="pic">
-			<!-- <image src="/static/images/icons/activaty.png" mode="" /> -->
+			<!-- <image src="/static/images/icons/activity.png" mode="" /> -->
 			<image src="{{item.pic_icon}}" mode="" />
 		</view>
 		<view class="text">
@@ -54,7 +54,7 @@
 			<van-tab title="{{tabs}}">
 				<view class="content">
 					<view class="box" wx:for="{{activatiesArr}}" wx:key="index">
-						<activaty-item item="{{item}}"></activaty-item>
+						<activity-item item="{{item}}"></activity-item>
 					</view>
 				</view>
 			</van-tab>

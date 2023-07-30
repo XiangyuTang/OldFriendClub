@@ -1,5 +1,5 @@
-<!--components/activaty-item/activaty-item.wxml-->
-<navigator url="../../pages/activaty_page/activaty_page" class="acitem">
+<!--components/activity-item/activity-item.wxml-->
+<navigator url="../../pages/activity_page/activity_page" class="acitem">
 	<view class="pic">
 		<image class="img" src="../../static/images/banner1.jpg" mode="aspectFill"/>
 	</view>

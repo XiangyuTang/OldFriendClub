@@ -85,7 +85,7 @@ opacity: 0.8;
 }
 
 .info_model .item .sign_btn[disabled] {
-color: hsla(0,0%,100%,.8);
+color: hsla(0,0%,100%,0.8);
 opacity: 1;
 }
 
@@ -95,6 +95,7 @@ width: calc(100% - 60rpx);
 background-color: #ffffff;
 margin-top: 20rpx;
 padding: 30rpx;
+margin-left: 30rpx;
 font-size: 28rpx;
 line-height: 50rpx;
 padding-bottom: var(--safeBottom);

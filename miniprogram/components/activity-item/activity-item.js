@@ -1,4 +1,4 @@
-// components/activaty-item/activaty-item.js
+// components/activity-item/activity-item.js
 Component({
 	/**
 	 * 组件的属性列表

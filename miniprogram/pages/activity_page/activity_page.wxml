@@ -1,11 +1,11 @@
 <wxs module="tool" src="./tool.wxs"></wxs>
 <view class="container {{form.show==true?'noscroll':''}}" style="{{stylecss}}" wx:if="{{project._id!=null}}">
-	<view class="top_model" style="width: 748rpx; height: 441rpx; display: block; box-sizing: border-box; left: 0rpx; top: 0rpx">
-		<image mode="aspectFill" src="{{project.topimg}}" style="width: 746rpx; height: 439rpx; display: inline-block; box-sizing: border-box"></image>
+	<view class="top_model" >
+		<image mode="aspectFill" src="{{project.topimg}}" ></image>
 		<view class="title">{{project.title}}</view>
 	</view>
 	<view class="info_model">
-		<view class="item arrow_model" bindtap="openLocation" data-info="{{project.position}}" style="width: 750rpx; height: -19rpx; display: flex; box-sizing: border-box">
+		<view class="item arrow_model" bindtap="openLocation" data-info="{{project.position}}" >
 			<mp-icon class="icon" icon="location" color="{{project.style.backgroudColor||'#343434'}}" size="{{20}}"></mp-icon>
 			<view class="content">{{project.position.address}}</view>
 			<mp-icon class="arrow" icon="arrow" color="#787878" size="{{15}}"></mp-icon>

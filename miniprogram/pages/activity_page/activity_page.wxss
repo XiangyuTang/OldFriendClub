@@ -106,6 +106,7 @@ page {
   background-color: #ffffff;
   margin-top: 20rpx;
   padding: 30rpx;
+  margin-left: 30rpx;
   font-size: 28rpx;
   line-height: 50rpx;
   padding-bottom: var(--safeBottom);

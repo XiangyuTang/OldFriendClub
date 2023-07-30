@@ -24,13 +24,14 @@
   confirm-button-open-type="getUserInfo"
   bind:close="onClose"
   bind:getuserinfo="getUserInfo"
+	bind:confirm="confirmPublish"
 	confirmButtonText="确认发布"
 	customStyle="myvan-dialog"
 >
 	<view class="cell-group">
 		<van-cell-group class="van-cell-group">
 			<van-field
-				value="{{ activity_title }}"
+				model:value="{{ activity_title }}"
 				required
 				clearable
 				focus
@@ -40,7 +41,13 @@
 				bind:click-icon="onClickIcon"
 			/>
 			<van-field
-				value="{{ max_people_num }}"
+				model:value="{{ activity_content }}"
+				label="活动描述"
+				placeholder="请输入活动详情信息"
+				required
+			/>
+			<van-field
+				model:value="{{ max_people_num }}"
 				label="参与人数"
 				placeholder="请输入参与人数限制"
 				required
@@ -53,7 +60,7 @@
         bind:tap="choseTime"
         input-align="left"
         right-icon="arrow"
-        value="{{registrationTime}}"
+        model:value="{{registrationTime}}"
 				data-idx="0"
       />
 			<van-field
@@ -64,7 +71,7 @@
         bind:tap="choseTime"
         input-align="left"
         right-icon="arrow"
-        value="{{unregistrationTime}}"
+        model:value="{{unregistrationTime}}"
 				data-idx="1"
       />
 			<van-field
@@ -75,7 +82,7 @@
         bind:tap="choseTime"
         input-align="left"
         right-icon="arrow"
-        value="{{beginTime}}"
+        model:value="{{beginTime}}"
 				data-idx="2"
       />
 			<van-field
@@ -86,7 +93,7 @@
         bind:tap="choseTime"
         input-align="left"
         right-icon="arrow"
-        value="{{endTime}}"
+        model:value="{{endTime}}"
 				data-idx="3"
       />
 			<van-popup show="{{showPicker}}" position="bottom">
@@ -99,7 +106,7 @@
 				/>
 			</van-popup>
 			<van-field
-				value="{{ max_people_num }}"
+				model:value="{{ activity_address }}"
 				label="活动举办地点"
 				placeholder="如：北京-东城区"
 				required
@@ -130,9 +137,6 @@
 	</view>
 </van-dialog>
 
-<!-- v-model="{{currentDate}}" -->
-<!-- 
-		 -->
 
 
 

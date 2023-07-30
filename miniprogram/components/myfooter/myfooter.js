@@ -1,5 +1,8 @@
 // components/myfooter/myfooter.js
 import {formatTime} from "../../utils/common.js"
+import {publishActivaty} from "../../api/apis"
+const LoginBiz = require('../../common_biz/login.js')
+
 let choose_date_idx = ""
 Component({
 	/**
@@ -35,7 +38,10 @@ Component({
 		maxDate: "",
 		choose_date_idx : "",
 		imgs: [],
-  	count: 3
+		count: 3, //上传照片最大数量
+		activity_title: "",
+		max_people_num: "",
+		activity_content: "",
 	},
 	
 	/**
@@ -73,16 +79,72 @@ Component({
 			this.setData({
 				showPublishActivatyWindow:true
 			})
+			
 		},
 		getUserInfo(event) {
+			console.log("getUserInfo方法");
 			console.log(event.detail);
+		},
+		confirmPublish(event){
+			console.log("confirmPublish方法");
+			console.log(event);
+			//将数据提交至后台数据库
+			/**
+			 * {
+					token string // 用户token，必要
+					activity_id string // 活动唯一id，非必要，传0表示创建新活动，非0表示更新活动
+					location Location // 用户的地点信息
+					title string // 活动标题，必要
+					cover_image_url string // 活动封面图，非必要，此处为加密后的链接字符串
+					content string // 活动文本内容，必要
+					image_url []string // 活动内图片，非必要，此处为加密后的链接字符串
+					activity_location string // 活动地点，必要
+					activity_start_time int64 // 活动开始时间，必要
+					activity_end_time int64 // 活动截止时间
+					sign_start_time int64 // 报名开始时间
+					sign_end_time int64 // 报名截止时间
+				}
+				Location
+				{
+						city_id int // 城市id
+						lng string // 经度
+						lat string // 纬度
+				}
+			 */
+			//todo：待添加文本输入是否为空的判断逻辑
+
+			var location = {
+				city_id: 0,
+				lng:"123.11",
+				lat:"123.22"
+			}
+			var data = {
+				token:LoginBiz.getToken(),
+				activity_id: "0",
+				location:location,
+				title:this.data.activity_title,
+				max_people_num:max_people_num, //接口待添加
+				cover_image_url:"",
+				content:this.data.activity_content,
+				image_url: [],
+				activity_location:"北京市-测试区",
+				sign_start_time:registrationTimestamp,
+				sign_end_time:unregistrationTimestamp,
+				activity_start_time:beginTimestamp,
+				activity_end_time:endTimestamp
+			};//传参
+			publishActivaty(data).then(res=>{
+				console.log(res);
+			})
 		},
 		onClose() {
 			this.setData({ close: false });
 		},
+		//每一次选择日期后判断的方法
 		onConfirm(event) {
 			console.log("onConfirm");
 			console.log(event);
+			
 			this.setData({
 				showPicker:false,
 			})
@@ -91,13 +153,11 @@ Component({
 			let choosedate = formatTime(date,1)
 			//把格式化后的日期赋值给registrationTime，就会显示到页面
 			if (choose_date_idx==0) {
-				console.log("进入0");
 				this.setData({ 
 					registrationTime:choosedate,
 					registrationTimestamp:date
 				})
 			}else if(choose_date_idx==1){
-				console.log("进入1");
 				if(this.data.registrationTimestamp!="" && date > this.data.registrationTimestamp){
 					console.log("报名时间段合法");
 					this.setData({ 
@@ -113,13 +173,11 @@ Component({
 					return
 				}
 			}else if(choose_date_idx==2){
-				console.log("进入2");
 				this.setData({ 
 					beginTime:choosedate,
 					beginTimestamp:date
 				})
 			}else{
-				console.log("进入3");
 				console.log(this.data.beginTimestamp);
 				console.log(date);
 				if(this.data.biginTimestamp!="" && date > this.data.beginTimestamp){
@@ -136,9 +194,9 @@ Component({
 					})
 					return
 				}
-				
 			}
 			this.setData({ choose_date_idx:""})
+			
     },
     onCancel() {
 			// console.log("onCancel");
