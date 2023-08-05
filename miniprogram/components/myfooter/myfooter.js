@@ -30,9 +30,9 @@ Component({
 		beginTime:"",
 		endTime:"",
 		registrationTimestamp: "",
-		unregistrationTimestamp: "",
+		unregistrationTimestamp: 0,
 		beginTimestamp:"",
-		endTimestamp:"",
+		endTimestamp:0,
 		showPicker: false,
 		minDate: "",
 		maxDate: "",
@@ -101,11 +101,33 @@ Component({
 			console.log("getUserInfo方法");
 			console.log(event.detail);
 		},
+
 		confirmPublish(event){
 			console.log("confirmPublish方法");
 			console.log(event);
-			//将数据提交至后台数据库
 			//todo：待添加文本输入是否为空的判断逻辑
+			if(this.data.activity_title == ""||
+			this.data.activity_content == "" ||
+			this.data.max_people_num == "" ||
+			this.data.registrationTimestamp == ""||
+			this.data.beginTimestamp == ""||
+			this.data.activity_address == ""
+			){
+				wx.showToast({
+					title: '请检查必填项',
+					icon: 'error',
+					duration: 2000
+				})
+				return;
+			}
+			if(this.data.max_people_num <= 0){
+				wx.showToast({
+					title: '参与人数非法',
+					icon: 'error',
+					duration: 2000
+				})
+				return;
+			} 
 			//上传图片至服务器，获得图片加密链接后再上传活动表单
 			var that = this
 			var imgUrl = []
@@ -129,11 +151,6 @@ Component({
 							times += 1
 							var jsonObj = JSON.parse(res.data);
 							if (res.statusCode == 200) {
-								wx.showToast({
-									title: "图片上传成功",
-									icon: "none",
-									duration: 1500
-								})
 								imgUrl.push(jsonObj.data.file_download_http)
 								if(times === tempFilePaths.length){//图片传完了
 									console.log("图片上传完毕");
@@ -203,7 +220,7 @@ Component({
 					activity_end_time:this.data.endTimestamp
 				};//传参
 				console.log(data);
-				wx.showLoading({ title: '发布中...' })
+				wx.showLoading({ title: "发布中..." })
 				publishActivaty(data).then(res=>{
 					console.log(res);
 				}).catch(err=>{
@@ -211,8 +228,8 @@ Component({
 				})
 				wx.hideLoading()
 				wx.showToast({
-					title: '活动发布成功！',
-					icon: 'success',
+					title: "活动发布成功！",
+					icon: "success",
 				})
 			}
 			
