@@ -1,6 +1,6 @@
 // components/myfooter/myfooter.js
 import {formatTime} from "../../utils/common.js"
-import {publishActivaty} from "../../api/apis"
+import {publishActivaty,wxGetAddress} from "../../api/apis"
 const LoginBiz = require('../../common_biz/login.js')
 
 let choose_date_idx = ""
@@ -42,6 +42,9 @@ Component({
 		activity_title: "",
 		max_people_num: "",
 		activity_content: "",
+		activity_address:"",
+		location:{},
+		illegal_message:""
 	},
 	
 	/**
@@ -54,17 +57,33 @@ Component({
 				title: '标题尽量控制在25字内！',
 				icon: 'none',
 			})
+		},
+		
+		onClickAddr(){
+			console.log("进入获取地址");
+			var that = this
 			wx.authorize({
 				scope: 'scope.userFuzzyLocation',
 				success(res) {
 						console.log(res)
 						if(res.errMsg == 'authorize:ok'){
-								wx.getFuzzyLocation({
+							  wx.getFuzzyLocation({
 										type: 'wgs84',
-										success(res) {
-												console.log(res)  //此时里面有经纬度
+										async success(res) {
+											console.log(res)  //此时里面有经纬度
+											let result = await wxGetAddress(res.longitude, res.latitude);
+											console.log(result);
+											var loc = {
+												city_id:Number(result.regeocodeData.addressComponent.adcode),
+												lng:String(res.longitude),
+												lat:String(res.latitude)
+											}
+											that.setData({
+												activity_address : result.regeocodeData.addressComponent.province+"-"+result.regeocodeData.addressComponent.district,
+												location : loc
+											})
 										}
-								})
+								});
 						}
 				},
 				fail(err) {
@@ -72,14 +91,11 @@ Component({
 				}                    
 			})
 		},
-		onClickAddr(){
-			console.log("进入获取地址");
-		},
+		
 		onclickPublish(){
 			this.setData({
 				showPublishActivatyWindow:true
 			})
-			
 		},
 		getUserInfo(event) {
 			console.log("getUserInfo方法");
@@ -89,56 +105,132 @@ Component({
 			console.log("confirmPublish方法");
 			console.log(event);
 			//将数据提交至后台数据库
-			/**
-			 * {
-					token string // 用户token，必要
-					activity_id string // 活动唯一id，非必要，传0表示创建新活动，非0表示更新活动
-					location Location // 用户的地点信息
-					title string // 活动标题，必要
-					cover_image_url string // 活动封面图，非必要，此处为加密后的链接字符串
-					content string // 活动文本内容，必要
-					image_url []string // 活动内图片，非必要，此处为加密后的链接字符串
-					activity_location string // 活动地点，必要
-					activity_start_time int64 // 活动开始时间，必要
-					activity_end_time int64 // 活动截止时间
-					sign_start_time int64 // 报名开始时间
-					sign_end_time int64 // 报名截止时间
-				}
-				Location
-				{
-						city_id int // 城市id
-						lng string // 经度
-						lat string // 纬度
-				}
-			 */
 			//todo：待添加文本输入是否为空的判断逻辑
-
-			var location = {
-				city_id: 0,
-				lng:"123.11",
-				lat:"123.22"
+			//上传图片至服务器，获得图片加密链接后再上传活动表单
+			var that = this
+			var imgUrl = []
+			var cover_imgUrl = ""
+			if (that.data.imgs.length > 0) {
+				var tempFilePaths = that.data.imgs
+				var times = 0
+				for (var i = 0; i < tempFilePaths.length; i++) {
+					wx.uploadFile({
+						url: 'http://124.220.84.200:5455/api/uploadStream',
+						filePath: tempFilePaths[i],
+						name: "file",
+						header: {
+							"content-type": "multipart/form-data"
+						},
+						formData:{
+							token: LoginBiz.getToken(),// 用户token
+							biz_type:1,// 业务线  1：普通活动，必要
+						},
+						success: function (res) {
+							times += 1
+							var jsonObj = JSON.parse(res.data);
+							if (res.statusCode == 200) {
+								wx.showToast({
+									title: "图片上传成功",
+									icon: "none",
+									duration: 1500
+								})
+								imgUrl.push(jsonObj.data.file_download_http)
+								if(times === tempFilePaths.length){//图片传完了
+									console.log("图片上传完毕");
+									//图片上传完毕，得到imgUrl
+									cover_imgUrl = imgUrl[0]
+									//同步
+									var data = {
+										token:LoginBiz.getToken(),
+										activity_id: "0",
+										biz_type:1,
+										location:that.data.location,
+										title:that.data.activity_title,
+										max_sign_num:Number(that.data.max_people_num),
+										cover_image_url:cover_imgUrl,
+										content:that.data.activity_content,
+										image_url: imgUrl,
+										activity_location:that.data.activity_address,
+										sign_start_time:that.data.registrationTimestamp,
+										sign_end_time:that.data.unregistrationTimestamp,
+										activity_start_time:that.data.beginTimestamp,
+										activity_end_time:that.data.endTimestamp
+									};//传参
+									console.log(data);
+									wx.showLoading({ title: '发布中...' })
+									publishActivaty(data).then(res=>{
+										console.log(res);
+									}).catch(err=>{
+										console.log(err);
+									})
+									wx.hideLoading()
+									wx.showToast({
+										title: '活动发布成功！',
+										icon: 'success',
+									})
+								}
+							}
+						},
+						fail: function (err) {
+							wx.showToast({
+								title: "图片上传失败",
+								icon: "none",
+								duration: 2000
+							})
+						},
+						complete: function (result) {
+							console.log(result.errMsg)
+						}
+					})
+				}
+				
 			}
-			var data = {
-				token:LoginBiz.getToken(),
-				activity_id: "0",
-				location:location,
-				title:this.data.activity_title,
-				max_people_num:max_people_num, //接口待添加
-				cover_image_url:"",
-				content:this.data.activity_content,
-				image_url: [],
-				activity_location:"北京市-测试区",
-				sign_start_time:registrationTimestamp,
-				sign_end_time:unregistrationTimestamp,
-				activity_start_time:beginTimestamp,
-				activity_end_time:endTimestamp
-			};//传参
-			publishActivaty(data).then(res=>{
-				console.log(res);
-			})
+			else{
+				var data = {
+					token:LoginBiz.getToken(),
+					activity_id: "0",
+					biz_type:1,
+					location:this.data.location,
+					title:this.data.activity_title,
+					max_sign_num:Number(this.data.max_people_num),
+					cover_image_url:"",
+					content:this.data.activity_content,
+					image_url: [],
+					activity_location:this.data.activity_address,
+					sign_start_time:this.data.registrationTimestamp,
+					sign_end_time:this.data.unregistrationTimestamp,
+					activity_start_time:this.data.beginTimestamp,
+					activity_end_time:this.data.endTimestamp
+				};//传参
+				console.log(data);
+				wx.showLoading({ title: '发布中...' })
+				publishActivaty(data).then(res=>{
+					console.log(res);
+				}).catch(err=>{
+					console.log(err);
+				})
+				wx.hideLoading()
+				wx.showToast({
+					title: '活动发布成功！',
+					icon: 'success',
+				})
+			}
+			
 		},
 		onClose() {
 			this.setData({ close: false });
+		},
+		verifyNum(){
+			if(!(/(^[0-9]*$)/.test(this.data.max_people_num))){
+				this.setData({illegal_message:"请输入数字！"})
+			}
+			else if(this.data.max_people_num == ""){
+				this.setData({illegal_message:""})
+			}
+			else{
+				this.setData({illegal_message:""})
+			}
+			
 		},
 		//每一次选择日期后判断的方法
 		onConfirm(event) {
@@ -148,21 +240,21 @@ Component({
 			this.setData({
 				showPicker:false,
 			})
-			var date = event.detail;
+			var date = event.detail//13位时间戳转10位
 			console.log(date);
-			let choosedate = formatTime(date,1)
+			let choosedate = formatTime(date,1)//参数2：选择“格式1”进行format
 			//把格式化后的日期赋值给registrationTime，就会显示到页面
 			if (choose_date_idx==0) {
 				this.setData({ 
 					registrationTime:choosedate,
-					registrationTimestamp:date
+					registrationTimestamp:Number(date.toString().substr(0,10))
 				})
 			}else if(choose_date_idx==1){
 				if(this.data.registrationTimestamp!="" && date > this.data.registrationTimestamp){
 					console.log("报名时间段合法");
 					this.setData({ 
 						unregistrationTime:choosedate,
-						unregistrationTimestamp:date
+						unregistrationTimestamp:Number(date.toString().substr(0,10))
 					})
 				}else{
 					console.log("报名时间段非法");
@@ -175,7 +267,7 @@ Component({
 			}else if(choose_date_idx==2){
 				this.setData({ 
 					beginTime:choosedate,
-					beginTimestamp:date
+					beginTimestamp:Number(date.toString().substr(0,10))
 				})
 			}else{
 				console.log(this.data.beginTimestamp);
@@ -184,7 +276,7 @@ Component({
 					console.log("活动时间段合法");
 					this.setData({ 
 						endTime:choosedate,
-						endTimestamp:date
+						endTimestamp:Number(date.toString().substr(0,10))
 					})
 				}else{
 					console.log("活动时间段非法");
@@ -239,56 +331,13 @@ Component({
 					// 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
 					var tempFilePaths = res.tempFiles
 					for (var i = 0; i < tempFilePaths.length; i++) {
-						//调试用
 						that.data.imgs.push(tempFilePaths[i].tempFilePath)
 						that.setData({
 							imgs: that.data.imgs
 						})
-						//调试用⬆️
-						wx.uploadFile({
-							url: 'https://graph.baidu.com/upload',
-							filePath: tempFilePaths[i].tempFilePath,
-							name: "file",
-							header: {
-								"content-type": "multipart/form-data"
-							},
-							success: function (res) {
-								if (res.statusCode == 200) {
-									wx.showToast({
-										title: "上传成功",
-										icon: "none",
-										duration: 1500
-									})
-									console.log(res);
-									// that.data.imgs.push(JSON.parse(res.data).data)
-									// console.log(that.data.imgs);
-									// that.setData({
-									// 	imgs: that.data.imgs
-									// })
-								}
-							},
-							fail: function (err) {
-								wx.showToast({
-									title: "上传失败",
-									icon: "none",
-									duration: 2000
-								})
-							},
-							complete: function (result) {
-								console.log(result.errMsg)
-							}
-						})
 					}
 				}
 			})
-			// wx.chooseImage({
-			// 	count: that.data.count, // 默认3
-			// 	sizeType: ["original", "compressed"], // 可以指定是原图还是压缩图，默认二者都有
-			// 	sourceType: ["album", "camera"], // 可以指定来源是相册还是相机，默认二者都有
-			// 	success: function (res) {
-					
-			// 	}
-			// })
 		},
 		// 删除图片
 		deleteImg: function (e) {

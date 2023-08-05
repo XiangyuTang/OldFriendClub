@@ -32,7 +32,6 @@ export function request(params){
     })
   })
 }
-
 const URL = 'http://124.220.84.200:5455' //聚荟后端API
 export function send_request(params){
   let dataObj = params.data || {};

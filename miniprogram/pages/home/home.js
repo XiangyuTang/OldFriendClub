@@ -1,6 +1,6 @@
 // pages/home/home.js
 import {formatNum,formatTime} from "../../utils/common.js"
-import {listNav,listActivities} from "../../api/apis"
+import {listActivities,listActivities2} from "../../api/apis"
 const db = wx.cloud.database()
 const LoginBiz = require('../../common_biz/login.js')
 
@@ -67,6 +67,70 @@ Page({
 			// hot:true
 		};//传参
 		listActivities(data).then(res=>{
+			console.log(res);
+			res.data.forEach(item=>{
+				item.view_count = formatNum(item.view_count)
+				item.publish_date = formatTime(item.publish_date,5)
+			}) 
+			let old_list = this.data.activatiesArr;
+			let new_list = old_list.concat(res.data);
+			console.log("new_list:",new_list);
+			wx.stopPullDownRefresh();
+			this.setData({
+				activatiesArr:new_list,
+				isLoading:false,
+			})
+			if(this.data.activatiesArr.length==res.total){
+				console.log("没有更多了");
+				this.setData({
+					finishLoading:true
+				})
+			}
+		})
+	},
+	getMyAddr(){
+		var that = this
+		wx.authorize({
+			scope: 'scope.userFuzzyLocation',
+			success(res) {
+					console.log(res)
+					if(res.errMsg == 'authorize:ok'){
+							wx.getFuzzyLocation({
+									type: 'wgs84',
+									async success(res) {
+										console.log(res)  //此时里面有经纬度
+										let result = await wxGetAddress(res.longitude, res.latitude);
+										console.log(result);
+										var loc = {
+											city_id:Number(result.regeocodeData.addressComponent.adcode),
+											lng:String(res.longitude),
+											lat:String(res.latitude)
+										}
+										that.setData({
+											activity_address : result.regeocodeData.addressComponent.province+"-"+result.regeocodeData.addressComponent.district,
+											location : loc
+										})
+									}
+							});
+					}
+			},
+			fail(err) {
+					console.log(err)   
+			}                    
+		})
+	},
+	//获取活动列表2
+	getActivatiesList2(size=0){
+		this.setData({
+			isLoading:true
+		})
+		let data = {
+			token:LoginBiz.getToken(),
+			location: Location,
+			page_no: size
+			// hot:true
+		};//传参
+		listActivities2(data).then(res=>{
 			console.log(res);
 			res.data.forEach(item=>{
 				item.view_count = formatNum(item.view_count)

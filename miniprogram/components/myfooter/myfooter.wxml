@@ -28,112 +28,125 @@
 	confirmButtonText="确认发布"
 	customStyle="myvan-dialog"
 >
-	<view class="cell-group">
-		<van-cell-group class="van-cell-group">
-			<van-field
-				model:value="{{ activity_title }}"
-				required
-				clearable
-				focus
-				label="活动标题"
-				icon="question-o"
-				placeholder="请输入活动标题"
-				bind:click-icon="onClickIcon"
-			/>
-			<van-field
-				model:value="{{ activity_content }}"
-				label="活动描述"
-				placeholder="请输入活动详情信息"
-				required
-			/>
-			<van-field
-				model:value="{{ max_people_num }}"
-				label="参与人数"
-				placeholder="请输入参与人数限制"
-				required
-			/>
-			<van-field
-				required
-        name="datetimePicker"
-        label="报名开始时间"
-        placeholder="请选择报名开始时间"
-        bind:tap="choseTime"
-        input-align="left"
-        right-icon="arrow"
-        model:value="{{registrationTime}}"
-				data-idx="0"
-      />
-			<van-field
-				required
-        name="datetimePicker"
-        label="报名截止时间"
-        placeholder="请选择报名截止时间"
-        bind:tap="choseTime"
-        input-align="left"
-        right-icon="arrow"
-        model:value="{{unregistrationTime}}"
-				data-idx="1"
-      />
-			<van-field
-				required
-        name="datetimePicker"
-        label="活动开始时间"
-        placeholder="请选择活动开始时间"
-        bind:tap="choseTime"
-        input-align="left"
-        right-icon="arrow"
-        model:value="{{beginTime}}"
-				data-idx="2"
-      />
-			<van-field
-				required
-        name="datetimePicker"
-        label="活动截止时间"
-        placeholder="请选择活动截止时间"
-        bind:tap="choseTime"
-        input-align="left"
-        right-icon="arrow"
-        model:value="{{endTime}}"
-				data-idx="3"
-      />
-			<van-popup show="{{showPicker}}" position="bottom">
-				<van-datetime-picker
-					bind:cancel="onCancel"
-					bind:confirm="onConfirm"
-					type="datetime"
-					min-date="{{minDate}}"
-					max-date="{{maxDate}}"
+	<view class="cell-group" scroll-y>
+		<scroll-view class="myscroll" scroll-y>
+			<van-cell-group class="van-cell-group">
+				<van-field
+					model:value="{{ activity_title }}"
+					required
+					clearable
+					focus
+					label="活动标题"
+					icon="question-o"
+					placeholder="请输入活动标题"
+					bind:click-icon="onClickIcon"
 				/>
-			</van-popup>
-			<van-field
-				model:value="{{ activity_address }}"
-				label="活动举办地点"
-				placeholder="如：北京-东城区"
-				required
-				bindtap="onClickAddr"
-			/>
-			<view class="wrap">
-				<view class="img-wrap">
-					<!-- <view class="txt">上传活动封面</view> -->
-					<van-field
-						value=""
-						label="活动介绍图片"
-						disabled
+				<van-field
+					model:value="{{ activity_content }}"
+					label="活动描述"
+					placeholder="活动信息（100字以内）"
+					required
+					type="textarea"
+					autosize
+					clearable
+					maxlength="100"
+				/>
+				<van-field
+					model:value="{{ max_people_num }}"
+					type="number"
+					label="参与人数"
+					placeholder="请输入参与人数限制"
+					error-message="{{illegal_message}}"
+					bind:input="verifyNum"
+					required
+				/>
+				<van-field
+					required
+					name="datetimePicker"
+					label="报名开始时间"
+					placeholder="请选择报名开始时间"
+					bind:tap="choseTime"
+					input-align="left"
+					right-icon="arrow"
+					model:value="{{registrationTime}}"
+					data-idx="0"
+					disabled
+				/>
+				<van-field
+					required
+					name="datetimePicker"
+					label="报名截止时间"
+					placeholder="请选择报名截止时间"
+					bind:tap="choseTime"
+					input-align="left"
+					right-icon="arrow"
+					model:value="{{unregistrationTime}}"
+					data-idx="1"
+					disabled
+				/>
+				<van-field
+					required
+					name="datetimePicker"
+					label="活动开始时间"
+					placeholder="请选择活动开始时间"
+					bind:tap="choseTime"
+					input-align="left"
+					right-icon="arrow"
+					model:value="{{beginTime}}"
+					data-idx="2"
+					disabled
+				/>
+				<van-field
+					required
+					name="datetimePicker"
+					label="活动截止时间"
+					placeholder="请选择活动截止时间"
+					bind:tap="choseTime"
+					input-align="left"
+					right-icon="arrow"
+					model:value="{{endTime}}"
+					data-idx="3"
+					disabled
+				/>
+				<van-popup show="{{showPicker}}" position="bottom">
+					<van-datetime-picker
+						bind:cancel="onCancel"
+						bind:confirm="onConfirm"
+						type="datetime"
+						min-date="{{minDate}}"
+						max-date="{{maxDate}}"
 					/>
-					<view class="imglist">
-						<view class="item" wx:for="{{imgs}}" wx:key="item">
-							<image src="{{item}}" alt=""></image>
-							<view class='delete' bindtap='deleteImg' data-index="{{index}}">
-								<image src="../../static/images/icons/delete.png"></image>
+				</van-popup>
+				<van-field
+					model:value="{{ activity_address }}"
+					label="活动举办地点"
+					placeholder="请输入活动地点"
+					required
+					bindtap="onClickAddr"
+				/>
+				<view class="wrap">
+					<view class="img-wrap">
+						<van-field
+							value=""
+							label="活动介绍图片（上传的第一张作为封面）"
+							disabled
+							title-width = "600rpx"
+						/>
+						<view class="imglist">
+							<view class="item" wx:for="{{imgs}}" wx:key="item">
+								<image src="{{item}}" alt=""></image>
+								<view class='delete' bindtap='deleteImg' data-index="{{index}}">
+									<image src="../../static/images/icons/delete.png"></image>
+								</view>
 							</view>
-						</view>
-						<view class="last-item" wx:if="{{imgs.length >= 3 ? false : true}}" bindtap="bindUpload">
-							<text class="sign">+</text>
+							<view class="last-item" wx:if="{{imgs.length >= 3 ? false : true}}" bindtap="bindUpload">
+								<text class="sign">+</text>
+							</view>
 						</view>
 					</view>
 				</view>
-			</view>
-		</van-cell-group>
+			</van-cell-group>
+		</scroll-view>
 	</view>
 </van-dialog>
 

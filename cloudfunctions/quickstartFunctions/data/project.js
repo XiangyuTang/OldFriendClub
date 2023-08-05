@@ -1,9 +1,9 @@
 module.exports = {
   initinfo: {
 		style: { // 页面主题
-			signButtonColor:'#00BFFF',
-      backgroudColor: '#c3cfe7', // 标题栏背景颜色，按钮背景颜色
-      frontColor: '#ffffff' // 标题栏文字颜色，按钮文字颜色
+			signButtonColor:'#ed7a1b',
+      backgroudColor: '#ed7a1b', // 标题栏背景颜色，按钮背景颜色
+      frontColor: '#ed7a1b' // 标题栏文字颜色，按钮文字颜色
     },
     // 报名页头图链接
     topimg: 'https://ts1.cn.mm.bing.net/th/id/R-C.889e0c629c5bf87201711cb55b2a4079?rik=VTHn8wOE8%2bqKQg&riu=http%3a%2f%2fimg1.gtimg.com%2fhealth%2fpics%2fhv1%2f242%2f27%2f2244%2f145923227.jpg&ehk=ivAnIdpdXEIts9pl0bOHW6EcAULElWZNvhvqtz5IQJk%3d&risl=&pid=ImgRaw&r=0',
