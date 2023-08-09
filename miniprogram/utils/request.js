@@ -46,8 +46,9 @@ export function send_request(params){
       data:dataObj,
       header:headerObj,
       success:res=>{
-				console.log(res);
-        if(res.data.errCode!=0){
+				console.log("后端请求成功");
+				// console.log(res);
+        if(res.data.err_no!=0){
           reject(res.data);
           wx.showToast({
             title: res.data.errMsg,

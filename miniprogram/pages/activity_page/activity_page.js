@@ -17,8 +17,8 @@ Page({
     that.id = options.id
     wx.startPullDownRefresh()
 
-    // that.init() // 初始化
-  },
+	},
+	
   onPullDownRefresh () {
     that.init()
   },

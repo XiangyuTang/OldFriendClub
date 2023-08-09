@@ -1,4 +1,4 @@
-<wxs module="tool" src="./tool.wxs"></wxs>
+<!-- <wxs module="tool" src="./tool.wxs"></wxs>
 <mp-cells>
     <block wx:for="{{list}}" wx:key="index">
         <mp-cell icon="{{tool.cloudtohttp(item.info[project.signlist.img])}}" footer="{{['未报名','审核中','已通过','已拒绝'][item.open]}}" bindtap="{{admin?'toDetail':''}}" data-openid="{{index}}" data-info="{{item}}" hover="{{admin}}" link="{{admin}}">
@@ -19,4 +19,4 @@
             </mp-cell>
 		</block>
 	</mp-cells>
-</mp-half-screen-dialog>
+</mp-half-screen-dialog> -->

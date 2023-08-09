@@ -15,6 +15,20 @@
 					"query": "",
 					"launchMode": "default",
 					"scene": null
+				},
+				{
+					"name": "",
+					"pathName": "pages/activity_page/activity_page",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "",
+					"pathName": "pages/activity_detail/activity_detail",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
 				}
 			]
 		}

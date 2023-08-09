@@ -1,24 +1,24 @@
 <!--components/activity-item/activity-item.wxml-->
-<navigator url="../../pages/activity_page/activity_page" class="acitem">
+<navigator url="../../pages/activity_detail/activity_detail?acid={{item.activity_id}}" class="acitem">
 	<view class="pic">
-		<image class="img" src="../../static/images/banner1.jpg" mode="aspectFill"/>
+		<image class="img" src="{{item.cover_image_url==''?'../../static/images/banner3.jpg':item.cover_image_url}}" mode="aspectFill"/>
 	</view>
 	<view class="text">
 		<view class="title">
-			{{item.title}} 666填充标题测试填充标题测试填充标题测试
+			{{item.title}}
 		</view>
 		<view class="info">
 			<view class="block">
 				<van-icon name="clock-o" />
-				<text>{{item.publish_date}}</text>
+				<text>{{item.sign_start_time}}</text>
 			</view>
 			<view class="block">
 				<van-icon name="friends-o" />
-				<text>10/{{item.view_count}}</text>
+				<text>0/{{item.max_sign_num}}</text>
 			</view>
 			<view class="block">
 				<van-icon name="location-o" />
-				<text>北京-东城区</text>
+				<text>{{item.activity_location}}</text>
 			</view>
 		</view>
 	</view>

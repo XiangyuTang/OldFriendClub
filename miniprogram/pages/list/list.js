@@ -7,14 +7,14 @@ Page({
     }
   },
   onLoad () {
-    that = this
-    that.project = app.project
-    const stylecss = app.pagestyleinit(that.project)
-    that.setData({
-      project: that.project,
-      stylecss
-    })
-    wx.startPullDownRefresh()
+    // that = this
+    // that.project = app.project
+    // const stylecss = app.pagestyleinit(that.project)
+    // that.setData({
+    //   project: that.project,
+    //   stylecss
+    // })
+    // wx.startPullDownRefresh()
   },
   onPullDownRefresh () {
     that.init()

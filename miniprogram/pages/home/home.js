@@ -1,6 +1,6 @@
 // pages/home/home.js
 import {formatNum,formatTime} from "../../utils/common.js"
-import {listActivities,listActivities2} from "../../api/apis"
+import {listActivities,listActivities2,wxGetAddress} from "../../api/apis"
 const db = wx.cloud.database()
 const LoginBiz = require('../../common_biz/login.js')
 
@@ -10,12 +10,14 @@ Page({
 	 */
 	data: {
 		activeTab: 0,
+		page_no: 1,
 		navArr:[],
 		tabsArr:['即将开始','往期精彩'],
 		activatiesArr:[],
 		isLoading:false,
 		finishLoading:false,
-		isLogin: false
+		isLogin: false,
+		location:{}
 	},
 	
 	
@@ -29,14 +31,11 @@ Page({
 				return;
 		}
 		this.getNavData();
-		this.getActivatiesList();
+		this.getActivatiesList2();
+		this.getMyAddr();
 	},
 	//获取导航数据
 	getNavData(){
-		// listNav().then(res=>{
-		// 	console.log(res);
-		// 	this.setData({navArr: res.data});
-		// })
 		db.collection("navi_item").get().then(res=>{
 			console.log(res);
 			this.setData({
@@ -46,7 +45,6 @@ Page({
 		}).catch(err=>{
 			console.log(err);
 		})
-		
 	},
 	//点击导航栏
 	onClickNavi(){
@@ -55,8 +53,54 @@ Page({
 			icon: 'success',
   		duration: 800
 		})
+		return
 	},
 	//获取活动列表
+	getActivatiesList2(page_no=1,scene=0){
+		this.setData({
+			isLoading:true
+		})
+		let data = {
+			token: LoginBiz.getToken(),
+			biz_type: 1,
+			location:this.data.location,
+			page_no:page_no,
+			scene:scene,//0:默认推荐页  1:往期活动页
+			sort_type:0 // 排序类型，0:按照时间排序，1：按照点赞数排序
+		};//传参
+		listActivities2(data).then(res=>{
+			console.log("正确信息：");
+			console.log(res);
+			if(res.data.activity_datas == null){
+				this.setData({
+					isLoading:false,
+					finishLoading:true
+				})
+				return;
+			}
+			res.data.activity_datas.forEach(item=>{
+				item.max_sign_num = formatNum(item.max_sign_num)
+				item.sign_start_time = formatTime(item.sign_start_time,5)
+			}) 
+			let old_list = this.data.activatiesArr;
+			let new_list = old_list.concat(res.data.activity_datas);
+			console.log("new_list:",new_list);
+			wx.stopPullDownRefresh();
+			this.setData({
+				activatiesArr:new_list,
+				isLoading:false,
+			})
+			if(res.data.activity_datas.length < 10){
+				console.log("没有更多了");
+				this.setData({
+					finishLoading:true
+				})
+			}
+		}).catch(err=>{
+			console.log("错误信息：");
+			console.log(err);
+		})
+	},
 	getActivatiesList(size=0){
 		this.setData({
 			isLoading:true
@@ -107,7 +151,6 @@ Page({
 											lat:String(res.latitude)
 										}
 										that.setData({
-											activity_address : result.regeocodeData.addressComponent.province+"-"+result.regeocodeData.addressComponent.district,
 											location : loc
 										})
 									}
@@ -119,39 +162,7 @@ Page({
 			}                    
 		})
 	},
-	//获取活动列表2
-	getActivatiesList2(size=0){
-		this.setData({
-			isLoading:true
-		})
-		let data = {
-			token:LoginBiz.getToken(),
-			location: Location,
-			page_no: size
-			// hot:true
-		};//传参
-		listActivities2(data).then(res=>{
-			console.log(res);
-			res.data.forEach(item=>{
-				item.view_count = formatNum(item.view_count)
-				item.publish_date = formatTime(item.publish_date,5)
-			}) 
-			let old_list = this.data.activatiesArr;
-			let new_list = old_list.concat(res.data);
-			console.log("new_list:",new_list);
-			wx.stopPullDownRefresh();
-			this.setData({
-				activatiesArr:new_list,
-				isLoading:false,
-			})
-			if(this.data.activatiesArr.length==res.total){
-				console.log("没有更多了");
-				this.setData({
-					finishLoading:true
-				})
-			}
-		})
-	},
+	
 	onTabClick(e) {
     const index = e.detail.index
     this.setData({ 
@@ -171,7 +182,7 @@ Page({
       title: `切换到标签 ${index + 1}`,
       icon: 'none'
 		})
-		this.getActivatiesList();
+		this.getActivatiesList2(1,index);
   },
   handleClick(e) {
     wx.navigateTo({
@@ -216,7 +227,7 @@ Page({
 			isLoading:false,
 			finishLoading:false
 		})
-		this.getActivatiesList();
+		this.getActivatiesList2(1,this.data.activeTab);
 	},
 
 	/**
@@ -224,7 +235,10 @@ Page({
 	 */
 	onReachBottom() {
 		if(this.data.finishLoading) return;
-		this.getActivatiesList(this.data.activatiesArr.length);
+		this.setData({
+			page_no:this.data.page_no+1
+		})
+		this.getActivatiesList2(this.data.page_no,this.data.activeTab);
 	},
 
 	/**

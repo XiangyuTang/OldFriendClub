@@ -20,8 +20,8 @@ function formatTime(value,type=0) { //type是指输出的格式数组下标
 	var arr = [
 		year + "-" + month + "-" + date,
 		year + "-" + month + "-" + date + " " + hour + ":" + minute + ":" + second,
-		year + "年" + month + "月" + date,
-		year + "年" + month + "月" + date + "日" + hour + ":" + minute + ":" + second,
+		year + "年" + month + "月" + date + "日",
+		year + "年" + month + "月" + date + "日 " + hour + ":" + minute + ":" + second,
 		hour + ":" + minute + ":" + second,
 		month + "-" + date
 	]

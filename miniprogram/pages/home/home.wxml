@@ -27,7 +27,7 @@
 <view class="scrollNav">
 <scroll-view scroll-x>
 	<navigator 
-	url="" 
+	url="www.baidu.com" 
 	class="item" 
 	wx:for="{{navArr}}" wx:key="index" 
 	bindtap="onClickNavi">

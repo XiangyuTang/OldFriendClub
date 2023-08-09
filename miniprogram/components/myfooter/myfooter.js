@@ -200,7 +200,6 @@ Component({
 						}
 					})
 				}
-				
 			}
 			else{
 				var data = {
@@ -232,7 +231,6 @@ Component({
 					icon: "success",
 				})
 			}
-			
 		},
 		onClose() {
 			this.setData({ close: false });

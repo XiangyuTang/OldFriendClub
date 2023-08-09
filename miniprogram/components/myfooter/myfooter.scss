@@ -62,7 +62,7 @@
 	padding: 30rpx;
 }
 
-button{width: 100%!important;}
+button{width: 100%}
 
 .myscroll{
 	height: 800rpx;
@@ -115,3 +115,6 @@ button{width: 100%!important;}
   right: -12rpx;
 }
 
+.btn-hover{
+  box-shadow:0px 0px 30px #ff8500 inset; 
+}
