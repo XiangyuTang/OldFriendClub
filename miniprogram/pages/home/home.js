@@ -3,6 +3,7 @@ import {formatNum,formatTime} from "../../utils/common.js"
 import {listActivities,listActivities2,wxGetAddress} from "../../api/apis"
 const db = wx.cloud.database()
 const LoginBiz = require('../../common_biz/login.js')
+const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
 
 Page({
 	/**
@@ -11,7 +12,28 @@ Page({
 	data: {
 		activeTab: 0,
 		page_no: 1,
-		navArr:[],
+		navArr:[
+			{
+				name:"菜市优惠",
+				pic_icon:"/static/images/navicons/shopping.png"
+			},
+			{
+				name:"晨操跟练",
+				pic_icon:"/static/images/navicons/exercise.png"
+			},
+			{
+				name:"时光相册",
+				pic_icon:"/static/images/navicons/photos.png"
+			},
+			{
+				name:"温馨陪伴",
+				pic_icon:"/static/images/navicons/concern.png"
+			},
+			{
+				name:"在线游戏",
+				pic_icon:"/static/images/navicons/game.png"
+			},
+		],
 		tabsArr:['即将开始','往期精彩'],
 		activatiesArr:[],
 		isLoading:false,
@@ -30,9 +52,11 @@ Page({
 				console.log("fail to login")
 				return;
 		}
-		this.getNavData();
-		this.getActivatiesList2();
-		this.getMyAddr();
+    await this.getMyAddr();
+    // while(this.data.location == {});
+		await this.getActivatiesList2();
+		//注册通知
+    WxNotificationCenter.addNotification('refresh', this.didNotification, this)
 	},
 	//获取导航数据
 	getNavData(){
@@ -47,13 +71,22 @@ Page({
 		})
 	},
 	//点击导航栏
-	onClickNavi(){
-		wx.showToast({
-			title: '敬请期待!',
-			icon: 'success',
-  		duration: 800
-		})
-		return
+	onClickNavi(e){
+		let choose_idx = e.currentTarget.dataset.idx;
+		if(choose_idx === 0){
+			wx.redirectTo({
+				url: '/pages/navi_pages/shopping_market/shopping_market',
+			})
+		}
+		else{
+			wx.showToast({
+				title: '即将上线!',
+				icon: 'success',
+				duration: 800
+			})
+			return
+		}
+		
 	},
 	//获取活动列表
 	getActivatiesList2(page_no=1,scene=0){
@@ -67,7 +100,9 @@ Page({
 			page_no:page_no,
 			scene:scene,//0:默认推荐页  1:往期活动页
 			sort_type:0 // 排序类型，0:按照时间排序，1：按照点赞数排序
-		};//传参
+    };//传参
+    console.log("获取活动列表：");
+    console.log(data);
 		listActivities2(data).then(res=>{
 			console.log("正确信息：");
 			console.log(res);
@@ -80,7 +115,7 @@ Page({
 			}
 			res.data.activity_datas.forEach(item=>{
 				item.max_sign_num = formatNum(item.max_sign_num)
-				item.sign_start_time = formatTime(item.sign_start_time,5)
+				item.sign_start_time = formatTime(item.sign_start_time*1000,5)
 			}) 
 			let old_list = this.data.activatiesArr;
 			let new_list = old_list.concat(res.data.activity_datas);
@@ -158,7 +193,8 @@ Page({
 					}
 			},
 			fail(err) {
-					console.log(err)   
+					console.log("用户拒绝位置授权");
+					console.log(err)  
 			}                    
 		})
 	},
@@ -178,10 +214,10 @@ Page({
 			isLoading:false,
 			finishLoading:false,
 		})
-		wx.showToast({
-      title: `切换到标签 ${index + 1}`,
-      icon: 'none'
-		})
+		// wx.showToast({
+    //   title: `切换到标签 ${index + 1}`,
+    //   icon: 'none'
+		// })
 		this.getActivatiesList2(1,index);
   },
   handleClick(e) {
@@ -215,9 +251,14 @@ Page({
 	 * 生命周期函数--监听页面卸载
 	 */
 	onUnload() {
-
+		//移除通知
+ 		WxNotificationCenter.removeNotification('refresh', this)
 	},
-
+	//通知处理
+	didNotification: function () {
+		console.log("主页收到其他页面的通知");
+		// this.onLoad();
+	},
 	/**
 	 * 页面相关事件处理函数--监听用户下拉动作
 	 */

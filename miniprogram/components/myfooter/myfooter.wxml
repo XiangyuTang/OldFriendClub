@@ -2,13 +2,13 @@
 <view class="footer">
 	<view class="row">解释权归麦赛塔信息科技（郑州）有限公司所有</view>
 	<view class="row">Copyright © {{year}} 版权所有</view>
-	<view class="row">北京市海淀区清华大学学生创客中心</view>
+	<view class="row">北京市聚荟乐享社团创新实验室</view>
 </view>
 
 <view class="publishActivaty" hover-class="btn-hover">
 	<button class="btn" bindtap="onclickPublish" ></button>
 	<!-- open-type="contact"  -->
-	<image src="../../static/images/icons/publish-white.png" mode="aspectFill" class="pic" />
+	<image src="../../static/images/icons/plus.png" mode="aspectFill" class="pic" />
 	<view class="line"></view>
 </view>
 

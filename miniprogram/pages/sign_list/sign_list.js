@@ -4,10 +4,26 @@ Page({
   data: {
     info: {
       show: false
-    }
+    },
+    list: ['a', 'b', 'c'],
+    result: ['C', 'B','C','D']
+  },
+  onChange(event) {
+    this.setData({
+      result: event.detail
+    });
+  },
+
+  toggle(event) {
+    const { index } = event.currentTarget.dataset;
+    const checkbox = this.selectComponent(`.checkboxes-${index}`);
+    checkbox.toggle();
+  },
+  noop() {
+
   },
   onLoad () {
-    // that = this
+    that = this
     // that.project = app.project
     // const stylecss = app.pagestyleinit(that.project)
     // that.setData({
@@ -15,18 +31,25 @@ Page({
     //   stylecss
     // })
     // wx.startPullDownRefresh()
+    this.init();
   },
   onPullDownRefresh () {
     that.init()
   },
   async init () {
-    const { list, admin } = await app.call({ name: 'get_signlist', data: { id: that.project._id } })
+    // const { list, admin } = await app.call({ name: 'get_signlist', data: { id: that.project._id } })
+    let list = [
+      {
+        "info":"666"
+      },
+      {
+        "info":"777"
+      }
+    ]
     that.setData({
       list,
-      admin
     })
     wx.hideLoading()
-    wx.stopPullDownRefresh()
   },
   toDetail (e) {
     const list = ['查看信息', '设为审核中', '通过报名', '拒绝报名']

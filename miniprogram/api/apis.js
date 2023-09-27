@@ -50,6 +50,24 @@ export function getActivatyDetail(data){
 		data
 	})
 }
+
+//报名活动
+export function signActivity(data){
+	return send_request({
+		url:"/activity/signActivity",
+		method:"POST",
+		data
+	})
+}
+//取消报名活动
+export function cancelSignActivity(data){
+  return send_request({
+		url:"/activity/cancelSignActivity",
+		method:"POST",
+		data
+	})
+}
+
 //拉取活动数据接口
 /**
  * {

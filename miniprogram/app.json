@@ -2,11 +2,12 @@
 	"pages": [
 		"pages/home/home",
 		"pages/activity_page/activity_page",
-		"pages/list/list",
+		"pages/sign_list/sign_list",
 		"pages/club/club",
 		"pages/earns/earns",
 		"pages/mine/mine",
-		"pages/activity_detail/activity_detail"
+		"pages/activity_detail/activity_detail",
+		"pages/navi_pages/shopping_market/shopping_market"
 	],
 	"permission": {
 		"scope.userFuzzyLocation": {
@@ -48,7 +49,7 @@
 			},
 			{
 				"pagePath": "pages/earns/earns",
-				"text": "享赚资金",
+				"text": "周边优惠",
 				"iconPath": "static/images/icons/money.png",
 				"selectedIconPath": "static/images/icons/money_fill.png"
 			},

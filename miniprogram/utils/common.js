@@ -12,6 +12,9 @@ function formatTime(value,type=0) { //type是指输出的格式数组下标
 	var hour = time.getHours();
 	var minute = time.getMinutes();
 	var second = time.getSeconds();
+	// console.log(year);
+	// console.log(month);
+	// console.log(date);
 	month = month < 10 ? "0" + month : month;
 	date = date < 10 ? "0" + date : date;
 	hour = hour < 10 ? "0" + hour : hour;

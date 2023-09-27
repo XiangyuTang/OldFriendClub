@@ -32,7 +32,8 @@ export function request(params){
     })
   })
 }
-const URL = 'http://124.220.84.200:5455' //聚荟后端API
+export const URL = 'http://www.mirthdata.com:5455'
+// const URL = 'http://124.220.84.200:5455' //聚荟后端API
 export function send_request(params){
   let dataObj = params.data || {};
   let headerObj = {			
@@ -46,17 +47,7 @@ export function send_request(params){
       data:dataObj,
       header:headerObj,
       success:res=>{
-				console.log("后端请求成功");
-				// console.log(res);
-        if(res.data.err_no!=0){
-          reject(res.data);
-          wx.showToast({
-            title: res.data.errMsg,
-            mask:true,
-            icon:"error"
-          })
-          return;
-        }
+				console.log("后端请求响应成功");
         resolve(res.data)
       },
       fail:err=>{

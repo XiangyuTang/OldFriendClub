@@ -1,7 +1,7 @@
 <wxs module="tool" src="./tool.wxs"></wxs>
 <view class="">
 	<view class="top_model" >
-		<image mode="aspectFill" src="../../static/images/banner4.png" ></image>
+		<image mode="aspectFill" src="{{activity.cover_image_url!=''?activity.cover_image_url:'../../static/images/banner4.png'}}" ></image>
 		<view class="title">{{activity.title}}</view>
 	</view>
 	<view class="info_model">
@@ -14,11 +14,20 @@
 			<mp-icon class="icon" icon="time" color="#343434" size="{{20}}"></mp-icon>
 			<view class="content">{{activity.activity_start_time}} - {{activity.activity_end_time}}</view>
 		</view>
-		<view class="item arrow_model" bindtap="tosignlist">
-			<mp-icon class="icon" icon="group-detail" color="#343434" size="{{20}}"></mp-icon>
-			<view class="content">报名人数限额：{{(activity.max_sign_num!=null&&activity.max_sign_num>0)?activity.max_sign_num+'人':'不限'}} / 已报名：{{signed_num||0}} 人</view>
-			<mp-icon class="arrow" icon="arrow" color="#787878" size="{{15}}"></mp-icon>
-		</view>
+    <block wx:if="{{sign_status === 4}}">
+      <view class="item arrow_model"  bindtap="tosignlist">
+        <mp-icon class="icon" icon="group-detail" color="#343434" size="{{20}}"></mp-icon>
+        <view class="content">报名人数限额：{{(activity.max_sign_num!=null&&activity.max_sign_num>0)?activity.max_sign_num+'人':'不限'}} / 已报名(通过审核)：{{signed_num||0}} 人</view>
+        <mp-icon class="arrow" icon="arrow" color="#787878" size="{{15}}" ></mp-icon>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="item">
+        <mp-icon class="icon" icon="group-detail" color="#343434" size="{{20}}"></mp-icon>
+        <view class="content">报名人数限额：{{(activity.max_sign_num!=null&&activity.max_sign_num>0)?activity.max_sign_num+'人':'不限'}} / 已报名(通过审核)：{{signed_num||0}} 人</view>
+      </view>
+    </block>
+		
 		<view class="item">
 			<mp-icon class="icon" icon="done2" color="#343434" size="{{20}}"></mp-icon>
 			<view class="content">{{tool.execTime(sign_due).text}}</view>
@@ -28,42 +37,46 @@
 			<view class="content">{{activity.content}}</view>
 		</view>
 		<view class="item">
-			<button class="sign_btn" bindtap="startsign" disabled="{{tool.signBtnstatus(user.open,sign_due).disable}}" hover-class="btn-hover">
-			{{tool.signBtnstatus(user.open,sign_due).text}}
+			<button class="sign_btn" bindtap="startsign" disabled="{{tool.signBtnstatus(sign_status,sign_due).disable}}" hover-class="btn-hover">
+			{{tool.signBtnstatus(sign_status,sign_due).text}}
 			</button>
 		</view>
 	</view>
-	<!-- <view class="content_model">
-		<block wx:for="{{project.content}}" wx:key="index">
-			<image wx:if="{{item.type=='image'}}" mode="widthFix" src="{{item.value}}"></image>
-			<view wx:else><text>{{item.value}}</text></view>
-		</block>
-	</view> -->
+	<block wx:if="{{activity.cover_image_url!=''}}">
+		<view class="content_model">
+			<block wx:for="{{activity.image_urls}}" wx:key="index">
+				<view><text wx:if="{{item}}">活动内容展示{{index+1}}：</text></view>
+				<image wx:if="{{item}}"mode="widthFix" src="{{item}}"></image>
+			</block>
+		</view>
+	</block>
+	
 </view>
-
-<mp-half-screen-dialog show="{{form.show}}" bindbuttontap="submitsign" bindclose="closesign" maskClosable="{{false}}" title="{{tool.signBtnstatus(user.open,sign_due).title}}" buttons="{{tool.signBtnstatus(user.open,sign_due).btnlist}}">
+ <van-dialog id="van-dialog" />
+<!--
+  <mp-half-screen-dialog show="{{form.show}}" bindbuttontap="submitsign" bindclose="closesign" maskClosable="{{false}}" title="{{tool.signBtnstatus(sign_status,sign_due).title}}" buttons="{{tool.signBtnstatus(sign_status,sign_due).btnlist}}">
 	<mp-cells slot="desc">
 		<block wx:for="{{sign_form}}" wx:key="id">
 			<mp-cell title="{{item.prop}}" ext-class="form_prop">
-                <block wx:if="{{user.open!=0 && user.open!=1}}">
-                    <image wx:if="{{item.type=='avatar'}}" class="weui-cell__icon" src="{{tool.cloudtohttp(input[item.id])}}"></image>
-                    <block wx:else>
-                        <span>{{input[item.id]}}</span>
-                    </block>
-                    <view wx:if="{{item.unit!=null}}" slot="footer">{{item.unit}}</view>
-                </block>
-                <block wx:else>
-                    <picker wx:if="{{item.type==='select'}}" bindchange="ininput" bindcancel="ininput" data-info="{{item}}" value="{{index}}" range="{{item.selects}}">
-                        <view class="{{(input[item.id]==null||input[item.id]=='')?'novalue':''}}">{{input[item.id]||item.des||'请选择'+item.prop}}{{item.option==true?'【选填】':''}}</view>
-                    </picker>
-                    <button wx:elif="{{item.type==='phone'}}" open-type="getPhoneNumber" bindgetphonenumber="ininput" data-info="{{item}}" class="input_btn {{(input[item.id]==null||input[item.id]=='')?'novalue':''}}">{{input[item.id]||item.des||'请选择'+item.prop}}{{item.option==true?'【选填】':''}}</button>
-                    <button wx:elif="{{item.type==='avatar'}}" class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="ininput" data-info="{{item}}">
-                        <image class="avatar" src="{{tool.cloudtohttp(input[item.id])?tool.cloudtohttp(input[item.id]):'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'}}"></image>
-                    </button> 
-                    <input wx:else data-id="{{item.id}}" cursor-spacing="100" type="{{item.type}}" bindinput="ininput" data-info="{{item}}" class="weui-input" placeholder="{{item.des||'请输入'+item.prop}}{{item.option==true?'【选填】':''}}" value="{{input[item.id]}}"/>
-                    <view wx:if="{{item.unit!=null}}" slot="footer">{{item.unit}}</view>
-                </block>
+				<block wx:if="{{sign_status!=0 && sign_status!=1}}">
+						<image wx:if="{{item.type=='avatar'}}" class="weui-cell__icon" src="{{tool.cloudtohttp(input[item.id])}}"></image>
+						<block wx:else>
+								<span>{{input[item.id]}}</span>
+						</block>
+						<view wx:if="{{item.unit!=null}}" slot="footer">{{item.unit}}</view>
+				</block>
+				<block wx:else>
+						<picker wx:if="{{item.type==='select'}}" bindchange="ininput" bindcancel="ininput" data-info="{{item}}" value="{{index}}" range="{{item.selects}}">
+								<view class="{{(input[item.id]==null||input[item.id]=='')?'novalue':''}}">{{input[item.id]||item.des||'请选择'+item.prop}}{{item.option==true?'【选填】':''}}</view>
+						</picker>
+						<button wx:elif="{{item.type==='phone'}}" open-type="getPhoneNumber" bindgetphonenumber="ininput" data-info="{{item}}" class="input_btn {{(input[item.id]==null||input[item.id]=='')?'novalue':''}}">{{input[item.id]||item.des||'请选择'+item.prop}}{{item.option==true?'【选填】':''}}</button>
+						<button wx:elif="{{item.type==='avatar'}}" class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="ininput" data-info="{{item}}">
+								<image class="avatar" src="{{tool.cloudtohttp(input[item.id])?tool.cloudtohttp(input[item.id]):'https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0'}}"></image>
+						</button> 
+						<input wx:else data-id="{{item.id}}" cursor-spacing="100" type="{{item.type}}" bindinput="ininput" data-info="{{item}}" class="weui-input" placeholder="{{item.des||'请输入'+item.prop}}{{item.option==true?'【选填】':''}}" value="{{input[item.id]}}"/>
+						<view wx:if="{{item.unit!=null}}" slot="footer">{{item.unit}}</view>
+				</block>
 			</mp-cell>
 		</block>
 	</mp-cells>
-</mp-half-screen-dialog>
+</mp-half-screen-dialog> -->

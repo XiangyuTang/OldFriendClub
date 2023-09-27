@@ -1,6 +1,7 @@
 const LoginBiz = require('../../common_biz/login.js')
 import {formatTime} from "../../utils/common.js"
-import {getActivatyDetail} from "../../api/apis"
+import {getActivatyDetail,signActivity,cancelSignActivity} from "../../api/apis"
+import Dialog from 'vant-weapp/dialog/dialog';
 let that = null
 Page({
 
@@ -8,6 +9,7 @@ Page({
 	 * 页面的初始数据
 	 */
 	data: {
+    activity_id: '',
 		activity: {},
 		like_num:0,
 		signed_num:0,
@@ -42,19 +44,16 @@ Page({
 			}
 		],
 		sign_due:[],
-		user: {
-			open: 0
-		}
+		sign_status:"",
+		// user: {
+		// 	open: 0
+		// }
 	},
 	openLocation (e) {
     const {
 			info,
 			addr
 		} = e.currentTarget.dataset
-		console.log(e);
-		//测试
-		info.lat = "29.369709999999998"
-		info.lng = "105.59088"
     wx.openLocation({
 			latitude:parseFloat(info.lat),
 			longitude:parseFloat(info.lng),
@@ -63,9 +62,9 @@ Page({
     })
   },
 	tosignlist () {
-    // wx.navigateTo({
-    //   url: '../list/list'//报名列表页
-    // })
+    wx.navigateTo({
+      url: '../sign_list/sign_list'//报名列表页
+    })
   },
 	ininput (e) {
 		const { info } = e.currentTarget.dataset
@@ -119,53 +118,135 @@ Page({
     }
   },
 	startsign () {
-    that.setData({
-      'form.show': true
-    })
-	},
-	async submitsign (e) {
-    const { input, project } = that.data
-    if (e.detail?.item?.value === 1) {
-      for (const item of project.form) {
-        if (item.option !== true && (input[item.id] == null || input[item.id] == '')) {
-          showModal(`【${item.prop}】要求必须填写，请补充后重新提交`, '提示')
-          return false
+		//不用填写表单，后台自动校验
+    // that.setData({
+    //   'form.show': true
+    // })
+    if(this.data.sign_status === 1){//已报名，审核中
+      Dialog.confirm({
+        title: '取消报名',
+        message: '您确认【取消】报名本活动吗？'
+      }).then(() => {
+        let data= {
+          token:LoginBiz.getToken(),
+          biz_type:1,
+          activity_id:that.data.activity.activity_id
         }
-      }
-      wx.showLoading({ title: '提交中' })
-			const submitres = await app.call({ name: 'add_sign', data: { id: project._id, input } })
-			wx.hideLoading()
-			if(submitres.code === 0){
-				await that.init()
-			} else {
-				showModal(submitres.msg||'系统出现问题，请稍后再试','安全提示',{
-					showCancel: true,
-					confirmText: '重新编辑'
-				}).then(flag=>{
-					if (flag) {
-						that.setData({
-							'form.show': true
-						})
-					}
-				})
-			}
-    } else if (e.detail?.item?.value === 2) {
-      const flag = await showModal('是否取消报名，取消后需要重新填写审核', '确认操作', {
-        showCancel: true
-      })
-      if (flag) {
-        wx.showLoading({ title: '取消中' })
-        await app.call({ name: 'del_sign', data: { id: project._id } })
-        await that.init()
-        wx.hideLoading()
-      } else {
-        return
-      }
+        cancelSignActivity(data).then(res=>{
+          console.log("取消活动报名结果");
+          console.log(res);
+          if(res.err_no === 0){
+            var options = {"acid":that.data.activity_id}
+            // that.onLoad(options);
+            that.setData({
+              sign_status: 0,
+              signed_num:res.data.signed_num
+            })
+          }else{
+            wx.showToast({
+              title: '取消报名失败！',
+              icon:"error"
+            });
+          }
+        })
+      }).catch((err) => {
+        // on cancel
+        console.log(err);
+      });
     }
-    that.setData({
-      'form.show': false
-    })
-  },
+    else if(this.data.sign_status === 0 || this.data.sign_status === 5){//没有报名或取消报名
+      console.log(this.data.sign_status);
+      Dialog.confirm({
+        title: '报名确认',
+        message: '确认报名本活动吗？'
+      }).then(() => {
+        // on confirm
+        let data= {
+          token:LoginBiz.getToken(),
+          biz_type:1,
+          activity_id:that.data.activity.activity_id
+        }
+        
+        signActivity(data).then(res=>{
+          console.log("报名活动返回结果");
+          console.log(res);
+          if(res.err_no!=0){
+            wx.showToast({
+              title: res.err_msg,
+              mask:true,
+              icon:"error"
+            });
+          }else if(res.err_no===0){
+            wx.showToast({
+              title: '报名成功！',
+              icon:'success'
+            })
+            var options = {"acid":that.data.activity_id}
+            that.onLoad(options);
+            that.setData({
+              sign_status: 1,
+              signed_num:res.data.signed_num
+            })
+            
+          }
+        }).catch((err) => {
+          // on cancel
+          wx.showToast({
+            title: '报名失败！',
+            icon:'error'
+          })
+        })
+        
+      }).catch((err) => {
+        // on cancel
+        console.log(err);
+      });
+    }
+		
+	},
+	// async submitsign (e) {
+  //   const { input, project } = that.data
+  //   if (e.detail?.item?.value === 1) {
+  //     for (const item of project.form) {
+  //       if (item.option !== true && (input[item.id] == null || input[item.id] == '')) {
+  //         showModal(`【${item.prop}】要求必须填写，请补充后重新提交`, '提示')
+  //         return false
+  //       }
+  //     }
+  //     wx.showLoading({ title: '提交中' })
+	// 		const submitres = await app.call({ name: 'add_sign', data: { id: project._id, input } })
+	// 		wx.hideLoading()
+	// 		if(submitres.code === 0){
+	// 			await that.init()
+	// 		} else {
+	// 			showModal(submitres.msg||'系统出现问题，请稍后再试','安全提示',{
+	// 				showCancel: true,
+	// 				confirmText: '重新编辑'
+	// 			}).then(flag=>{
+	// 				if (flag) {
+	// 					that.setData({
+	// 						'form.show': true
+	// 					})
+	// 				}
+	// 			})
+	// 		}
+  //   } else if (e.detail?.item?.value === 2) {
+  //     const flag = await showModal('是否取消报名，取消后需要重新填写审核', '确认操作', {
+  //       showCancel: true
+  //     })
+  //     if (flag) {
+  //       wx.showLoading({ title: '取消中' })
+  //       await app.call({ name: 'del_sign', data: { id: project._id } })
+  //       await that.init()
+  //       wx.hideLoading()
+  //     } else {
+  //       return
+  //     }
+  //   }
+  //   that.setData({
+  //     'form.show': false
+  //   })
+  // },
   closesign () {
     that.setData({
       'form.show': false
@@ -175,9 +256,8 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
-		that = this // 页面this指向指针变量
-		const acid= options.acid;
-		console.log(acid);
+    that = this // 页面this指向指针变量
+    const acid= options.acid;
 		let data = {
 			token:LoginBiz.getToken(),
 			activity_id:acid,
@@ -189,22 +269,18 @@ Page({
 		getActivatyDetail(data).then(res=>{
 			wx.hideLoading()
 			console.log(res);
-			// res.data.activity_data.forEach(item=>{
-			// 	item.activity_start_time = formatTime(item.activity_start_time,2)
-			// 	item.activity_end_time = formatTime(item.activity_end_time,2)
-			// 	item.sign_start_time = formatTime(item.sign_start_time,2)
-			// 	item.sigh_end_time = formatTime(item.sigh_end_time,2)
-			// })
 			var item = res.data.activity_data
-			res.data.activity_data.activity_start_time = formatTime(item.activity_start_time,2)
-			res.data.activity_data.activity_end_time = formatTime(item.activity_end_time,2)
-			res.data.activity_data.sign_start_time = formatTime(item.sign_start_time,3)
-			res.data.activity_data.sigh_end_time = formatTime(item.sigh_end_time,3)
+			res.data.activity_data.activity_start_time = formatTime(item.activity_start_time*1000,2)
+			res.data.activity_data.activity_end_time = formatTime(item.activity_end_time*1000,2)
+			res.data.activity_data.sign_start_time = formatTime(item.sign_start_time*1000,3)
+			res.data.activity_data.sigh_end_time = formatTime(item.sigh_end_time*1000,3)
 			that.setData({
+        activity_id:acid,
 				activity:res.data.activity_data,
 				like_num:res.data.like_num,
-				signed_num:res.data.signed_num,
-				sign_due:[res.data.activity_data.sign_start_time,res.data.activity_data.sigh_end_time]
+				signed_num:res.data.activity_data.signed_num,
+				sign_due:[res.data.activity_data.sign_start_time,res.data.activity_data.sigh_end_time],
+				sign_status:res.data.activity_data.sign_status
 			})
 		}).catch(err=>{
 			console.log("出错了");

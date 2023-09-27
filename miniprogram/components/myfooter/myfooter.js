@@ -2,6 +2,7 @@
 import {formatTime} from "../../utils/common.js"
 import {publishActivaty,wxGetAddress} from "../../api/apis"
 const LoginBiz = require('../../common_biz/login.js')
+const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
 
 let choose_date_idx = ""
 Component({
@@ -23,6 +24,7 @@ Component({
 	 * 组件的初始数据
 	 */
 	data: {
+		beforeClose: {},
 		year:new Date().getFullYear(),
 		showPublishActivatyWindow:false,
 		registrationTime: "",
@@ -101,9 +103,26 @@ Component({
 			console.log("getUserInfo方法");
 			console.log(event.detail);
 		},
-
+		onBeforeClose (action, done) {
+			console.log("onBeforeClose方法");
+			if (action === "confirm") {
+				return done(false);
+			} else {
+				return done();
+			}
+		},
 		confirmPublish(event){
 			console.log("confirmPublish方法");
+			this.beforeClose = (action) => new Promise((resolve) => {
+				setTimeout(() => {
+					if (action === 'confirm') {
+						// 拦截确认操作
+						resolve(false);
+					} else {
+						resolve(true);
+					}
+				}, 0);
+			});
 			console.log(event);
 			//todo：待添加文本输入是否为空的判断逻辑
 			if(this.data.activity_title == ""||
@@ -118,9 +137,12 @@ Component({
 					icon: 'error',
 					duration: 2000
 				})
+				this.setData({
+					showPublishActivatyWindow:true
+				})
 				return;
 			}
-			if(this.data.max_people_num <= 0){
+			if(this.data.max_people_num <= 0 || this.data.max_people_num>999){
 				wx.showToast({
 					title: '参与人数非法',
 					icon: 'error',
@@ -185,6 +207,8 @@ Component({
 										title: '活动发布成功！',
 										icon: 'success',
 									})
+									//向主页发布通知重新刷新
+									WxNotificationCenter.postNotificationName('refresh')
 								}
 							}
 						},
@@ -241,6 +265,9 @@ Component({
 			}
 			else if(this.data.max_people_num == ""){
 				this.setData({illegal_message:""})
+			}
+			else if(this.data.max_people_num >999){
+				this.setData({illegal_message:"最多允许999人参与！"})
 			}
 			else{
 				this.setData({illegal_message:""})

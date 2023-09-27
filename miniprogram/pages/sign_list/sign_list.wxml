@@ -1,0 +1,47 @@
+<!-- <wxs module="tool" src="./tool.wxs"></wxs> -->
+<myheader></myheader>
+<block wx:for="{{list}}" wx:key="index">
+  <view class="sign_card">
+    <van-card
+      title="报名用户{{index+1}}"
+      thumb="../../../static/images/icons/user.png"
+    >
+      <view slot="desc" >
+        电话：1231414141
+      </view>
+      <view slot="desc" >
+        地址：北京市海淀区
+      </view>
+      <view slot="desc" >
+        年龄：56 岁
+      </view>
+      <view slot="footer" > <!-- style="display:flex; justify-content:center"  -->
+        <van-button round hairline size="mini" type="danger" style="margin-right: 20rpx;">审批拒绝</van-button>
+        <van-button round hairline size="mini" type="primary" style="margin-right: 10rpx;">审批通过</van-button>
+      </view>
+    
+    </van-card> 
+  </view>
+</block>
+
+<!-- <mp-cells>
+    <block wx:for="{{list}}" wx:key="index">
+        <mp-cell icon="{{tool.cloudtohttp(item.info[project.signlist.img])}}" footer="{{['未报名','审核中','已通过','已拒绝'][item.open]}}" bindtap="{{admin?'toDetail':''}}" data-openid="{{index}}" data-info="{{item}}" hover="{{admin}}" link="{{admin}}">
+            <span>{{item.info[project.signlist.text]}}</span>
+            <div class="weui-cell__desc">{{item.time}}</div>
+        </mp-cell>
+    </block>
+</mp-cells>
+<mp-half-screen-dialog show="{{info.show}}" title="报名信息">
+	<mp-cells slot="desc">
+		<block wx:for="{{project.form}}" wx:key="id">
+			<mp-cell title="{{item.prop}}" ext-class="form_prop">
+					<image wx:if="{{item.type=='avatar'}}" class="weui-cell__icon" src="{{info.data[item.id]}}"></image>
+					<block wx:else>
+							<span>{{info.data[item.id]}}</span>
+					</block>
+					<view wx:if="{{item.unit!=null}}" slot="footer">{{item.unit}}</view>
+			</mp-cell>
+		</block>
+	</mp-cells>
+</mp-half-screen-dialog> -->

@@ -80,7 +80,7 @@ page {
   margin: auto 0 auto auto;
 }
 
-.info_model .item .sign_btn {
+.info_model .item .sign_btn, .sign_btn2 {
   width: 100%;
   margin: 25rpx auto;
   line-height: 80rpx;
@@ -91,9 +91,15 @@ page {
   box-shadow: none;
 }
 
-.info_model .item .sign_btn:active {
+.info_model .item .sign_btn[disabled] {
   background-color: #ed7a19;
   color: #ffffff;
+  opacity: 0.8;
+}
+
+.info_model .item .sign_btn2:active {
+  background-color: #ffffff;
+  color: #4faf70;
   opacity: 0.8;
 }
 

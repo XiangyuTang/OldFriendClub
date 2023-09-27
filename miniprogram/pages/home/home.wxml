@@ -30,7 +30,9 @@
 	url="www.baidu.com" 
 	class="item" 
 	wx:for="{{navArr}}" wx:key="index" 
-	bindtap="onClickNavi">
+	bindtap="onClickNavi"
+	data-idx="{{index}}"
+	>
 		<view class="pic">
 			<!-- <image src="/static/images/icons/activity.png" mode="" /> -->
 			<image src="{{item.pic_icon}}" mode="" />

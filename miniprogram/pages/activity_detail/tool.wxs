@@ -82,11 +82,11 @@ function signBtnstatus (useropen, time) {
     btnlist: [sign_btnlist[0], sign_btnlist[1]],
     title: '报名信息填写'
   }
+  
   if (useropen === 0) {
 		var open = execTime(time).open
-		console.log("open状态：");
-		console.log(open);
-		open = true //调试
+
+		// open = true //调试
     if (open === false) {
       res.text = '报名关闭'
       res.disable = true
@@ -101,14 +101,25 @@ function signBtnstatus (useropen, time) {
     res.btnlist = [sign_btnlist[3], sign_btnlist[2]]
   } else if (useropen === 2) {
     res.text = '已通过报名'
-    res.disable = false
+    res.disable = true
     res.title = '报名信息-已通过'
     res.btnlist = []
   } else if (useropen === 3) {
     res.text = '报名未通过'
-    res.disable = false
+    res.disable = true
     res.title = '报名信息-未通过'
     res.btnlist = []
+  }else if (useropen === 4) {
+    res.text = '您无需报名'
+    res.disable = true
+    res.title = '创建者无需报名'
+		res.btnlist = []
+  }
+  else if(useropen === 5){
+    res.text = '重新报名'
+    res.disable = false
+    res.title = ''
+		res.btnlist = []
   }
   return res
 }
