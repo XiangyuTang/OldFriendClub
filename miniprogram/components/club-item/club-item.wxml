@@ -13,7 +13,7 @@
   </view>
 </van-card> -->
 
-<view class="club-item">
+<view class="club-item {{hideBorder ? '': 'club-item-border'}}">
 	<view class="pic">
 		<image class="img" src="../../static/images/banner2.jpg" mode="aspectFill"/>
 	</view>

@@ -25,7 +25,9 @@ page{
 	--globalColor:#1a1b1c;
 	--grayColor: #8a8a8a;
 	--lessGrayColor:#7e8081;
-	--focusColor: #4c4d4e;
+  --focusColor: #4c4d4e;
+  --bgColor: rgb(170, 164, 164);
 	--globalBgColor: #f6f7f8;
-	--line: #efefef;
+  --line: #efefef;
+  --shadow: 0 2px 4px rgba(0,0,0,.2);
 }

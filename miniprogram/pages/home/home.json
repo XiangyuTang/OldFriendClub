@@ -1,7 +1,10 @@
 {
 	"usingComponents": {
 		"mp-tabs": "@miniprogram-component-plus/tabs",
-		"activity-item":"../../components/activity-item/activity-item",
 		"van-dialog": "vant-weapp/dialog/index"
-	}
+  },
+  "componentPlaceholder": {
+		"activity-item":"../../components/activity-item/activity-item"
+    
+  }
 }

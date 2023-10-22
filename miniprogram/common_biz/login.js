@@ -8,7 +8,7 @@ const serverBiz = require('./server')
 const constants = require('./constants')
 
 class LoginBiz {
-    // 静默登录(有登录状态则不登录)  
+    // 静默登录(有登录状态则不登录)
     static async loginSilence(that) {
         return await LoginBiz.loginCheck(that);
     }
@@ -25,7 +25,7 @@ class LoginBiz {
         utilsCache.set(constants.CACHE_TOKEN, token, constants.CACHE_TOKEN_EXPIRE);
     }
 
-    // 是否登录 
+    // 是否登录
     static isLogin() {
         let token = LoginBiz.getToken();
         return (token.length > 0) ? true : false;
@@ -44,7 +44,7 @@ class LoginBiz {
             if (that) that.setData({
                 isLogin: false
             });
-        }
+				}
 
         let res = await serverBiz.serverLogin().then(result => {
             LoginBiz.clearToken();

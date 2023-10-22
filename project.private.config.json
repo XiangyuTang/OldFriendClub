@@ -5,10 +5,17 @@
 		"compileHotReLoad": true,
 		"urlCheck": false
 	},
-	"libVersion": "2.33.0",
+	"libVersion": "3.1.3",
 	"condition": {
 		"miniprogram": {
 			"list": [
+				{
+					"name": "",
+					"pathName": "pages/club_detail/club_detail",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
 				{
 					"name": "",
 					"pathName": "pages/club/club",
@@ -26,6 +33,20 @@
 				{
 					"name": "",
 					"pathName": "pages/activity_detail/activity_detail",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "",
+					"pathName": "pages/mine/mine",
+					"query": "",
+					"launchMode": "default",
+					"scene": null
+				},
+				{
+					"name": "",
+					"pathName": "pages/home/home",
 					"query": "",
 					"launchMode": "default",
 					"scene": null
