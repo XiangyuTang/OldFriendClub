@@ -1,5 +1,6 @@
 // const host = 'http://124.220.84.200'
-const host = "http://www.mirthdata.com"
+const host = 'http://124.220.84.200:5455';
+// const host = "http://www.mirthdata.com"
 const port = '5455'
 const serverLoginInterface = '/wxApi/miniProgram/login'
 
@@ -39,7 +40,6 @@ async function serverLogin() {
                         'content-type': 'application/json' // 默认值
                     },
                     success: res => {
-                        console.log(res.data)
                         if (res.data.err_no == 0) {
                             resolve(res.data)
                             return;
@@ -58,7 +58,7 @@ async function serverLogin() {
                 reject(error)
                 return;
             }
-        });    
+        });
     })
 }
 
