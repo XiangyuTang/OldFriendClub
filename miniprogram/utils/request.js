@@ -32,8 +32,8 @@ export function request(params){
     })
   })
 }
-export const URL = 'http://www.mirthdata.com:5455'
-// const URL = 'http://124.220.84.200:5455' //聚荟后端API
+// export const URL = 'http://www.mirthdata.com:5455'
+export const serverURL = 'http://124.220.84.200:5455' //聚荟后端API
 export function send_request(params){
   let dataObj = params.data || {};
   let headerObj = {			
@@ -42,7 +42,7 @@ export function send_request(params){
   
   return new Promise((resolve,reject)=>{
     wx.request({
-      url: URL + params.url,
+      url: serverURL + params.url,
       method:params.method || "GET",
       data:dataObj,
       header:headerObj,

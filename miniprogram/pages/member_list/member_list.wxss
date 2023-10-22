@@ -1,0 +1,57 @@
+/* pages/member_list.wxss */
+.member-item {
+  height: 80px;
+  border-top: 1px solid #F1F2F3;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+.member-item-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 100%;
+  margin-right: 8px;
+}
+.member-item-info {
+
+}
+.member-item-name {
+  
+}
+
+.member-item-style1 {
+  border-radius: 12px;
+  padding: 0 6px;
+  height: 20px;
+  flex-shrink: 0;
+  display: inline-block;
+  color: #FF7F24;
+  background-color: #FFF0E3;
+  border-radius: 4px;
+  margin-right: 4px;
+  font-size: 12px;
+  padding: 0 4px;
+  cursor: default;
+}
+
+
+.member-item-style2 {
+  border-radius: 12px;
+  padding: 0 6px;
+  height: 20px;
+  flex-shrink: 0;
+  display: inline-block;
+  color: #61666D;
+  background-color: #F6F7F8;
+  border-radius: 4px;
+  margin-right: 4px;
+  font-size: 12px;
+  padding: 0 4px;
+  cursor: default;
+}
+
+.member-item-gender {
+  width: 12px;
+  height: 12px;
+  margin: 0 7px 0 0px;
+}

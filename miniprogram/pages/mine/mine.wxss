@@ -1,1 +1,248 @@
 /* pages/mine/mine.wxss */
+.mine-avatar {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  border-radius: 100%;
+  border-top: 1px solid #F1F2F3;
+  margin: 20px 20px 0 20px;
+  overflow: hidden;
+}
+
+.mine-name {
+  font-size: 20px;
+  font-weight: 400;
+  display: inline-block;
+  position: relative;
+  top: -20px;
+  margin-right: 10px;
+}
+
+.mine-gender-cont {
+  display: inline-block;
+  position: relative;
+  top: -20px;
+}
+
+.club-detail-list {
+  /* margin-top: 20px; */
+  border-radius: 12px 12px 0 0;
+  box-shadow: var(--shadow);
+}
+
+.mine-item-gender {
+  width: 12px;
+  height: 12px;
+  margin: 0 7px 0 0;
+}
+
+.club-item {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20rpx;
+  padding-left: 30rpx;
+  padding-right: 30rpx;
+  border: 1px solid #eee;
+}
+
+.club-item .pic {
+  width: 200rpx;
+  height: 140rpx;
+  margin-right: 10rpx;
+}
+
+.club-item .pic .img {
+  width: 100%;
+  height: 100%;
+}
+
+.club-item .club-info {
+  width: 470rpx;
+  height: 160rpx;
+  text-align: justify;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.club-item .club-info .club-name {
+  line-height: 1.4em;
+  color: var(--globalColor);
+  font-size: 30rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.club-item .club-info .club-summary {
+  line-height: 1.4em;
+  color: rgb(126, 120, 120);
+  font-size: 24rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-top: 6px;
+}
+
+.club-item .club-info .club-intro {
+  display: flex;
+  justify-content: space-between;
+  font-size: 28rpx;
+  color: var(--focusColor);
+  padding-bottom: 6rpx;
+}
+
+.club-item .club-info .club-intro .club-tag {
+  display: flex;
+  align-items: center;
+}
+
+.club-item .club-info .club-intro .club-tag van-tag {
+  padding-right: 4rpx;
+  padding-bottom: 10rpx;
+}
+
+.club-item .club-info .club-intro .club-people {
+  display: flex;
+  align-items: center;
+}
+
+.club-item .club-info .club-intro .club-people van-icon {
+  color: var(--themeColor);
+  padding-left: 2rpx;
+  margin-right: 8rpx;
+  margin-top: 10rpx;
+  align-items: center;
+  font-size: 35rpx;
+}
+
+.loading-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 15px;
+}
+
+.cell-group {
+  padding: 30rpx;
+}
+
+button {
+  width: 100%;
+}
+
+.myscroll {
+  height: 800rpx;
+}
+
+.wrap {
+  width: 100%;
+  padding: 0 0rpx;
+  box-sizing: border-box;
+}
+
+.wrap .img-wrap {
+  font-size: 30rpx;
+  color: #33373E;
+  margin-bottom: 10rpx;
+}
+
+.wrap .img-wrap .txt {
+  margin-bottom: 20rpx;
+}
+
+.wrap .img-wrap .imglist {
+  padding-top: 16rpx;
+  padding-left: 30rpx;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.wrap .img-wrap .imglist .item {
+  width: 150rpx;
+  height: 150rpx;
+  margin-right: 22rpx;
+  margin-bottom: 10rpx;
+  position: relative;
+}
+
+.wrap .img-wrap .imglist .last-item {
+  width: 150rpx;
+  height: 150rpx;
+  text-align: center;
+  line-height: 146rpx;
+  border: 2rpx dashed #8B97A9;
+  box-sizing: border-box;
+}
+
+.wrap .img-wrap .imglist .item image {
+  width: 100%;
+  height: 100%;
+}
+
+.wrap .img-wrap .imglist .item .delete {
+  width: 30rpx;
+  height: 30rpx;
+  position: absolute;
+  top: -14rpx;
+  right: -12rpx;
+  background: #fff;
+  border-radius: 100%;
+}
+
+.loading-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.gender-wrap {
+  display: flex;
+  position: relative;
+  display: -webkit-flex;
+  display: flex;
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 14px;
+  line-height: 24px;
+  color: #333;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.gender-title:before {
+  position: absolute;
+  left: 7px;
+  font-size: 14px;
+  color: #f44;
+  content: "*";
+}
+
+.gender-title {
+  margin-right: 40px;
+}
+
+.gender-select {
+  display: flex;
+}
+
+.gender-select-item {
+  margin: 0 20px;
+  position: relative;
+}
+
+
+.gender-select-item-active:before {
+  position: absolute;
+  right: -14px;
+  font-size: 14px;
+  color: #f44;
+  content: "✓";
+}

@@ -1,5 +1,6 @@
-import {request,send_request} from '../utils/request'
-
+import LoginBiz from '../common_biz/login'
+import { request, send_request } from '../utils/request'
+import { getUserLocation } from '../utils/server/club'
 //发布活动
 /**
  * @param{
@@ -27,10 +28,10 @@ import {request,send_request} from '../utils/request'
 		}
  * } data
 */
-export function publishActivaty(data){
+export function publishActivaty(data) {
 	return send_request({
-		url:"/activity/createActivity",
-		method:"POST",
+		url: "/activity/createActivity",
+		method: "POST",
 		data
 	})
 }
@@ -39,31 +40,31 @@ export function publishActivaty(data){
 /**
  * 
  * @param {{
-    token string // 用户token，必要
-    activity_id string// 活动id，必要
+		token string // 用户token，必要
+		activity_id string// 活动id，必要
 		}} data 
  */
-export function getActivatyDetail(data){
+export function getActivatyDetail(data) {
 	return send_request({
-		url:"/activity/getActivityDetail",
-		method:"GET",
+		url: "/activity/getActivityDetail",
+		method: "GET",
 		data
 	})
 }
 
-//报名活动
-export function signActivity(data){
+// 报名活动
+export function signActivity(data) {
 	return send_request({
-		url:"/activity/signActivity",
-		method:"POST",
+		url: "/activity/signActivity",
+		method: "POST",
 		data
 	})
 }
 //取消报名活动
-export function cancelSignActivity(data){
-  return send_request({
-		url:"/activity/cancelSignActivity",
-		method:"POST",
+export function cancelSignActivity(data) {
+	return send_request({
+		url: "/activity/cancelSignActivity",
+		method: "POST",
 		data
 	})
 }
@@ -78,11 +79,15 @@ export function cancelSignActivity(data){
 				sort_type int// 排序类型，0:按照时间排序，1：按照点赞数排序，非必要
 		}
 */
-export function listActivities2(data){
+export const listActivities2 = async (data) => {
 	return send_request({
-		url:"/activity/getActivityFeed",
-		method:"GET",
-		data
+		url: "/activity/getActivityFeed",
+		method: "GET",
+		data: {
+      location: await getUserLocation(),
+      token: LoginBiz.getToken(),
+			...data, 
+		}
 	})
 }
 
@@ -91,10 +96,10 @@ export function listActivities2(data){
  * {
 			file string // 文件编码
 		}**/
-export function uploadMedia(data){
+export function uploadMedia(data) {
 	return send_request({
-		url:"/api/uploadStream",
-		method:"POST",
+		url: "/api/uploadStream",
+		method: "POST",
 		data
 	})
 }
@@ -106,8 +111,8 @@ const AMAPKEY = require('../envList.js').envList[0].AMAPKEY //申请的高德地
 const myAmapFun = new amapFile.AMapWX({
 	key: AMAPKEY
 }); //创建一个实例化对象
-export function wxGetAddress(longitude,latitude) {
-  //根据传递进来经纬度进行反解析，调用的是高德给的方法
+export function wxGetAddress(longitude, latitude) {
+	//根据传递进来经纬度进行反解析，调用的是高德给的方法
 	return new Promise((resolve, reject) => {
 		myAmapFun.getRegeo({
 			location: String(longitude + ',' + latitude),//location的格式为'经度,纬度'
@@ -123,18 +128,18 @@ export function wxGetAddress(longitude,latitude) {
 }
 
 //获取首页导航栏
-export function listNav(){
+export function listNav() {
 	return request({
-		url:"/nav/get",
-		method:"POST"
+		url: "/nav/get",
+		method: "POST"
 	})
 }
 
 //获取活动列表
-export function listActivities(data){
+export function listActivities(data) {
 	return request({
-		url:"/news/get",
-		method:"POST",
+		url: "/news/get",
+		method: "POST",
 		data
 	})
 }

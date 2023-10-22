@@ -1,0 +1,12 @@
+<!--pages/member_list.wxml-->
+<view class="member-item" wx:for="{{memberList}}">
+  <image class="member-item-avatar" src="{{item.avatar_url || '../club_detail/assets/noportrait.png'}}" mode="" />
+  <view class="member-item-info">
+    <view class="member-item-name">{{item.nick_name}}
+      <image class="member-item-gender" wx:if="{{index ===1}}" src="./assets/boy.jpeg"></image>
+      <image class="member-item-gender" wx:if="{{index ===2}}" src="./assets/girl.jpeg"></image>
+    </view>
+  </view>
+  <view wx:if="{{index === 0}}" class="member-item-idcard member-item-style1">社长</view>
+  <view wx:if="{{index !== 0}}" class="member-item-idcard member-item-style2">成员</view>
+</view>

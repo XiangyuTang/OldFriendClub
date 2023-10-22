@@ -51,7 +51,8 @@
 		"useCompilerPlugins": false,
 		"useStaticServer": true,
 		"condition": false,
-		"ignoreUploadUnusedFiles": true
+		"ignoreUploadUnusedFiles": false,
+		"ignoreDevUnusedFiles": false
 	},
 	"compileType": "miniprogram",
 	"libVersion": "2.19.1",
