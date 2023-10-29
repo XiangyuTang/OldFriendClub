@@ -49,6 +49,8 @@
   width: 200rpx;
   height: 140rpx;
   margin-right: 10rpx;
+  border: 1px solid #eee;
+
 }
 
 .club-item .pic .img {
@@ -241,8 +243,41 @@ button {
 
 .gender-select-item-active:before {
   position: absolute;
-  right: -14px;
+  right: -19px;
   font-size: 14px;
   color: #f44;
   content: "✓";
+}
+
+
+.gender-select-item:after {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #f44;
+  content: "";
+  border: 1px solid #999;
+  height: 12px;
+  width: 12px;
+  border-radius: 2px;
+}
+
+.mine-tabs-fix {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #fff;
+}
+
+.custom-class {
+  border: 1px solid red;
+}
+.no-more {
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  padding: 10px 0;
 }

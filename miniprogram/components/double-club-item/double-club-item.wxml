@@ -1,6 +1,6 @@
 <!--components/double-club-item.wxml-->
 <view class="double-club-item">
-  <image bindtap="onClubItemClick" class="double-club-item-bg" mode="widthFix" style="height: {{itemStyle.realHeight}}px" src="{{club.club_back_img}}"></image>
+  <image bindtap="onClubItemClick" class="double-club-item-bg" mode="widthFix" style="height: {{itemStyle.realHeight}}px;width: {{itemStyle.realWidth}}px" src="{{club.club_back_img}}"></image>
   <view class="double-club-item-content">
     <view class="double-club-item-content-left">
       <image mode="aspectFill" class="double-club-item-logo" src="{{club.club_icon}}"></image>

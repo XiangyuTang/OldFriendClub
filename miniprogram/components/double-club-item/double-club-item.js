@@ -36,18 +36,19 @@ Component({
     onClubItemClick() {
       wx.navigateTo({
         url: '/pages/club_detail/club_detail?id=' + this.data.club.club_id,
-
       })
     },
     onClubJoin() {
-      const {refreshList} = this.props;
+      // const {
+      //   refreshList
+      // } = this.props;
       joinClub(this.data.club.club_id).then((res) => {
         if (res.err_no === 0) {
           wx.showToast({
             title: '申请成功',
             icon: 'none',
           });
-          refreshList()
+          // refreshList()
         } else {
           wx.showToast({
             title: '加入社团失败',

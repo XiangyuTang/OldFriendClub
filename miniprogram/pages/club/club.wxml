@@ -12,7 +12,7 @@
           <view class="box-content" wx:if="{{!isLoading}}">
             <view class="box-left">
               <view wx:if="{{item.direction === 'left'}}" wx:for="{{clubList}}" wx:key="_id">
-                <double-club-item itemStyle="{{item.itemStyle}}" wx:if="{{item.direction === 'left'}}" club="{{item}}" :jumpDetail="{{jumpDetail}}" onJoin="joinClub"></double-club-item>
+                <double-club-item itemStyle="{{item.itemStyle}}" wx:if="{{item.direction === 'left'}}" club="{{item}}"></double-club-item>
               </view>
             </view>
             <view class="box-right">
@@ -49,7 +49,7 @@
         <van-field model:value="{{ club_content }}" label="社团简介" placeholder="简介信息（100字以内）" required autosize maxlength="100" />
         <view class="wrap">
           <view class="img-wrap">
-            <van-field value="" label="社团Logo" disabled required title-width="600rpx" />
+            <van-field value="" label="社团图标" disabled title-width="600rpx" />
             <view class="imglist">
               <view class="item" wx:if="{{club_icon === '' ? false : true}}">
                 <image mode="aspectFill" src="{{club_icon}}" alt=""></image>
@@ -65,7 +65,7 @@
         </view>
         <view class="wrap">
           <view class="img-wrap">
-            <van-field value="" label="社团背景" disabled required title-width="600rpx" />
+            <van-field value="" label="社团背景" disabled title-width="600rpx" />
             <view class="imglist">
               <view class="item" wx:if="{{club_back_img === '' ? false : true}}">
                 <image class="img-logo" mode="aspectFill" src="{{club_back_img}}" alt=""></image>
