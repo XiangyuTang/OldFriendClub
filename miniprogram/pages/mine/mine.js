@@ -8,7 +8,6 @@ import {
   editUser
 } from "../../utils/server/club";
 import LoginBiz from "../../common_biz/login"
-const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
 
 Page({
 
@@ -27,10 +26,15 @@ Page({
     userData: {},
     showEditUser: false,
     curGender: 0,
-    userName: '',
+    userAge: '',
     userNickname: '',
     userPhone: '',
-    userAvatar: ''
+    userAvatar: '',
+    scrollviewHeight: 300,
+    fixed: false,
+    currentPageNo: 1,
+    currentActivityPageNo: 1,
+    clubNoMore: false
   },
 
   selectGender(e) {
@@ -51,19 +55,32 @@ Page({
     }
 
   },
+  verifyAge() {
+    if (!(/^((1[0-5])|[1-9])?\d$/.test(this.data.userAge))) {
+      this.setData({
+        illegal_message_age: "请输入正确的年龄！"
+      })
+    } else {
+      this.setData({
+        illegal_message_age: ""
+      })
+    }
+
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-    getUser().then(res => {
-      this.setData({
-        userData: res.data,
-        userName: res.data.name,
-        userNickname: res.data.nick_name,
-        curGender: res.data.gender,
-        userPhone: res.data.phone,
-        userAvatar: res.data.avatar_url
-      })
+
+    this.getUserData();
+
+    const _this = this;
+    wx.getSystemInfo({
+      success: function (res) {
+        _this.setData({
+          scrollviewHeight: res.windowHeight - 196
+        })
+      }
     })
     // wx.getSetting({
     //   success(res) {
@@ -93,11 +110,45 @@ Page({
     wx.showLoading({
       title: '获取中...'
     })
-    this.getData();
+    this.getData(1);
     // this.setData({
     //   clubList: mockData
     // })
     console.log(this.data.clubList)
+  },
+
+  onPageScroll: function (e) {
+    let scrollTop = parseInt(e.scrollTop); //滚动条距离顶部高度
+    console.log('==scrollTop', scrollTop)
+    if (scrollTop > 30) {
+      this.setData({
+        fixed: true
+      })
+    }
+  },
+
+  onScrollRefresh() {
+    const {
+      currentPageNo
+    } = this.data;
+    console.log('==refresh')
+    this.getData(currentPageNo + 1);
+  },
+
+  onActivityScrollRefresh() {
+    console.log('==onActivityScrollRefresh')
+  },
+  getUserData() {
+    getUser().then(res => {
+      this.setData({
+        userData: res.data,
+        userAge: res.data.age,
+        userNickname: res.data.nick_name,
+        curGender: res.data.gender,
+        userPhone: res.data.phone,
+        userAvatar: res.data.avatar_url
+      })
+    })
   },
 
   onChange(e) {
@@ -107,34 +158,54 @@ Page({
       isLoading: true
     })
     if (key === 1) {
-      this.getActivity();
+      this.getActivity(1);
     } else if (key === 0) {
-      this.getData();
+      this.getData(1);
     }
   },
-  async getActivity() {
-    let data = {
-      biz_type: 1,
-      page_no: 0,
-      scene: 0, // 0:默认推荐页  1:往期活动页
-      sort_type: 0 // 排序类型，0:按照时间排序，1：按照点赞数排序
-    }; //传参
-    listActivities2(data).then((res) => {
-      this.setData({
-        clubList: res.data.activity_datas,
-        isLoading: false
+  async getActivity(pageNo) {
+    const {
+      activityNoMore,
+      clubList
+    } = this.data;
+    if (!activityNoMore) {
+      let data = {
+        biz_type: 1,
+        page_no: pageNo,
+        scene: 0, // 0:默认推荐页  1:往期活动页
+        sort_type: 0 // 排序类型，0:按照时间排序，1:按照点赞数排序
+      }; // 传参
+      listActivities2(data).then((res) => {
+        this.setData({
+          clubList: [].concat(pageNo === 1 ? [] : clubList, res.data.activity_datas),
+          isLoading: false,
+          currentActivityPageNo: pageNo,
+          activityNoMore: res.data.activity_datas.length < 10
+        })
       })
-    })
+    }
+
   },
-  async getData() {
-    getClubList().then(async (res) => {
-      console.log(res.data)
-      this.setData({
-        clubList: res.data.club_list,
-        isLoading: false
+  async getData(pageNo) {
+    const {
+      clubList,
+      clubNoMore
+    } = this.data;
+    if (!clubNoMore) {
+      getClubList({
+        scene: 1,
+        page_no: pageNo
+      }).then(async (res) => {
+        this.setData({
+          clubList: [].concat(pageNo === 1 ? [] : clubList, res.data.club_list),
+          isLoading: false,
+          currentPageNo: pageNo,
+          clubNoMore: res.data.club_list.length < 10
+        })
+        wx.hideLoading()
       })
-      wx.hideLoading()
-    })
+    }
+
   },
 
   /**
@@ -215,7 +286,8 @@ Page({
       }, 0);
     });
     //todo：待添加文本输入是否为空的判断逻辑
-    if (this.data.userName == "" ||
+    console.log(this.data.userAge)
+    if (this.data.userAge < 0 ||
       this.data.userNickname == "" ||
       this.data.userPhone == "" ||
       this.data.userAvatar == ""
@@ -234,77 +306,94 @@ Page({
     var that = this
     var imgUrl = '';
     var tempFilePaths = that.data.userAvatar;
+    const isUploadAvatar = that.data.userAvatar.split('/')[2] === 'tmp';
     try {
-      wx.uploadFile({
-        url: 'http://124.220.84.200:5455/api/uploadStream',
-        filePath: tempFilePaths,
-        name: "file",
-        header: {
-          "content-type": "multipart/form-data"
-        },
-        formData: {
-          token: LoginBiz.getToken(), // 用户token
-          biz_type: 1, // 业务线  1：普通活动，必要
-        },
-        success: function (res) {
-          var jsonObj = JSON.parse(res.data);
-          if (res.statusCode == 200) {
-          imgUrl = jsonObj.data.file_download_http;
-          var data = {
-            name: that.data.userName,
-            nick_name: that.data.userNickname,
-            gender: Number(that.data.curGender),
-            Phone: that.data.userPhone,
-            avatar_url: imgUrl
-          }; //传参
-          console.log(data);
-          wx.showLoading({
-            title: '修改中...'
-          })
-          editUser(data).then(res => {
-            console.log({
-              this: this,
-              that
-            }, res);
+      if (isUploadAvatar) {
+        wx.uploadFile({
+          url: 'http://124.220.84.200:5455/api/uploadStream',
+          filePath: tempFilePaths,
+          name: "file",
+          header: {
+            "content-type": "multipart/form-data"
+          },
+          formData: {
+            token: LoginBiz.getToken(), // 用户token
+            biz_type: 1, // 业务线  1：普通活动，必要
+          },
+          success: function (res) {
+            var jsonObj = JSON.parse(res.data);
+            if (res.statusCode == 200) {
+              imgUrl = jsonObj.data.file_download_http;
+              var data = {
+                age: Number(that.data.userAge),
+                nick_name: that.data.userNickname,
+                gender: Number(that.data.curGender),
+                Phone: that.data.userPhone,
+                avatar_url: imgUrl
+              }; //传参
+              wx.showLoading({
+                title: '修改中...'
+              })
+              editUser(data).then(res => {
+                if (res.err_no === 0) {
+                  wx.hideLoading()
+                  wx.showToast({
+                    title: '信息修改成功！',
+                    icon: 'success',
+                  });
+                  that.getUserData();
+                }
 
-          }).catch(err => {
-            console.log(err);
-          })
+              }).catch(err => {
+                console.log(err);
+              })
+            }
+          },
+          fail: function (err) {
+            console.log('11', err)
+            wx.showToast({
+              title: "图片上传失败",
+              icon: "none",
+              duration: 2000
+            })
+            that.setData({
+              userAge: that.data.userData.age,
+              userNickname: that.data.userData.nick_name,
+              curGender: that.data.userData.gender,
+              userPhone: that.data.userData.phone,
+              userAvatar: that.data.userData.avatar_url
+            })
+          },
+          complete: function (result) {
+            console.log(result.errMsg)
+          }
+        })
+      } else {
+        var data = {
+          age: Number(that.data.userAge),
+          nick_name: that.data.userNickname,
+          gender: Number(that.data.curGender),
+          Phone: that.data.userPhone,
+          avatar_url: that.data.userAvatar
+        }; //传参
+        console.log(data);
+        wx.showLoading({
+          title: '修改中...'
+        })
+        editUser(data).then(res => {
+          if (res.err_no === 0) {
             wx.hideLoading()
             wx.showToast({
               title: '信息修改成功！',
               icon: 'success',
             })
-            that.setData({
-              isLoading: true
-            }, () => {
-              console.log('==>>社团创建成功,重新进入页面请求getData')
-              that.getData(0, 0);
-            })
-            // 
-            //向主页发布通知重新刷新
-            WxNotificationCenter.postNotificationName('refresh')
+            that.getUserData();
           }
-        },
-        fail: function (err) {
-          console.log('11', err)
-          wx.showToast({
-            title: "图片上传失败",
-            icon: "none",
-            duration: 2000
-          })
-          this.setData({
-            userName: this.data.userData.name,
-            userNickname: this.data.userData.nick_name,
-            curGender: this.data.userData.gender,
-            userPhone: this.data.userData.phone,
-            userAvatar: this.data.userData.avatar_url
-          })
-        },
-        complete: function (result) {
-          console.log(result.errMsg)
-        }
-      })
+        }).catch(err => {
+          console.log(err);
+        })
+      }
+
     } catch (err) {
       console.log('121', err)
       wx.showToast({
@@ -312,12 +401,12 @@ Page({
         icon: "none",
         duration: 2000
       })
-      this.setData({
-        userName: this.data.userData.name,
-        userNickname: this.data.userData.nick_name,
-        curGender: this.data.userData.gender,
-        userPhone: this.data.userData.phone,
-        userAvatar: this.data.userData.avatar_url
+      that.setData({
+        userAge: that.data.userData.age,
+        userNickname: that.data.userData.nick_name,
+        curGender: that.data.userData.gender,
+        userPhone: that.data.userData.phone,
+        userAvatar: that.data.userData.avatar_url
       })
     }
 
@@ -345,13 +434,13 @@ Page({
   onClose() {
     setTimeout(() => {
       this.setData({
-        userName: this.data.userData.name,
+        userAge: this.data.userData.age,
         userNickname: this.data.userData.nick_name,
         curGender: this.data.userData.gender,
         userPhone: this.data.userData.phone,
         userAvatar: this.data.userData.avatar_url
       })
-    },300)
+    }, 300)
   },
   // 删除图片
   deleteImg: function (e) {

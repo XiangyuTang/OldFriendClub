@@ -3,7 +3,6 @@ let leftHeight = 0;
 let rightHeight = 0;
 
 function clearHeight() {
-  console.log('===clear')
   leftHeight = 0;
   rightHeight = 0;
 }
@@ -23,7 +22,6 @@ function addHeightArray(addedStyleArr, attribute) {
   //     return item;
   //   })
   // })).then((addedStyleArr) => {
-    console.log('==>>1addedStyleArr',addedStyleArr)
     const pageWidth = wx.getSystemInfoSync().windowWidth;
     const standardWidth = ((pageWidth - 10) / 2) - 10;
     for (let i = 0; i < addedStyleArr.length; i++) {
@@ -32,12 +30,11 @@ function addHeightArray(addedStyleArr, attribute) {
       const radio = standardWidth / itemOriWidth;
       const itemRealHeight = itemOriHeight * radio;
 
-      console.log('==>>leftHeight', leftHeight, rightHeight)
       if (leftHeight <= rightHeight) {
-        leftHeight = leftHeight + itemRealHeight;
+        leftHeight = leftHeight + itemRealHeight + 10;
         addedStyleArr[i].direction = 'left';
       } else {
-        rightHeight = rightHeight + itemRealHeight;
+        rightHeight = rightHeight + itemRealHeight + 10;
         addedStyleArr[i].direction = 'right';
       }
       addedStyleArr[i]['itemStyle'] = {
@@ -45,7 +42,6 @@ function addHeightArray(addedStyleArr, attribute) {
         realWidth: standardWidth
       }
     }
-    console.log('==>>2addedStyleArr', addedStyleArr)
     return addedStyleArr;
   // })
 }

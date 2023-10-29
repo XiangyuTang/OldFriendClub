@@ -10,58 +10,70 @@
     <image class="mine-item-gender" wx:if="{{userData.gender ===2}}" src="../member_list/assets/girl.jpeg"></image>
   </view>
 </view>
+<!-- class="{{fixed ? 'mine-tabs-fix' : ''}}" -->
+
 <van-tabs active="{{ activeTab }}" bind:change="onChange" swipeable animated color="#f09636">
   <block wx:for="{{tabsArr}}" wx:for-item="tabs" wx:key="index">
     <van-tab title="{{tabs}}">
       <view class="club-detail-list">
-        <view wx:if="{{!isLoading && activeTab === 1}}" wx:for="{{clubList}}">
-          <view class="club-item {{hideBorder ? '': 'club-item-border'}}" data-acid="{{item.activity_id}}" bindtap="onJumpAct">
-            <view class="pic">
-              <image class="img" src="{{item.cover_image_url}}" mode="aspectFill" />
-            </view>
-            <view class="club-info">
-              <view class="club-name">
-                {{item.title}}
+        <scroll-view wx:if="{{!isLoading && activeTab === 1}}" scroll-y="true" bindscrolltolower="onActivityScrollRefresh" style="height:{{scrollviewHeight}}px">
+          <view wx:for="{{clubList}}">
+            <view class="club-item {{hideBorder ? '': 'club-item-border'}}" data-acid="{{item.activity_id}}" bindtap="onJumpAct">
+              <view class="pic">
+                <image class="img" src="{{item.cover_image_url}}" mode="aspectFill" />
               </view>
-              <view class="club-summary">
-                {{item.activity_location}}
-              </view>
-              <view class="club-intro">
-                <view class="club-tag">
+              <view class="club-info">
+                <view class="club-name">
+                  {{item.title}}
                 </view>
-                <view class="club-people">
-                  <!-- <van-icon name="friends-o" /> -->
-                  <text>{{item.signed_num}}/{{item.max_sign_num}}人</text>
+                <view class="club-summary">
+                  {{item.activity_location}}
                 </view>
-              </view>
-            </view>
-          </view>
-        </view>
-        <view wx:if="{{!isLoading && activeTab===0}}" wx:for="{{clubList}}">
-          <view class="club-item {{hideBorder ? '': 'club-item-border'}}" data-clubid="{{item.club_id}}" bindtap="onJumpClub">
-            <view class="pic">
-              <image class="img" src="{{item.club_back_img}}" mode="aspectFill" />
-            </view>
-            <view class="club-info">
-              <view class="club-name">
-                {{item.club_name}}
-              </view>
-              <view class="club-summary">
-                {{item.club_summary}}
-              </view>
-              <view class="club-intro">
-                <view class="club-tag">
-                </view>
-                <view class="club-people">
-                  <text>{{item.member_num}}人</text>
+                <view class="club-intro">
+                  <view class="club-tag">
+                  </view>
+                  <view class="club-people">
+                    <!-- <van-icon name="friends-o" /> -->
+                    <text>{{item.signed_num}}/{{item.max_sign_num}}人</text>
+                  </view>
                 </view>
               </view>
             </view>
           </view>
-        </view>
-        <view class="loading-wrap">
-          <van-loading wx:if="{{isLoading}}" size="24px">加载中...</van-loading>
-        </view>
+          <view class="loading-wrap" wx:if="{{isLoading}}">
+            <van-loading size="24px">加载中...</van-loading>
+          </view>
+          <view class="no-more" wx:if="{{activityNoMore}}">没有更多了~</view>
+        </scroll-view>
+        <scroll-view wx:if="{{!isLoading && activeTab === 0}}" scroll-y="true" bindscrolltolower="onScrollRefresh" style="height:{{scrollviewHeight}}px">
+          <view wx:for="{{clubList}}">
+            <view class="club-item {{hideBorder ? '': 'club-item-border'}}" data-clubid="{{item.club_id}}" bindtap="onJumpClub">
+              <view class="pic">
+                <image class="img" src="{{item.club_back_img}}" mode="aspectFill" />
+              </view>
+              <view class="club-info">
+                <view class="club-name">
+                  {{item.club_name}}
+                </view>
+                <view class="club-summary">
+                  {{item.club_summary}}
+                </view>
+                <view class="club-intro">
+                  <view class="club-tag">
+                  </view>
+                  <view class="club-people">
+                    <text>{{item.member_num}}人</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+          <view class="loading-wrap" wx:if="{{isLoading}}">
+            <van-loading size="24px">加载中...</van-loading>
+          </view>
+          <view class="no-more" wx:if="{{clubNoMore}}">没有更多了~</view>
+        </scroll-view>
+
       </view>
     </van-tab>
   </block>
@@ -70,8 +82,8 @@
 <van-dialog use-slot title="修改信息" show="{{ showEditUser }}" messageAlign="left" closeOnClickOverlay showConfirmButton showCancelButton bind:close="onClose" bind:confirm="confirmEdit" confirmButtonText="确定修改" customStyle="myvan-dialog" before-close="onBeforeClose">
   <view class="cell-group" scroll-y>
     <van-cell-group class="van-cell-group">
-      <van-field model:value="{{ userName }}" required focus label="用户名" placeholder="请输入用户名" />
       <van-field model:value="{{ userNickname }}" required focus label="用户昵称" placeholder="请输入用户昵称" />
+      <van-field model:value="{{ userAge }}" label="年龄" placeholder="请输入年龄" required autosize bind:input="verifyAge" error-message="{{illegal_message_age}}" />
       <view class="gender-wrap">
         <view class="gender-title">性别</view>
         <view class="gender-select">

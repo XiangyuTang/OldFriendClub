@@ -32,7 +32,11 @@ Page({
     loadingFlag: false,
     scrollviewHeight: 0,
     currentPageNo: 1,
-    isNoMore: false
+    isNoMore: false,
+    club_back_img_width: 717,
+    club_back_img_height: 603,
+    activeTab: 0,
+    currentActiveTab: 0
   },
 
 
@@ -44,8 +48,7 @@ Page({
     const {
       currentPageNo
     } = this.data;
-    console.log('==>>on Load 请求getData');
-    this.getData(0, currentPageNo);
+    this.getData(this.data.tabKey, currentPageNo);
     wx.getSystemInfo({
       success: function (res) {
         _this.setData({
@@ -63,15 +66,25 @@ Page({
       1: 2,
       2: 0
     };
+    const {
+      clubList: oldClubList,
+      activeTab
+    } = this.data;
+
     getClubList({
       scene: idMap[typeKey],
       page_no: pageNo
     }).then(async (res) => {
-      const clubList = res.data.club_list.filter((item) => {
-        return item.club_back_img_width
+      const filterNoWidthClubList = res.data.club_list.map((item) => {
+        return {
+          ...item,
+          club_back_img_height: item.club_back_img_height ? item.club_back_img_height : 603,
+          club_back_img_width: item.club_back_img_width ? item.club_back_img_width : 717,
+          club_back_img: item.club_back_img || 'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/dc27bcb8ed6da24c452ef24a7495df06.jpg',
+          club_icon: item.club_icon || 'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/e21405990022308da593789d244e3a30.png'
+        }
       })
-      const list = await addHeightArray(clubList, 'club_back_img');
-      console.log('==>>list', list)
+      const list = await addHeightArray(filterNoWidthClubList, 'club_back_img');
 
       if (list.length < 10) {
         // 没有更多了
@@ -79,8 +92,10 @@ Page({
           isNoMore: true
         })
       }
+      const completeList = (pageNo === 1 ? [] : oldClubList).concat(list);
       this.setData({
-        clubList: list,
+        clubList: completeList,
+        currentActiveTab: activeTab,
         isLoading: false,
         loadingFlag: false,
         currentPageNo: pageNo + 1
@@ -98,12 +113,6 @@ Page({
     this.getData(this.data.tabKey, this.data.currentPageNo)
   },
 
-  jumpDetail() {
-    console.log('==>>jump d')
-  },
-  joinClub() {
-    console.log('==>>jump joinClub')
-  },
   onclickPublishClub() {
     this.setData({
       showPublishClub: true
@@ -124,9 +133,9 @@ Page({
       currentPageNo: 1,
       isLoading: true,
       tabKey: e.detail.index,
+      activeTab: e.detail.index,
       isNoMore: false
     }, () => {
-      console.log('==>>onChange发送getData请求=2')
       this.getData(e.detail.index, 1);
     })
   },
@@ -143,10 +152,9 @@ Page({
       }, 0);
     });
     //todo：待添加文本输入是否为空的判断逻辑
+    console.log(this.data.club_name, this.data.club_content)
     if (this.data.club_name == "" ||
-      this.data.club_content == "" ||
-      this.data.club_icon == "" ||
-      this.data.club_back_img == ""
+      this.data.club_content == ""
     ) {
       wx.showToast({
         title: '请检查必填项',
@@ -163,78 +171,151 @@ Page({
     var imgUrl = [];
     var tempFilePaths = [that.data.club_icon, that.data.club_back_img];
     var times = 0;
+    console.log(tempFilePaths)
     try {
-      for (var i = 0; i < tempFilePaths.length; i++) {
-        wx.uploadFile({
-          url: 'http://124.220.84.200:5455/api/uploadStream',
-          filePath: tempFilePaths[i],
-          name: "file",
-          header: {
-            "content-type": "multipart/form-data"
-          },
-          formData: {
-            token: LoginBiz.getToken(), // 用户token
-            biz_type: 1, // 业务线  1：普通活动，必要
-          },
-          success: function (res) {
-            times += 1
-            var jsonObj = JSON.parse(res.data);
-            if (res.statusCode == 200) {
-              imgUrl.push(jsonObj.data.file_download_http)
-              if (times === tempFilePaths.length) { //图片传完了
-                var data = {
-                  club_name: that.data.club_name,
-                  club_summary: that.data.club_content,
-                  club_icon: imgUrl[0],
-                  club_back_img: imgUrl[1]
-                }; //传参
-                console.log(data);
-                wx.showLoading({
-                  title: '发布中...'
-                })
-                createClub(data).then(res => {
-                  console.log({
-                    this: this,
-                    that
-                  }, res);
+      if (tempFilePaths[0] !== '' || tempFilePaths[1] !== '') {
+        for (var i = 0; i < tempFilePaths.length; i++) {
+          if (tempFilePaths[i] === '') {
+            times += 1;
+            imgUrl.push('')
+            continue;
+          }
+          wx.uploadFile({
+            url: 'http://124.220.84.200:5455/api/uploadStream',
+            filePath: tempFilePaths[i],
+            name: "file",
+            header: {
+              "content-type": "multipart/form-data"
+            },
+            formData: {
+              token: LoginBiz.getToken(), // 用户token
+              biz_type: 1, // 业务线  1：普通活动，必要
+            },
+            success: function (res) {
+              times += 1
+              var jsonObj = JSON.parse(res.data);
+              if (res.statusCode == 200) {
+                imgUrl.push(jsonObj.data.file_download_http)
+                if (times === tempFilePaths.length) { //图片传完了
+                  var data = {};
+                  console.log(imgUrl)
+                  if (imgUrl[0] !== '') {
+                    data = {
+                      club_name: that.data.club_name,
+                      club_summary: that.data.club_content,
+                      club_icon: imgUrl[0],
+                      club_back_img: imgUrl[1],
+                      club_back_img_width: that.data.club_back_img_width,
+                      club_back_img_height: that.data.club_back_img_height
+                    };
+                  } else {
+                    data = {
+                      club_name: that.data.club_name,
+                      club_summary: that.data.club_content,
+                      club_icon: tempFilePaths[0] === '' ? 'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/e21405990022308da593789d244e3a30.png' : imgUrl[1],
+                      club_back_img: tempFilePaths[1] === '' ? 'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/dc27bcb8ed6da24c452ef24a7495df06.jpg' : imgUrl[1],
+                      club_back_img_width: tempFilePaths[1] === '' ? 717 : that.data.club_back_img_width,
+                      club_back_img_height: tempFilePaths[1] === '' ? 603 : that.data.club_back_img_height
+                    };
+                  }
+                  console.log(data);
+                  wx.showLoading({
+                    title: '发布中...'
+                  })
+                  createClub(data).then(res => {
+                    if (res.err_no === 0) {
+                      wx.hideLoading()
+                      wx.showToast({
+                        title: '社团创建成功！',
+                        icon: 'success',
+                      })
+                      that.setData({
+                        isLoading: true,
+                        club_name: '',
+                        club_content: '',
+                        club_icon: '',
+                        club_back_img: '',
+                        club_back_img_width: 717,
+                        club_back_img_height: 603,
+                        activeTab: 1
+                      }, () => {
+                        that.getData(1, 1);
+                      })
+                    }
 
-                }).catch(err => {
-                  console.log(err);
-                })
-                wx.hideLoading()
-                wx.showToast({
-                  title: '社团创建成功！',
-                  icon: 'success',
-                })
-                that.setData({
-                  isLoading: true
-                }, () => {
-                  console.log('==>>社团创建成功,重新进入页面请求getData')
-                  that.getData(0, 1);
-                })
-                // 
-                //向主页发布通知重新刷新
-                WxNotificationCenter.postNotificationName('refresh')
+                  }).catch(err => {
+                    console.log(err);
+                  })
+
+                  //
+                  //向主页发布通知重新刷新
+                  // WxNotificationCenter.postNotificationName('refresh')
+                }
               }
+            },
+            fail: function (err) {
+              wx.showToast({
+                title: "图片上传失败",
+                icon: "none",
+                duration: 2000
+              })
+              this.setData({
+                club_name: '',
+                club_content: '',
+                club_icon: '',
+                club_back_img: '',
+                club_back_img_width: 717,
+                club_back_img_height: 603
+              })
+            },
+            complete: function (result) {
+              console.log(result.errMsg)
             }
-          },
-          fail: function (err) {
+          })
+        }
+      } else {
+        var data = {
+          club_name: that.data.club_name,
+          club_summary: that.data.club_content,
+          club_icon: 'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/e21405990022308da593789d244e3a30.png',
+          club_back_img: 'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/dc27bcb8ed6da24c452ef24a7495df06.jpg',
+          club_back_img_width: 717,
+          club_back_img_height: 603
+        }; //传参
+        wx.showLoading({
+          title: '发布中...'
+        })
+        createClub(data).then(res => {
+          if (res.err_no === 0) {
+            wx.hideLoading()
             wx.showToast({
-              title: "图片上传失败",
-              icon: "none",
-              duration: 2000
+              title: '社团创建成功！',
+              icon: 'success',
             })
-            this.setData({
+            that.setData({
+              isLoading: true,
               club_name: '',
               club_content: '',
               club_icon: '',
+              club_back_img: '',
+              club_back_img_width: 717,
+              club_back_img_height: 603,
+              activeTab: 1
+            }, () => {
+              console.log('==>>社团创建成功,重新进入页面请求getData')
+              that.getData(1, 1);
             })
-          },
-          complete: function (result) {
-            console.log(result.errMsg)
           }
+
+        }).catch(err => {
+          console.log(err);
         })
+
+        //
+        //向主页发布通知重新刷新
+        // WxNotificationCenter.postNotificationName('refresh')
       }
+
     } catch (err) {
       wx.showToast({
         title: "图片上传失败",
@@ -245,6 +326,9 @@ Page({
         club_name: '',
         club_content: '',
         club_icon: '',
+        club_back_img: '',
+        club_back_img_width: 717,
+        club_back_img_height: 603
       })
     }
 
@@ -274,9 +358,17 @@ Page({
           })
         } else {
           that.data.club_back_img = tempFilePaths[0].tempFilePath;
-          that.setData({
-            club_back_img: that.data.club_back_img
+          wx.getImageInfo({
+            src: that.data.club_back_img,
+            success(res) {
+              that.setData({
+                club_back_img: that.data.club_back_img,
+                club_back_img_width: res.width,
+                club_back_img_height: res.height
+              })
+            }
           })
+
         }
 
       }
@@ -297,7 +389,9 @@ Page({
             })
           } else {
             that.setData({
-              club_back_img: ''
+              club_back_img: '',
+              club_back_img_width: 717,
+              club_back_img_height: 603
             })
           }
 
@@ -380,7 +474,7 @@ Page({
 
 
 // var that = this;
-// /** 
+// /**
 //  * 获取系统信息,系统宽高
 //  */
 // wx.getSystemInfo({
