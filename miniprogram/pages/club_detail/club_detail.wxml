@@ -12,42 +12,34 @@
       </view>
     </view>
     <view class="club-detail-name">{{clubData.club_name}}</view>
-    <view
-      wx:if="{{clubData.join_status === 1 || clubData.join_status === 4}}"
-      class="club-detail-ability"
-      bindtap="onClubAbility"
-      data-type="{{clubData.join_status}}"
-    >{{clubData.join_status === 4 ? '解散社团' : '退出社团'}}</view>
+    <view wx:if="{{clubData.join_status === 1 || clubData.join_status === 4}}" class="club-detail-ability" bindtap="onClubAbility" data-type="{{clubData.join_status}}">{{clubData.join_status === 4 ? '解散社团' : '退出社团'}}</view>
     <view class="club-detail-desc">{{clubData.club_summary}}</view>
   </view>
   <view class="club-detail-list">
-    <view wx:for="{{clubList}}">
-      <view
-        class="club-item {{hideBorder ? '': 'club-item-border'}}"
-        data-acid="{{item.activity_id}}"
-        bindtap="onJumpAct"
-      >
-        <view class="pic">
-          <image class="img" src="{{item.cover_image_url}}" mode="aspectFill" />
-        </view>
-        <view class="club-info">
-          <view class="club-name">
-            {{item.title}}
+    <scroll-view scroll-y bindscrolltolower="onScrollRefresh" style="height:{{scrollviewHeight}}px">
+      <view wx:for="{{clubList}}">
+        <view class="club-item {{hideBorder ? '': 'club-item-border'}}" data-acid="{{item.activity_id}}" bindtap="onJumpAct">
+          <view class="pic">
+            <image class="img" src="{{item.cover_image_url}}" mode="aspectFill" />
           </view>
-          <view class="club-summary">
-            {{item.activity_location}}
-          </view>
-          <view class="club-intro">
-            <view class="club-tag">
+          <view class="club-info">
+            <view class="club-name">
+              {{item.title}}
             </view>
-            <view class="club-people">
-              <!-- <van-icon name="friends-o" /> -->
-              <text>{{item.signed_num}}/{{item.max_sign_num}}人</text>
+            <view class="club-summary">
+              {{item.activity_location}}
+            </view>
+            <view class="club-intro">
+              <view class="club-tag">
+              </view>
+              <view class="club-people">
+                <text>{{item.signed_num}}/{{item.max_sign_num}}人</text>
+              </view>
             </view>
           </view>
         </view>
       </view>
-    </view>
+    </scroll-view>
   </view>
   <van-dialog use-slot title="{{dialogTitle}}" show="{{ showDialog }}" messageAlign="left" closeOnClickOverlay showConfirmButton showCancelButton bind:close="onClose" bind:confirm="onConfirm" confirmButtonText="{{buttonText}}" customStyle="myvan-dialog" before-close="onBeforeClose">
     <view class="cell-group" scroll-y>

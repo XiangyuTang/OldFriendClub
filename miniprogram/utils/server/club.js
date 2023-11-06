@@ -73,6 +73,24 @@ export const leaveClub = (clubId) => {
   })
 }
 
+export const getClubActivityFeed = ({
+  clubId,
+  pageNo
+}) => {
+  let params = {
+    token: LoginBiz.getToken(),
+    club_id: clubId,
+    page_size: 10,
+    page_no: pageNo,
+  }
+  return send_request({
+    url: "/club/getClubActivityFeed",
+    method: "get",
+    data: params
+  })
+}
+
+
 export const getUser = () => {
   let params = {
     token: LoginBiz.getToken()

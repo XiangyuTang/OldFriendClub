@@ -75,6 +75,14 @@ Page({
 	onClickNavi(e) {
 		let choose_idx = e.currentTarget.dataset.idx;
 		if (choose_idx === 0) {
+      // 暂时改为即将上线
+      wx.showToast({
+				title: '即将上线!',
+				icon: 'success',
+				duration: 800
+			})
+			return
+
 			wx.redirectTo({
 				url: '/pages/navi_pages/shopping_market/shopping_market',
 			})

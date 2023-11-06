@@ -1,1 +1,9 @@
 /* pages/earns/earns.wxss */
+
+.myText{
+  /* 用弹性盒子设置居中 */
+  display: flex;
+  align-items: center;/* 垂直居中 */
+  justify-content: center;/* 水平居中 */
+  font-size:x-large;
+}

@@ -1,5 +1,5 @@
 // const host = 'http://124.220.84.200'
-const host = 'http://124.220.84.200';
+const host = 'http://124.220.84.200:5455';
 // const host = "http://www.mirthdata.com"
 const port = '5455'
 const serverLoginInterface = '/wxApi/miniProgram/login'
