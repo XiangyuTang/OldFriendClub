@@ -3,8 +3,9 @@ Page({
 	/**
 	 * 页面的初始数据
 	 */
+
 	data: {
-		active: 1
+		active: 0
 	},
 	onChange(event) {
     wx.showToast({

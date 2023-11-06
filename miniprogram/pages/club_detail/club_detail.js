@@ -14,6 +14,7 @@ import {
 } from '../../utils/util';
 import {
   disbandClub,
+  getClubActivityFeed,
   leaveClub
 } from '../../utils/server/club'
 
@@ -32,73 +33,77 @@ Page({
     buttonText: '退出',
     dialogContent: '是否退出社团?',
     // 0 退出 1 解散
-    abilityType: 0
+    abilityType: 0,
+    scrollviewHeight: 300,
+    noMore: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    const _this = this;
+    wx.getSystemInfo({
+      success: function (res) {
+        _this.setData({
+          scrollviewHeight: res.windowHeight - 310
+        })
+      }
+    });
+    this.club_id = options.id;
     getClubDetail({
       clubId: options.id
     }).then((res) => {
-      console.log('==>>res`12', res)
       this.setData({
         clubData: res.data.club_data,
         memberList: res.data.member_list,
         // clubList: mockData
       });
-    })
-
-    let data = {
-      biz_type: 1,
-      // location: this.data.location,
-      page_no: 0,
-      scene: 0, // 0:默认推荐页  1:往期活动页
-      sort_type: 0 // 排序类型，0:按照时间排序，1：按照点赞数排序
-    }; //传参
-    console.log("获取活动列表：");
-    console.log(data);
-    listActivities2(data).then(res => {
-      console.log("正确信息：");
-      console.log('==res.data.activity_datas', res.data.activity_datas);
-      this.setData({
-        clubList: res.data.activity_datas
-      }, () => {
-        console.log('==>>club', this.clubData)
-      });
-      // if (res.data.activity_datas == null) {
-      // 	this.setData({
-      // 		isLoading: false,
-      // 		finishLoading: true
-      // 	})
-      // 	return;
-      // }
-      // res.data.activity_datas.forEach(item => {
-      // 	item.max_sign_num = formatNum(item.max_sign_num)
-      // 	item.sign_start_time = formatTime(item.sign_start_time * 1000, 5)
-      // })
-      // let old_list = this.data.activatiesArr;
-      // let new_list = old_list.concat(res.data.activity_datas);
-      // console.log("new_list:", new_list);
-      // wx.stopPullDownRefresh();
-      // this.setData({
-      // 	activatiesArr: new_list,
-      // 	isLoading: false,
-      // })
-      // if (res.data.activity_datas.length < 10) {
-      // 	console.log("没有更多了");
-      // 	this.setData({
-      // 		finishLoading: true
-      // 	})
-      // }
-    }).catch(err => {
-      console.log("错误信息：");
-      console.log(err);
+      this.getActivityList(1);
     })
 
   },
 
+  getActivityList(pageNo) {
+    const {
+      clubList,
+      noMore
+    } = this.data;
+
+    console.log('==>>');
+    if (noMore) {
+      return;
+    }
+    getClubActivityFeed({
+      clubId: this.club_id,
+      pageNo,
+    }).then(res => {
+      const list = res.data.activity_datas
+      this.setData({
+        // clubList: [].concat(clubList, res.data.activity_datas),
+        clubList: [].concat(clubList, list),
+        noMore: list.length < 10 ? true : false,
+        isLoading: false,
+        pageNo: pageNo
+      })
+    }).catch(err => {
+      console.log("错误信息：", err);
+      console.log(err);
+    })
+  },
+  onScrollRefresh() {
+    const {
+      isLoading,
+      pageNo
+    } = this.data;
+    this.setData({
+      isLoading: true
+    });
+    if (isLoading) {
+      return;
+    }
+    this.getActivityList(pageNo + 1)
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

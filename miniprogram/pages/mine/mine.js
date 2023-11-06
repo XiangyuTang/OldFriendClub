@@ -34,7 +34,8 @@ Page({
     fixed: false,
     currentPageNo: 1,
     currentActivityPageNo: 1,
-    clubNoMore: false
+    clubNoMore: false,
+    activityNoMore: false
   },
 
   selectGender(e) {
@@ -155,7 +156,9 @@ Page({
     const key = e.detail.index;
     this.setData({
       activeTab: key,
-      isLoading: true
+      isLoading: true,
+      activityNoMore: false,
+      clubNoMore: false
     })
     if (key === 1) {
       this.getActivity(1);
