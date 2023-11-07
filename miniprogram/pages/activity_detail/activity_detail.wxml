@@ -46,9 +46,19 @@
 			<view class="content">{{activity.content}}</view>
 		</view>
 		<view class="item">
-			<button class="sign_btn" bindtap="modifySignUp" disabled="{{tool.signBtnstatus(sign_status,sign_due).disable}}" hover-class="btn-hover">
-			{{tool.signBtnstatus(sign_status,sign_due).text}}
-			</button>
+      <block wx:if="{{sign_status != 4}}">
+        <button class="sign_btn" bindtap="modifySignUp" disabled="{{tool.signBtnstatus(sign_status,sign_due).disable}}" hover-class="btn-hover">
+        {{tool.signBtnstatus(sign_status,sign_due).text}}
+        </button>
+      </block>
+      <block wx:else>
+        <button class="edit_activity_btn" bindtap="editActivity" hover-class="btn-hover">
+        编辑活动
+        </button>
+        <button class="delete_activity_btn" bindtap="deleteActivity" hover-class="btn-hover">
+        删除活动
+        </button>
+      </block>
 		</view>
 	</view>
 	<block wx:if="{{activity.cover_image_url!=''}}">

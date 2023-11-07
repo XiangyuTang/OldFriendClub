@@ -52,6 +52,14 @@ export function getActivatyDetail(data) {
 	})
 }
 
+export function deleteActivity(data) {
+  return send_request({
+    url: "/activity/userDeleteActivity",
+    method: "DELETE",
+    data
+  })
+}
+
 // 报名活动
 export function signActivity(data) {
 	return send_request({

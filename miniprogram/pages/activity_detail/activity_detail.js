@@ -1,6 +1,6 @@
 const LoginBiz = require('../../common_biz/login.js')
 import {formatTime} from "../../utils/common.js"
-import {getActivatyDetail,signActivity,cancelSignActivity} from "../../api/apis"
+import {getActivatyDetail,signActivity,cancelSignActivity,deleteActivity} from "../../api/apis"
 import Dialog from 'vant-weapp/dialog/dialog';
 let that = null
 Page({
@@ -463,6 +463,24 @@ Page({
         sign_status:res.data.activity_data.sign_status
       })
 
+      if (res.data.activity_data.audit_status == -128 || res.data.activity_data.audit_status == -127) {
+        wx.showToast({
+          title: '该活动已被删除',
+          icon: 'error',
+          duration: 2000
+        });
+
+        var pages = getCurrentPages();
+        if (pages.length > 1) {
+          var beforePage = pages[pages.length-2];
+          beforePage.returnPage();
+        }
+        wx.navigateBack({
+          delta : 1
+        });
+        return
+      }
+
       if (res.data.club_data) {
         that.setData({
           activity_club: res.data.club_data
@@ -475,13 +493,13 @@ Page({
         })
       }
 
-      if (res.data.EnrollData.applicant_status == 1 || res.data.EnrollData.applicant_status == 2 || res.data.EnrollData.applicant_status == 5) {
+      if (res.data.enroll_data.applicant_status == 1 || res.data.enroll_data.applicant_status == 2 || res.data.enroll_data.applicant_status == 5) {
         that.setData({
           input: {
-            name: res.data.EnrollData.applicant_sign_name,
-            gender: res.data.EnrollData.applicant_gender,
-            age: res.data.EnrollData.applicant_age,
-            tel: res.data.EnrollData.applicant_phone,
+            name: res.data.enroll_data.applicant_sign_name,
+            gender: res.data.enroll_data.applicant_gender,
+            age: res.data.enroll_data.applicant_age,
+            tel: res.data.enroll_data.applicant_phone,
           }
         })
 
@@ -501,6 +519,68 @@ Page({
     console.log(info)
     wx.navigateTo({
       url: "../club_detail/club_detail?id="+info,
+    })
+  },
+
+  editActivity(e) {
+    console.log("编辑活动");
+    console.log(e.detail);
+  },
+
+  deleteActivity(e) {
+    console.log("删除活动");
+    console.log(e.detail);
+  
+    console.log(e)
+    var that = this
+    wx.showModal({
+      title: "提示",
+      content: "确定要删除该活动吗？",
+      success: function (res) {
+        if (res.confirm) {
+          let data = {
+            token:LoginBiz.getToken(),
+            biz_type:1,
+            activity_id:that.data.activity.activity_id,
+          }
+
+          deleteActivity(data).then(res=>{
+            console.log("删除活动返回结果");
+            console.log(res);
+            if(res.err_no!=0){
+              wx.showToast({
+                title: res.err_msg,
+                mask:true,
+                icon:"error"
+              });
+            }else if(res.err_no===0){
+              wx.showToast({
+                title: '删除活动成功！',
+                icon:'success'
+              })
+
+              var pages = getCurrentPages();
+              if (pages.length > 1) {
+                var beforePage = pages[pages.length-2];
+                beforePage.returnPage();
+              }
+              wx.navigateBack({
+                delta : 1
+              }); 
+            }
+          }).catch((err) => {
+            // on cancel
+            console.log(err)
+            wx.showToast({
+              title: '删除活动失败！',
+              icon:'error'
+            })
+          })
+
+        } else if (res.cancel) {
+          console.log("用户点击取消")
+        }
+      }
     })
   },
 

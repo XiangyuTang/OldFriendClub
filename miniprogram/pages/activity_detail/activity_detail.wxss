@@ -91,6 +91,21 @@ page {
   box-shadow: none;
 }
 
+.edit_activity_btn, .delete_activity_btn {
+  width: 40%;
+  margin: 25rpx auto;
+  line-height: 80rpx;
+  height: 80rpx;
+  padding: 0;
+  background: #ed7a19;
+  color: #ffffff;
+  box-shadow: none;
+}
+
+.delete_activity_btn {
+  background: rgb(192, 7, 7);
+}
+
 .info_model .item .sign_btn[disabled] {
   background-color: #ed7a19;
   color: #ffffff;

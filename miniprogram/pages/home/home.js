@@ -49,6 +49,12 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad: async function (option) {
+    console.log("onload")
+    this.setData({
+      activatiesArr: [],
+      page_no: 1,
+    })
+
 		if (!await LoginBiz.loginSilence(this)) {
 			console.log("fail to login")
 			return;
@@ -125,7 +131,9 @@ Page({
 			res.data.activity_datas.forEach(item => {
 				item.max_sign_num = formatNum(item.max_sign_num)
 				item.sign_start_time = formatTime(item.sign_start_time * 1000, 5)
-			})
+      })
+      console.log("oldList")
+      console.log(this.data.activatiesArr)
 			let old_list = this.data.activatiesArr;
 			let new_list = old_list.concat(res.data.activity_datas);
 			console.log("new_list:", new_list);
@@ -133,7 +141,9 @@ Page({
 			this.setData({
 				activatiesArr: new_list,
 				isLoading: false,
-			})
+      })
+      
+      console.log(res.data.activity_datas.length)
 			if (res.data.activity_datas.length < 10) {
 				console.log("没有更多了");
 				this.setData({
@@ -238,7 +248,17 @@ Page({
 		wx.navigateTo({
 			url: './webview',
 		})
-	},
+  },
+  
+  returnPage() {
+    this.setData({
+      activatiesArr: [],
+      page_no: 1,
+      isLoading: false,
+		  finishLoading: false,
+    })
+    this.onLoad();
+  },
 
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
@@ -251,7 +271,7 @@ Page({
 	 * 生命周期函数--监听页面显示
 	 */
 	onShow() {
-
+  
 	},
 
 	/**
@@ -278,7 +298,8 @@ Page({
 	 */
 	onPullDownRefresh() {
 		this.setData({
-			activatiesArr: [],
+      activatiesArr: [],
+      page_no: 1,
 			isLoading: false,
 			finishLoading: false
 		})

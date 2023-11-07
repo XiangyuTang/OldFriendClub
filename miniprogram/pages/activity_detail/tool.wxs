@@ -117,7 +117,7 @@ function signBtnstatus (useropen, time) {
     res.btnlist = []
   }else if (useropen === 4) {
     res.text = '您无需报名'
-    res.disable = true
+    res.disable = false
     res.title = '创建者无需报名'
 		res.btnlist = []
   }
