@@ -54,12 +54,24 @@ Page({
     getClubDetail({
       clubId: options.id
     }).then((res) => {
+      if (!res.data.club_data || res.data.club_data.club_id == '') {
+        wx.showToast({
+          title: '社团不存在！',
+          icon: 'none',
+          duration: 800
+        })
+        return
+      }
+
       this.setData({
         clubData: res.data.club_data,
         memberList: res.data.member_list,
         // clubList: mockData
       });
-      this.getActivityList(1);
+
+      if (res.data.club_data && res.data.club_data.club_id != '') {
+        this.getActivityList(1);
+      }
     })
 
   },
@@ -104,6 +116,7 @@ Page({
     }
     this.getActivityList(pageNo + 1)
   },
+  
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

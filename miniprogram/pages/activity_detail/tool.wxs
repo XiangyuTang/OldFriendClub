@@ -14,7 +14,7 @@ function execTime (time) {
   if (time.length === 2) {
     var starttime = Date.parse(time[0].replace(getRegExp('(月|年)', 'g'), '/').replace('日', ''))
 		var stoptime = Date.parse(time[1].replace(getRegExp('(月|年)', 'g'), '/').replace('日', ''))
-		// console.log("starttime:",starttime)
+    // console.log("starttime:",starttime)
 		// console.log("stoptime:",stoptime)
     if (now < starttime) {
       return {
@@ -26,7 +26,12 @@ function execTime (time) {
         open: true,
         text: '报名截止时间：' + time[1]
       }
-    } else {
+    } else if (stoptime == 0){
+      return {
+        open: true,
+        text:'报名截止时间：'
+      }
+    }else {
       return {
         open: false,
         text: '报名截止时间：' + time[1]
@@ -98,7 +103,8 @@ function signBtnstatus (useropen, time) {
     res.text = '已报名，审核中'
     res.disable = false
     res.title = '报名信息-审核中'
-    res.btnlist = [sign_btnlist[3], sign_btnlist[2]]
+    res.btnlist = [sign_btnlist[3]]
+    // res.btnlist = [sign_btnlist[3], sign_btnlist[2]]
   } else if (useropen === 2) {
     res.text = '已通过报名'
     res.disable = true
@@ -118,9 +124,10 @@ function signBtnstatus (useropen, time) {
   else if(useropen === 5){
     res.text = '重新报名'
     res.disable = false
-    res.title = ''
-		res.btnlist = []
+    res.title = '报名信息填写'
+		res.btnlist = [sign_btnlist[0], sign_btnlist[1]]
   }
+
   return res
 }
 
