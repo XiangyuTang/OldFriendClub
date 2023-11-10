@@ -111,3 +111,7 @@
 		</block>
 	</mp-cells>
 </mp-half-screen-dialog>
+
+<view>
+  <myfooter id="myfooter"></myfooter>
+</view>

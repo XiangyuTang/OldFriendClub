@@ -310,8 +310,10 @@ Page({
     var imgUrl = '';
     var tempFilePaths = that.data.userAvatar;
     const isUploadAvatar = that.data.userAvatar.split('/')[2] === 'tmp';
+    const phoneIsUploadAvatar = that.data.userAvatar.split('/')[0] === 'wxfile:';
+
     try {
-      if (isUploadAvatar) {
+      if (isUploadAvatar || phoneIsUploadAvatar) {
         wx.uploadFile({
           url: 'http://124.220.84.200:5455/api/uploadStream',
           filePath: tempFilePaths,

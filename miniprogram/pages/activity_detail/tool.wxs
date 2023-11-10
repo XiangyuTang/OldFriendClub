@@ -13,7 +13,10 @@ function execTime (time) {
 	var now = Date.now()
   if (time.length === 2) {
     var starttime = Date.parse(time[0].replace(getRegExp('(月|年)', 'g'), '/').replace('日', ''))
-		var stoptime = Date.parse(time[1].replace(getRegExp('(月|年)', 'g'), '/').replace('日', ''))
+    var stoptime = 0;
+    if ( time[1] != 0 ){
+      stoptime = Date.parse(time[1].replace(getRegExp('(月|年)', 'g'), '/').replace('日', ''))
+    }
     // console.log("starttime:",starttime)
 		// console.log("stoptime:",stoptime)
     if (now < starttime) {
@@ -21,7 +24,7 @@ function execTime (time) {
         open: false,
         text: '报名开始时间：' + time[0]
       }
-    } else if (now < stoptime) {
+    } else if (stoptime != 0 && now < stoptime) {
       return {
         open: true,
         text: '报名截止时间：' + time[1]
@@ -29,7 +32,7 @@ function execTime (time) {
     } else if (stoptime == 0){
       return {
         open: true,
-        text:'报名截止时间：'
+        text:'报名开始时间：' + time[0]
       }
     }else {
       return {

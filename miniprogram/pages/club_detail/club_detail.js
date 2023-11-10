@@ -6,6 +6,7 @@ const {
 const {
   noBg
 } = require("../../utils/styleCount");
+const WxNotificationCenter = require('../../utils/WxNotificationCenter.js');
 import {
   listActivities2
 } from '../../api/apis';
@@ -71,7 +72,10 @@ Page({
 
       if (res.data.club_data && res.data.club_data.club_id != '') {
         this.getActivityList(1);
-      }
+      };
+
+      // 注册通知
+      WxNotificationCenter.addNotification('refreshClubActivity', this.didRefreshActivityNotification, this);
     })
 
   },
@@ -143,7 +147,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-
+    //移除通知
+    WxNotificationCenter.removeNotification('refreshClubActivity', this)
   },
 
   /**
@@ -205,6 +210,8 @@ Page({
           wx.switchTab({
             url: '../club/club',
           });
+           // 向社团详情页发布通知重新刷新
+           WxNotificationCenter.postNotificationName('refreshClubList');
         } else {
           wx.showToast({
             title: '解散社团失败',
@@ -237,5 +244,14 @@ Page({
     wx.navigateTo({
       url: `/pages/activity_detail/activity_detail?acid=${e.currentTarget.dataset.acid}`,
     })
-  }
+  },
+
+  didRefreshActivityNotification: function (clubID) {
+    console.log("收到刷新通知"+clubID);
+    this.setData({
+      clubList: [],
+      noMore: false,
+    })
+    this.getActivityList(1);
+	},
 })

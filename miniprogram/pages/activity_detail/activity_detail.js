@@ -1,7 +1,9 @@
 const LoginBiz = require('../../common_biz/login.js')
 import {formatTime} from "../../utils/common.js"
 import {getActivatyDetail,signActivity,cancelSignActivity,deleteActivity} from "../../api/apis"
+import {hideButton} from "../../components/myfooter/myfooter"
 import Dialog from 'vant-weapp/dialog/dialog';
+const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
 let that = null
 Page({
 
@@ -71,7 +73,7 @@ Page({
   },
 	tosignlist () {
     wx.navigateTo({
-      url: '../sign_list/sign_list'//报名列表页
+      url: '../sign_list/sign_list?activity_id=' + this.data.activity_id//报名列表页
     })
   },
 	ininput (e) {
@@ -434,9 +436,22 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
-    that = this // 页面this指向指针变量
+    console.log(options);
     const acid= options.acid;
-		let data = {
+		
+    this.getActivityDetailData(acid);
+
+    this.myfooter = this.selectComponent('#myfooter');
+    console.log(this.myfooter.data);
+    this.myfooter.hideButton(true);
+
+    // 注册通知
+    WxNotificationCenter.addNotification('refreshActivityDetail', this.didRefreshNotification, this)
+  },
+
+  getActivityDetailData(acid){
+    that = this;
+    let data = {
 			token:LoginBiz.getToken(),
 			activity_id:acid,
 			biz_type: 1
@@ -444,22 +459,35 @@ Page({
 		wx.showLoading({
 			title: '加载中',
 		})
-		getActivatyDetail(data).then(res=>{
+
+    getActivatyDetail(data).then(res=>{
       wx.hideLoading()
+      console.log("活动详情")
       console.log(res);
       var item = res.data.activity_data
+
+      res.data.activity_data.activity_start_time_stamp = item.activity_start_time
       res.data.activity_data.activity_start_time = formatTime(item.activity_start_time*1000,2)
+      
+      res.data.activity_data.activity_end_time_stamp = item.activity_end_time
       if (res.data.activity_data.activity_end_time != 0){
         res.data.activity_data.activity_end_time = formatTime(item.activity_end_time*1000,2);
       }
+     
+      res.data.activity_data.sign_start_time_stamp = item.sign_start_time
       res.data.activity_data.sign_start_time = formatTime(item.sign_start_time*1000,3)
-      res.data.activity_data.sigh_end_time = formatTime(item.sigh_end_time*1000,3);
+
+      res.data.activity_data.sign_end_time_stamp = item.sign_end_time
+      if (res.data.activity_data.activity_end_time != 0){
+        res.data.activity_data.sign_end_time = formatTime(item.sign_end_time*1000,3);
+      }
+
 			that.setData({
         activity_id:acid,
 				activity:res.data.activity_data,
 				like_num:res.data.like_num,
 				signed_num:res.data.activity_data.signed_num,
-				sign_due:[res.data.activity_data.sign_start_time,res.data.activity_data.sigh_end_time],
+				sign_due:[res.data.activity_data.sign_start_time,res.data.activity_data.sign_end_time],
         sign_status:res.data.activity_data.sign_status
       })
 
@@ -508,7 +536,7 @@ Page({
 		}).catch(err=>{
 			console.log("出错了");
 			console.log(err);
-		})
+    })
   },
   
   openClubDetail (e) {
@@ -524,7 +552,7 @@ Page({
 
   editActivity(e) {
     console.log("编辑活动");
-    console.log(e.detail);
+    this.myfooter.onclickEdit(this.data);
   },
 
   deleteActivity(e) {
@@ -609,14 +637,20 @@ Page({
 	 * 生命周期函数--监听页面卸载
 	 */
 	onUnload() {
-
+		//移除通知
+		WxNotificationCenter.removeNotification('refreshActivityDetail', this)
 	},
 
+  didRefreshNotification: function (activityID) {
+		console.log("收到刷新通知"+activityID);
+    this.getActivityDetailData(activityID);
+	},
 	/**
 	 * 页面相关事件处理函数--监听用户下拉动作
 	 */
 	onPullDownRefresh() {
-
+    var options = {"acid":this.data.activity_id};
+    this.getActivityDetailData(this.data.activity_id)
 	},
 
 	/**

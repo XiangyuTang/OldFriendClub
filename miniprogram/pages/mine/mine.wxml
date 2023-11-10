@@ -20,7 +20,7 @@
           <view wx:for="{{clubList}}">
             <view class="club-item {{hideBorder ? '': 'club-item-border'}}" data-acid="{{item.activity_id}}" bindtap="onJumpAct">
               <view class="pic">
-                <image class="img" src="{{item.cover_image_url}}" mode="aspectFill" />
+                <image class="img" src="{{item.cover_image_url==''?'../../static/images/banner3.jpg':item.cover_image_url}}" mode="aspectFill" />
               </view>
               <view class="club-info">
                 <view class="club-name">
