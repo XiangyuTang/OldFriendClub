@@ -199,6 +199,7 @@ Page({
         scene: 1,
         page_no: pageNo
       }).then(async (res) => {
+        console.log(res);
         this.setData({
           clubList: [].concat(pageNo === 1 ? [] : clubList, res.data.club_list),
           isLoading: false,

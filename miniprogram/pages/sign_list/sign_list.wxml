@@ -7,28 +7,37 @@
       thumb="{{applicantList[index].applicant_avatar || 'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/e21405990022308da593789d244e3a30.png'}}"
     > 
 
-
       <view slot="desc" wx:if="{{applicantList[index].applicant_status !=4}}">
-        电话：{{applicantList[index].applicant_phone}}
+        <block wx:if="{{signStatus === '4'}}">
+          <block wx:if="{{applicantList[index].applicant_status === 2}}">
+           电话：{{applicantList[index].applicant_phone}}
+          </block>
+          <block wx:else>
+            电话：保密（通过审核后可查看）
+          </block>
+        </block>
+        <block wx:else>电话：保密</block>
+        
       </view>
-      <view slot="desc" wx:if="{{applicantList[index].applicant_gender===0}}">
-        性别：保密
+      <view slot="desc">
+        <block wx:if="{{applicantList[index].applicant_gender===0}}">性别：保密</block>
+        <block wx:if="{{applicantList[index].applicant_gender===1}}">性别：男</block>
+        <block wx:if="{{applicantList[index].applicant_gender===2}}">性别：女</block>
       </view>
-      <view slot="desc" wx:if="{{applicantList[index].applicant_gender===1}}">
-        性别：男
-      </view>
-      <view slot="desc" wx:if="{{applicantList[index].applicant_gender===2}}">
-        性别：女
-      </view>
+
       <view slot="desc" wx:if="{{applicantList[index].applicant_status !=4}}">
         年龄：{{applicantList[index].applicant_age}}
       </view>
-
-      <van-divider />
+     
       <view slot="footer" > <!-- style="display:flex; justify-content:center"  -->
         <view wx:if="{{applicantList[index].applicant_status === 1}}">
-          <van-button round hairline size="mini" type="danger" style="margin-right: 20rpx;" data-uid="{{applicantList[index].applicant_uid}}" data-index="{{index}}" bind:click="refuseSign">审批拒绝</van-button>
-          <van-button round hairline size="mini" type="primary" style="margin-right: 10rpx;"  data-uid="{{applicantList[index].applicant_uid}}" data-index="{{index}}" bind:click="agreeSign">审批通过</van-button>
+          <view wx:if="{{signStatus === '4'}}">
+            <van-button round hairline size="mini" type="danger" style="margin-right: 20rpx;" data-uid="{{applicantList[index].applicant_uid}}" data-index="{{index}}" bind:click="refuseSign">审批拒绝</van-button>
+            <van-button round hairline size="mini" type="primary" style="margin-right: 10rpx;"  data-uid="{{applicantList[index].applicant_uid}}" data-index="{{index}}" bind:click="agreeSign">审批通过</van-button>
+          </view>
+          <view wx:else>
+            <van-tag plain type="primary">等待审核</van-tag>
+          </view>
         </view>
 
         <view wx:if="{{applicantList[index].applicant_status === 2}}">

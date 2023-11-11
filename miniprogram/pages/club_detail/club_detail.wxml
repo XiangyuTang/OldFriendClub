@@ -13,7 +13,14 @@
     </view>
     <view class="club-detail-name">{{clubData.club_name}}</view>
     <view wx:if="{{clubData.join_status === 1 || clubData.join_status === 4}}" class="club-detail-ability" bindtap="onClubAbility" data-type="{{clubData.join_status}}">{{clubData.join_status === 4 ? '解散社团' : '退出社团'}}</view>
+   
+    <view class="club-tag">
+        <van-tag wx:if="{{clubData.audit_status===0 || clubData.audit_status===1}}" type="success" style="position: relative; bottom: 100%;">审核中</van-tag>
+        <van-tag wx:if="{{clubData.audit_status=== -1 || clubData.audit_status=== -2 || clubData.audit_status=== -3}}" type="danger" style="position: relative; bottom: 100%;" >审核未通过</van-tag>
+    </view>
+
     <view class="club-detail-desc">{{clubData.club_summary}}</view>
+ 
   </view>
   <view class="club-detail-list">
     <scroll-view scroll-y bindscrolltolower="onScrollRefresh" style="height:{{scrollviewHeight}}px">
@@ -25,6 +32,10 @@
           <view class="club-info">
             <view class="club-name">
               {{item.title}}
+            </view>
+            <view class="club-tag">
+                <van-tag wx:if="{{clubData.audit_status===0 || clubData.audit_status===1}}" type="success" style="position: relative; bottom: 100%;">审核中</van-tag>
+                <van-tag wx:if="{{clubData.audit_status=== -1 || clubData.audit_status=== -2 || clubData.audit_status=== -3}}" type="danger" style="position: relative; bottom: 100%;" >审核未通过</van-tag>
             </view>
             <view class="club-summary">
               {{item.activity_location}}
@@ -48,6 +59,6 @@
   </van-dialog>
 </view>
 
-<view>
+<view wx:if="{{clubData.club_status==1 && (clubData.join_status === 1 || clubData.join_status === 4) }}">
   <myfooter id="myfooter" activity_club_id = "{{clubData.club_id}}"></myfooter>
 </view>

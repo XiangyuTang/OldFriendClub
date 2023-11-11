@@ -73,7 +73,7 @@ Page({
   },
 	tosignlist () {
     wx.navigateTo({
-      url: '../sign_list/sign_list?activity_id=' + this.data.activity_id//报名列表页
+      url: `../sign_list/sign_list?activity_id=${this.data.activity_id}&sign_status=${this.data.activity.sign_status}`,
     })
   },
 	ininput (e) {

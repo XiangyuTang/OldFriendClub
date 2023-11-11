@@ -26,6 +26,12 @@
                 <view class="club-name">
                   {{item.title}}
                 </view>
+                <view class="club-intro">
+                  <view class="club-tag">
+                  </view>
+                  <van-tag wx:if="{{item.audit_status===0 || item.audit_status===1}}" type="success" style="position: relative; bottom: 90%;">审核中</van-tag>
+                  <van-tag wx:if="{{item.audit_status=== -1 || item.audit_status=== -2 || item.audit_status=== -3}}" type="danger" style="position: relative; bottom: 90%;" >审核未通过</van-tag>
+                </view>
                 <view class="club-summary">
                   {{item.activity_location}}
                 </view>
@@ -54,6 +60,12 @@
               <view class="club-info">
                 <view class="club-name">
                   {{item.club_name}}
+                </view>
+                <view class="club-intro">
+                  <view class="club-tag">
+                  </view>
+                  <van-tag wx:if="{{item.audit_status===0 || item.audit_status===1}}" type="success" style="position: relative; bottom: 90%;">审核中</van-tag>
+                  <van-tag wx:if="{{item.audit_status=== -1 || item.audit_status=== -2 || item.audit_status=== -3}}" type="danger" style="position: relative; bottom: 90%;" >审核未通过</van-tag>
                 </view>
                 <view class="club-summary">
                   {{item.club_summary}}

@@ -16,6 +16,7 @@ Page({
     noMoreData: false,
     isLoading: false,
     loadingFlag: false,
+    signStatus: "0",
   },
   onChange(event) {
     this.setData({
@@ -40,6 +41,7 @@ Page({
       activityId: option.activity_id,
       currentPage: 1,
       noMoreData: false,
+      signStatus: option.sign_status,
     })
     // that.project = app.project
     // const stylecss = app.pagestyleinit(that.project)

@@ -1,28 +1,58 @@
 // pages/member_list.js
 import { globalCache } from '../../utils/util';
+import {
+  getMemberList
+} from '../../utils/server/club'
+
 Page({
 
 	/**
 	 * 页面的初始数据
 	 */
 	data: {
-    memberList: {
-      type: Object,
-      value: []
-    }
+    memberList:[],
+    clubId:"",
+    isCreator: false,
+    currentPage: 1,
+    noMoreData: false,
 	},
 
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
-		const member_list = globalCache.get(options.memberListId);
+    console.log(options);
+
     this.setData({
-      memberList: member_list,
-    }, () => {
-      console.log('==>>club', this.data.memberList)
+      clubId: options.clubId,
+      isCreator: options.isCreator,
+    });
+
+    this.getMemberData(1);
+  },
+  
+  getMemberData(pageNo) {
+    getMemberList({
+      clubId: this.data.clubId,
+      pageNo: pageNo,
+    }).then((res) => {
+      console.log(res);
+      
+      let old_list = this.data.memberList;
+      let new_list = res.data.member_list;
+
+      if (this.data.currentPage == 1) {
+        old_list = [];
+      }
+
+      var member_list = old_list.concat(new_list);
+
+      this.setData({
+        memberList: member_list,
+        noMoreData: new_list.length < 10 ? true:false,
+      });
     })
-	},
+  },
 
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
@@ -56,14 +86,29 @@ Page({
 	 * 页面相关事件处理函数--监听用户下拉动作
 	 */
 	onPullDownRefresh() {
-
+    console.log("下拉");
+    this.setData({
+      memberList:[],
+      currentPage:1,
+      noMoreData:false,
+    })
+    this.getMemberData(1);
 	},
 
 	/**
 	 * 页面上拉触底事件的处理函数
 	 */
 	onReachBottom() {
+    if (this.data.noMoreData) {
+      return
+    }
 
+    var current_page = this.data.currentPage;
+
+    this.setData({
+      currentPage: current_page+1,
+    })
+    this.getMemberData(current_page+1);
 	},
 
 	/**

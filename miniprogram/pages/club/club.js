@@ -88,13 +88,21 @@ Page({
         }
       })
       const list = await addHeightArray(filterNoWidthClubList, 'club_back_img');
-
+      console.log(list);
       if (list.length < 10) {
         // 没有更多了
         this.setData({
           isNoMore: true
         })
       }
+
+      for (var i in list) {
+        if (list[i].club_name.length > 4) {
+          var name = list[i].club_name.slice(0,3);
+          list[i].club_name = name + "...";
+        }
+      }
+
       const completeList = (pageNo === 1 ? [] : oldClubList).concat(list);
       this.setData({
         clubList: completeList,

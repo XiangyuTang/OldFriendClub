@@ -156,3 +156,16 @@ export const getClubDetail = ({
     data: params
   })
 }
+
+export const getMemberList = ({clubId, pageNo}) => {
+  let params = {
+    token: LoginBiz.getToken(),
+    club_id: clubId,
+    page_no: pageNo,
+  }
+  return send_request({
+    url: "/club/getMemberList",
+    method: "get",
+    data: params
+  })
+}

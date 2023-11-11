@@ -36,7 +36,8 @@ Page({
     // 0 退出 1 解散
     abilityType: 0,
     scrollviewHeight: 300,
-    noMore: false
+    noMore: false,
+    isCreator: false,
   },
 
   /**
@@ -64,11 +65,18 @@ Page({
         return
       }
 
+      console.log(res);
       this.setData({
         clubData: res.data.club_data,
         memberList: res.data.member_list,
         // clubList: mockData
       });
+
+      if (res.data.club_data.join_status == 4){
+        this.setData({
+          isCreator: true,
+        })
+      }
 
       if (res.data.club_data && res.data.club_data.club_id != '') {
         this.getActivityList(1);
@@ -173,10 +181,12 @@ Page({
   },
   onClubMemberClick() {
     console.log('==jump');
-    console.log(this.memberList)
+    console.log(this.data.memberList)
     const memberListId = globalCache.add(this.data.memberList);
+    var isCreator = this.data.isCreator;
+    var clubId = this.data.clubData.club_id;
     wx.navigateTo({
-      url: `/pages/member_list/member_list?memberListId=${memberListId}`,
+      url: `/pages/member_list/member_list?memberListId=${memberListId}&isCreator=${isCreator}&clubId=${clubId}`,
     })
   },
   onClubAbility(e) {

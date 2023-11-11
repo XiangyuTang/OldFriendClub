@@ -37,7 +37,7 @@
   white-space: nowrap;
 
 }
-.double-club-item-btn {
+.double-club-item-btn, .double-club-item-btn-auditing, .double-club-item-btn-reject {
   background-color: var(--normalColor);
   border-radius: 20px;
   padding: 2px 6px;
@@ -51,6 +51,14 @@
   align-items: center;
 }
 
+.double-club-item-btn-auditing {
+  background-color: #0cbb32;
+}
+
+.double-club-item-btn-reject {
+  background-color: #db160f;
+}
+
 .disable {
 	opacity: 0.6;
 }
@@ -59,3 +67,4 @@
 	background-color: #fff;
 	color: var(--normalColor);
 }
+

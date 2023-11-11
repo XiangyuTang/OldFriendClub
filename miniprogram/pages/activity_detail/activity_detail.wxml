@@ -14,19 +14,19 @@
 			<mp-icon class="icon" icon="time" color="#343434" size="{{20}}"></mp-icon>
 			<view class="content">{{activity.activity_start_time}} - {{activity.activity_end_time === 0? '':activity.activity_end_time}}</view>
 		</view>
-    <block wx:if="{{sign_status === 4}}">
+    <block>
       <view class="item arrow_model"  bindtap="tosignlist">
         <mp-icon class="icon" icon="group-detail" color="#343434" size="{{20}}"></mp-icon>
         <view class="content">报名人数限额：{{(activity.max_sign_num!=null&&activity.max_sign_num>0)?activity.max_sign_num+'人':'不限'}} / 已报名(通过审核)：{{signed_num||0}} 人</view>
         <mp-icon class="arrow" icon="arrow" color="#787878" size="{{15}}" ></mp-icon>
       </view>
     </block>
-    <block wx:else>
+    <!-- <block wx:else>
       <view class="item">
         <mp-icon class="icon" icon="group-detail" color="#343434" size="{{20}}"></mp-icon>
         <view class="content">报名人数限额：{{(activity.max_sign_num!=null&&activity.max_sign_num>0)?activity.max_sign_num+'人':'不限'}} / 已报名(通过审核)：{{signed_num||0}} 人</view>
       </view>
-    </block>
+    </block> -->
 	
 		<view class="item">
 			<mp-icon class="icon" icon="done2" color="#343434" size="{{20}}"></mp-icon>
