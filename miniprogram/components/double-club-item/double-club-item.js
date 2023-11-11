@@ -42,12 +42,14 @@ Component({
       // const {
       //   refreshList
       // } = this.props;
+      console.log(this.properties.club);
       joinClub(this.data.club.club_id).then((res) => {
         if (res.err_no === 0) {
           wx.showToast({
             title: '申请成功',
             icon: 'none',
           });
+          this.properties.club.join_status = 1;
           // refreshList()
         } else {
           wx.showToast({

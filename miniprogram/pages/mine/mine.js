@@ -199,6 +199,7 @@ Page({
         scene: 1,
         page_no: pageNo
       }).then(async (res) => {
+        console.log(res);
         this.setData({
           clubList: [].concat(pageNo === 1 ? [] : clubList, res.data.club_list),
           isLoading: false,
@@ -310,8 +311,10 @@ Page({
     var imgUrl = '';
     var tempFilePaths = that.data.userAvatar;
     const isUploadAvatar = that.data.userAvatar.split('/')[2] === 'tmp';
+    const phoneIsUploadAvatar = that.data.userAvatar.split('/')[0] === 'wxfile:';
+
     try {
-      if (isUploadAvatar) {
+      if (isUploadAvatar || phoneIsUploadAvatar) {
         wx.uploadFile({
           url: 'http://124.220.84.200:5455/api/uploadStream',
           filePath: tempFilePaths,

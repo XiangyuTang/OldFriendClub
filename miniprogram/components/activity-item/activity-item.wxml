@@ -7,6 +7,12 @@
     <view class="title">
       {{item.title}}
     </view>
+    <view class="item-intro">
+      <view class="item-tag">
+      </view>
+      <van-tag wx:if="{{item.audit_status===0 || item.audit_status===1}}" type="success" style="position: relative; bottom: 100%;">审核中</van-tag>
+      <van-tag wx:if="{{item.audit_status=== -1 || item.audit_status=== -2 || item.audit_status=== -3}}" type="danger" style="position: relative; bottom: 100%;" >审核未通过</van-tag>
+    </view>
     <view class="info">
       <view class="block">
         <van-icon name="clock-o" />

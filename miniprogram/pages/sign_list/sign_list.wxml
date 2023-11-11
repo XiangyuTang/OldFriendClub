@@ -1,25 +1,58 @@
 <!-- <wxs module="tool" src="./tool.wxs"></wxs> -->
 <myheader></myheader>
-<block wx:for="{{list}}" wx:key="index">
+<block wx:for="{{applicantList}}" wx:key="index">
   <view class="sign_card">
     <van-card
-      title="报名用户{{index+1}}"
-      thumb="../../../static/images/icons/user.png"
-    >
-      <view slot="desc" >
-        电话：1231414141
+      title="{{applicantList[index].display_name}}"
+      thumb="{{applicantList[index].applicant_avatar || 'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/e21405990022308da593789d244e3a30.png'}}"
+    > 
+
+      <view slot="desc" wx:if="{{applicantList[index].applicant_status !=4}}">
+        <block wx:if="{{signStatus === '4'}}">
+          <block wx:if="{{applicantList[index].applicant_status === 2}}">
+           电话：{{applicantList[index].applicant_phone}}
+          </block>
+          <block wx:else>
+            电话：保密（通过审核后可查看）
+          </block>
+        </block>
+        <block wx:else>电话：保密</block>
+        
       </view>
-      <view slot="desc" >
-        地址：北京市海淀区
+      <view slot="desc">
+        <block wx:if="{{applicantList[index].applicant_gender===0}}">性别：保密</block>
+        <block wx:if="{{applicantList[index].applicant_gender===1}}">性别：男</block>
+        <block wx:if="{{applicantList[index].applicant_gender===2}}">性别：女</block>
       </view>
-      <view slot="desc" >
-        年龄：56 岁
+
+      <view slot="desc" wx:if="{{applicantList[index].applicant_status !=4}}">
+        年龄：{{applicantList[index].applicant_age}}
       </view>
+     
       <view slot="footer" > <!-- style="display:flex; justify-content:center"  -->
-        <van-button round hairline size="mini" type="danger" style="margin-right: 20rpx;">审批拒绝</van-button>
-        <van-button round hairline size="mini" type="primary" style="margin-right: 10rpx;">审批通过</van-button>
+        <view wx:if="{{applicantList[index].applicant_status === 1}}">
+          <view wx:if="{{signStatus === '4'}}">
+            <van-button round hairline size="mini" type="danger" style="margin-right: 20rpx;" data-uid="{{applicantList[index].applicant_uid}}" data-index="{{index}}" bind:click="refuseSign">审批拒绝</van-button>
+            <van-button round hairline size="mini" type="primary" style="margin-right: 10rpx;"  data-uid="{{applicantList[index].applicant_uid}}" data-index="{{index}}" bind:click="agreeSign">审批通过</van-button>
+          </view>
+          <view wx:else>
+            <van-tag plain type="primary">等待审核</van-tag>
+          </view>
+        </view>
+
+        <view wx:if="{{applicantList[index].applicant_status === 2}}">
+          <van-tag plain type="primary">已通过报名</van-tag>
+        </view>
+
+        <view wx:if="{{applicantList[index].applicant_status === 3}}">
+          <van-tag plain type="danger">已拒绝报名</van-tag>
+        </view>
+
+        <view wx:if="{{applicantList[index].applicant_status === 4}}">
+          <van-tag plain type="success">活动创建者</van-tag>
+        </view>
       </view>
-    
+
     </van-card> 
   </view>
 </block>

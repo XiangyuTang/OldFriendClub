@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "activity-item": "../../components/activity-item/activity-item",
-    "van-dialog": "vant-weapp/dialog/index"
+    "van-dialog": "vant-weapp/dialog/index",
+    "myfooter": "../../components/myfooter/myfooter"
   },
   
   "componentPlaceholder": {

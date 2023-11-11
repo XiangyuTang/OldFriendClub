@@ -6,6 +6,7 @@ const {
 const {
   noBg
 } = require("../../utils/styleCount");
+const WxNotificationCenter = require('../../utils/WxNotificationCenter.js');
 import {
   listActivities2
 } from '../../api/apis';
@@ -35,7 +36,8 @@ Page({
     // 0 退出 1 解散
     abilityType: 0,
     scrollviewHeight: 300,
-    noMore: false
+    noMore: false,
+    isCreator: false,
   },
 
   /**
@@ -54,12 +56,34 @@ Page({
     getClubDetail({
       clubId: options.id
     }).then((res) => {
+      if (!res.data.club_data || res.data.club_data.club_id == '') {
+        wx.showToast({
+          title: '社团不存在！',
+          icon: 'none',
+          duration: 800
+        })
+        return
+      }
+
+      console.log(res);
       this.setData({
         clubData: res.data.club_data,
         memberList: res.data.member_list,
         // clubList: mockData
       });
-      this.getActivityList(1);
+
+      if (res.data.club_data.join_status == 4){
+        this.setData({
+          isCreator: true,
+        })
+      }
+
+      if (res.data.club_data && res.data.club_data.club_id != '') {
+        this.getActivityList(1);
+      };
+
+      // 注册通知
+      WxNotificationCenter.addNotification('refreshClubActivity', this.didRefreshActivityNotification, this);
     })
 
   },
@@ -104,6 +128,7 @@ Page({
     }
     this.getActivityList(pageNo + 1)
   },
+  
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -130,7 +155,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-
+    //移除通知
+    WxNotificationCenter.removeNotification('refreshClubActivity', this)
   },
 
   /**
@@ -155,10 +181,12 @@ Page({
   },
   onClubMemberClick() {
     console.log('==jump');
-    console.log(this.memberList)
+    console.log(this.data.memberList)
     const memberListId = globalCache.add(this.data.memberList);
+    var isCreator = this.data.isCreator;
+    var clubId = this.data.clubData.club_id;
     wx.navigateTo({
-      url: `/pages/member_list/member_list?memberListId=${memberListId}`,
+      url: `/pages/member_list/member_list?memberListId=${memberListId}&isCreator=${isCreator}&clubId=${clubId}`,
     })
   },
   onClubAbility(e) {
@@ -192,6 +220,8 @@ Page({
           wx.switchTab({
             url: '../club/club',
           });
+           // 向社团详情页发布通知重新刷新
+           WxNotificationCenter.postNotificationName('refreshClubList');
         } else {
           wx.showToast({
             title: '解散社团失败',
@@ -224,5 +254,14 @@ Page({
     wx.navigateTo({
       url: `/pages/activity_detail/activity_detail?acid=${e.currentTarget.dataset.acid}`,
     })
-  }
+  },
+
+  didRefreshActivityNotification: function (clubID) {
+    console.log("收到刷新通知"+clubID);
+    this.setData({
+      clubList: [],
+      noMore: false,
+    })
+    this.getActivityList(1);
+	},
 })

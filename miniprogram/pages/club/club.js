@@ -7,7 +7,7 @@ import {
   clearHeight
 } from "../../utils/styleCount";
 import LoginBiz from "../../common_biz/login"
-const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
+const WxNotificationCenter = require('../../utils/WxNotificationCenter.js');
 
 // pages/club/club.js
 const db = wx.cloud.database()
@@ -55,7 +55,10 @@ Page({
           scrollviewHeight: res.windowHeight - 102 - 30
         })
       }
-    })
+    });
+
+    // 注册通知
+    WxNotificationCenter.addNotification('refreshClubList', this.didRefreshClubListNotification, this);
   },
 
   // typeKey: tab索引
@@ -85,13 +88,21 @@ Page({
         }
       })
       const list = await addHeightArray(filterNoWidthClubList, 'club_back_img');
-
+      console.log(list);
       if (list.length < 10) {
         // 没有更多了
         this.setData({
           isNoMore: true
         })
       }
+
+      for (var i in list) {
+        if (list[i].club_name.length > 4) {
+          var name = list[i].club_name.slice(0,3);
+          list[i].club_name = name + "...";
+        }
+      }
+
       const completeList = (pageNo === 1 ? [] : oldClubList).concat(list);
       this.setData({
         clubList: completeList,
@@ -427,7 +438,8 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload() {
-
+    //移除通知
+    WxNotificationCenter.removeNotification('refreshClubList', this)
   },
 
   /**
@@ -449,6 +461,15 @@ Page({
    */
   onShareAppMessage() {
 
+  },
+
+  didRefreshClubListNotification() {
+    this.setData({
+      isNoMore: false,
+      clubList: [],
+      currentPageNo: 1,
+    })
+    this.getData(this.data.tabKey, this.data.currentPageNo);
   }
 })
 

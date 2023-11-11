@@ -69,6 +69,7 @@
     "van-loading": "vant-weapp/loading/index",
     "van-tab": "vant-weapp/tab/index",
     "van-tabs": "vant-weapp/tabs/index",
+    "van-tag": "vant-weapp/tag/index",
     "double-club-item": "components/double-club-item/double-club-item",
     "club-item": "components/club-item/club-item",
     "activity-item": "components/activity-item/activity-item"

@@ -17,7 +17,9 @@ Component({
 		maxDate:{
 			type:Number,
 			value:{}
-		},
+    },
+    
+    activity_club_id : "",
 	},
 
 	/**
@@ -26,11 +28,13 @@ Component({
 	data: {
 		beforeClose: {},
 		year:new Date().getFullYear(),
-		showPublishActivatyWindow:false,
+    showPublishActivatyWindow:false,
 		registrationTime: "",
 		unregistrationTime: "",
 		beginTime:"",
-		endTime:"",
+    endTime:"",
+    publishTitle: "发布活动",
+    confirmButtonText: "确认发布",
 		registrationTimestamp: "",
 		unregistrationTimestamp: 0,
 		beginTimestamp:"",
@@ -46,7 +50,10 @@ Component({
 		activity_content: "",
 		activity_address:"",
 		location:{},
-		illegal_message:""
+    illegal_message:"",
+    hide_btn: false,
+    before_images : [],
+    editActivityID: "",
 	},
 	
 	/**
@@ -96,9 +103,82 @@ Component({
 		
 		onclickPublish(){
 			this.setData({
-				showPublishActivatyWindow:true
+        showPublishActivatyWindow:true,
+        before_images : [],
+        editActivityID: "",
 			})
+    },
+    
+		onclickEdit(e){
+			this.setData({
+				showPublishActivatyWindow:true
+      });
+      console.log("收到活动数据")
+      console.log(e);
+
+      let activityImages = []
+      let beforeImages = []
+      if (e.activity.cover_image_url != '') {
+        activityImages.push(e.activity.cover_image_url);
+        beforeImages.push(e.activity.cover_image_url);
+      }
+
+      if (e.activity.image_urls.length > 0) {
+        for (var i = 0; i < e.activity.image_urls.length; i++) {
+          if (e.activity.image_urls[i] != '') {
+            activityImages.push(e.activity.image_urls[i]);
+            beforeImages.push(e.activity.image_urls[i]);
+          }
+        }
+      }
+
+      if (e.activity.sign_end_time != 0) {
+        this.setData({
+          unregistrationTimestamp: e.activity.sign_end_time_stamp,
+        })
+      } else {
+        this.setData({
+          unregistrationTimestamp: 0,
+        })
+      }
+
+      if (e.activity.activity_end_time != 0) {
+        this.setData({
+          endTimestamp:  e.activity.activity_end_time_stamp,
+        })
+      } else {
+        this.setData({
+          endTimestamp: 0,
+        })
+      }
+
+      this.setData({
+        publishTitle: "编辑活动",
+        editActivityID: e.activity.activity_id,
+        activity_title: e.activity.title,
+        activity_content: e.activity.content,
+        max_people_num: e.activity.max_sign_num,
+        registrationTime: e.activity.sign_start_time,
+        registrationTimestamp:e.activity.sign_start_time_stamp,
+        unregistrationTime: e.activity.sign_end_time,
+        beginTime: e.activity.activity_start_time,
+        beginTimestamp:e.activity.activity_start_time_stamp,
+        endTime: e.activity.activity_end_time,
+        activity_address: e.activity.activity_location,
+        imgs: activityImages,
+        location: {
+            city_id:Number(e.activity.location.city_id),
+            lng:String(e.activity.location.lat),
+            lat:String(e.activity.location.lng),
+        },
+        before_images : beforeImages,
+      })
+
+      this.properties.activity_club_id = e.activity.club_id;
+
+      console.log(this.data);
 		},
+
 		getUserInfo(event) {
 			console.log("getUserInfo方法");
 			console.log(event.detail);
@@ -112,7 +192,8 @@ Component({
 			}
 		},
 		confirmPublish(event){
-			console.log("confirmPublish方法");
+      console.log("confirmPublish方法");
+      console.log(event);
 			this.beforeClose = (action) => new Promise((resolve) => {
 				setTimeout(() => {
 					if (action === 'confirm') {
@@ -123,7 +204,7 @@ Component({
 					}
 				}, 0);
 			});
-			console.log(event);
+	
 			//todo：待添加文本输入是否为空的判断逻辑
 			if(this.data.activity_title == ""||
 			this.data.activity_content == "" ||
@@ -153,107 +234,201 @@ Component({
 			//上传图片至服务器，获得图片加密链接后再上传活动表单
 			var that = this
 			var imgUrl = []
-			var cover_imgUrl = ""
-			if (that.data.imgs.length > 0) {
-				var tempFilePaths = that.data.imgs
-				var times = 0
-				for (var i = 0; i < tempFilePaths.length; i++) {
-					wx.uploadFile({
-						url: 'http://124.220.84.200:5455/api/uploadStream',
-						filePath: tempFilePaths[i],
-						name: "file",
-						header: {
-							"content-type": "multipart/form-data"
-						},
-						formData:{
-							token: LoginBiz.getToken(),// 用户token
-							biz_type:1,// 业务线  1：普通活动，必要
-						},
-						success: function (res) {
-							times += 1
-							var jsonObj = JSON.parse(res.data);
-							if (res.statusCode == 200) {
-								imgUrl.push(jsonObj.data.file_download_http)
-								if(times === tempFilePaths.length){//图片传完了
-									console.log("图片上传完毕");
-									//图片上传完毕，得到imgUrl
-									cover_imgUrl = imgUrl[0]
-									//同步
-									var data = {
-										token:LoginBiz.getToken(),
-										activity_id: "0",
-										biz_type:1,
-										location:that.data.location,
-										title:that.data.activity_title,
-										max_sign_num:Number(that.data.max_people_num),
-										cover_image_url:cover_imgUrl,
-										content:that.data.activity_content,
-										image_url: imgUrl,
-										activity_location:that.data.activity_address,
-										sign_start_time:that.data.registrationTimestamp,
-										sign_end_time:that.data.unregistrationTimestamp,
-										activity_start_time:that.data.beginTimestamp,
-										activity_end_time:that.data.endTimestamp
-									};//传参
-									console.log(data);
-									wx.showLoading({ title: '发布中...' })
-									publishActivaty(data).then(res=>{
-										console.log(res);
-									}).catch(err=>{
-										console.log(err);
-									})
-									wx.hideLoading()
-									wx.showToast({
-										title: '活动发布成功！',
-										icon: 'success',
-									})
-									//向主页发布通知重新刷新
-									WxNotificationCenter.postNotificationName('refresh')
-								}
-							}
-						},
-						fail: function (err) {
-							wx.showToast({
-								title: "图片上传失败",
-								icon: "none",
-								duration: 2000
-							})
-						},
-						complete: function (result) {
-							console.log(result.errMsg)
-						}
-					})
-				}
+      var cover_imgUrl = ""
+      var activityID = "0";
+      var needUploadImgs = [];
+
+      if (this.data.editActivityID != "") {
+        activityID = this.data.editActivityID;
+      }
+
+      for (var i = 0; i < that.data.imgs.length;i++) {
+        if (this.data.before_images.includes(that.data.imgs[i])) {
+          imgUrl.push(that.data.imgs[i]);
+        } else {
+          needUploadImgs.push(that.data.imgs[i]);
+        }
+      }
+
+			if (needUploadImgs.length > 0) {
+				// var tempFilePaths = that.data.imgs
+        var times = 0
+        
+        for (var i = 0; i < needUploadImgs.length; i++) {
+          wx.uploadFile({
+            url: 'http://124.220.84.200:5455/api/uploadStream',
+            filePath: needUploadImgs[i],
+            name: "file",
+            header: {
+              "content-type": "multipart/form-data"
+            },
+            formData:{
+              token: LoginBiz.getToken(),// 用户token
+              biz_type:1,// 业务线  1：普通活动，必要
+            },
+            success: function (res) {
+              times += 1
+              var jsonObj = JSON.parse(res.data);
+              if (res.statusCode == 200) {
+                imgUrl.push(jsonObj.data.file_download_http)
+              }
+              
+              if(times === needUploadImgs.length){//图片传完了
+                console.log("图片上传完毕");
+                //图片上传完毕，得到imgUrl
+                cover_imgUrl = imgUrl[0]
+
+                if (imgUrl.length > 1) {
+                  imgUrl = imgUrl.slice(1)
+                } else {
+                  imgUrl = [];
+                }
+                //同步
+      
+                var data = {
+                  token:LoginBiz.getToken(),
+                  activity_id: activityID,
+                  biz_type:1,
+                  location:that.data.location,
+                  title:that.data.activity_title,
+                  max_sign_num:Number(that.data.max_people_num),
+                  cover_image_url:cover_imgUrl,
+                  content:that.data.activity_content,
+                  image_url: imgUrl,
+                  activity_location:that.data.activity_address,
+                  sign_start_time:that.data.registrationTimestamp,
+                  sign_end_time:that.data.unregistrationTimestamp,
+                  activity_start_time:that.data.beginTimestamp,
+                  activity_end_time:that.data.endTimestamp,
+                  club_id: that.properties.activity_club_id,
+                };//传参
+                console.log("发布")
+                console.log(data);
+                wx.showLoading({ title: '发布中...' })
+                publishActivaty(data).then(res=>{
+                  console.log(res);
+                  if (res.err_no == 0) {
+                    wx.hideLoading()
+                    wx.showToast({
+                      title: "活动发布成功！",
+                      icon: "success",
+                    });
+                    
+                    if (activityID != '' && activityID != '0') {
+                      // 向详情页发布通知重新刷新
+                      WxNotificationCenter.postNotificationName('refreshActivityDetail',activityID);
+                    } else {
+                      // 活动详情页不需要刷新社团详情页
+                      if (that.properties.activity_club_id != '' && that.properties.activity_club_id != '0') {
+                        // 向社团详情页发布通知重新刷新
+                        WxNotificationCenter.postNotificationName('refreshClubActivity',that.properties.activity_club_id);
+                      }
+                    }
+                    
+                  } else {
+                    console.log(res.err_no+" "+ res.err_msg);
+                    wx.hideLoading();
+                    wx.showToast({
+                      title: "活动发布失败，请稍后重试",
+                      icon: "fail",
+                    });
+                  }
+                }).catch(err=>{
+                  console.log(err);
+                  
+                  wx.hideLoading();
+                  wx.showToast({
+                    title: "活动发布失败，请稍后重试",
+                    icon: "fail",
+                  });
+                })
+               
+                //向主页发布通知重新刷新
+                WxNotificationCenter.postNotificationName('refresh')
+              }
+            },
+            fail: function (err) {
+              console.log(err);
+              wx.showToast({
+                title: "图片上传失败",
+                icon: "none",
+                duration: 2000
+              })
+            },
+            complete: function (result) {
+              console.log(result.errMsg)
+            }
+          })
+        }
+        
 			}
 			else{
+        if (imgUrl.length > 0 ){
+          cover_imgUrl = imgUrl[0]
+
+          if (imgUrl.length > 1) {
+            imgUrl = imgUrl.slice(1)
+          } else {
+            imgUrl = [];
+          }
+        }
 				var data = {
 					token:LoginBiz.getToken(),
-					activity_id: "0",
+					activity_id: activityID,
 					biz_type:1,
 					location:this.data.location,
 					title:this.data.activity_title,
 					max_sign_num:Number(this.data.max_people_num),
-					cover_image_url:"",
+					cover_image_url:cover_imgUrl,
 					content:this.data.activity_content,
-					image_url: [],
+					image_url: imgUrl,
 					activity_location:this.data.activity_address,
 					sign_start_time:this.data.registrationTimestamp,
 					sign_end_time:this.data.unregistrationTimestamp,
 					activity_start_time:this.data.beginTimestamp,
-					activity_end_time:this.data.endTimestamp
-				};//传参
+          activity_end_time:this.data.endTimestamp,
+          club_id : this.properties.activity_club_id,
+        };//传参
+        console.log("发布");
 				console.log(data);
 				wx.showLoading({ title: "发布中..." })
 				publishActivaty(data).then(res=>{
-					console.log(res);
+          console.log(res);
+          if (res.err_no == 0) {
+            wx.hideLoading()
+            wx.showToast({
+              title: "活动发布成功！",
+              icon: "success",
+            });
+            
+            if (activityID != '' && activityID != '0') {
+              // 向详情页发布通知重新刷新
+              WxNotificationCenter.postNotificationName('refreshActivityDetail',activityID);
+            } else {
+              // 活动详情页不需要刷新社团详情页
+              if (this.properties.activity_club_id != '' && this.properties.activity_club_id != '0') {
+                // 向社团详情页发布通知重新刷新
+                WxNotificationCenter.postNotificationName('refreshClubActivity',this.properties.activity_club_id);
+              }
+            }
+
+          } else {
+            console.log(res.err_no+" "+ res.err_msg);
+            wx.hideLoading();
+            wx.showToast({
+              title: "活动发布失败，请稍后重试",
+              icon: "fail",
+            });
+          }
 				}).catch(err=>{
-					console.log(err);
+          console.log(err);
+          wx.hideLoading();
+          wx.showToast({
+            title: "活动发布失败，请稍后重试",
+            icon: "fail",
+          });
 				})
-				wx.hideLoading()
-				wx.showToast({
-					title: "活动发布成功！",
-					icon: "success",
-				})
+				
 			}
 		},
 		onClose() {
@@ -400,8 +575,15 @@ Component({
 					}
 				}
 			})
-		}
-
+    },
+    
+    // 是否隐藏发布按钮
+    hideButton(e) {
+      console.log(e);
+      this.setData({
+        hideBtn: e,
+      })
+    },
 
 	}
 })

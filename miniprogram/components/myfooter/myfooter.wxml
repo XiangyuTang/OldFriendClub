@@ -5,8 +5,8 @@
 	<view class="row">北京市聚荟乐享社团创新实验室</view>
 </view>
 
-<view class="publishActivaty" hover-class="btn-hover">
-	<button class="btn" bindtap="onclickPublish" ></button>
+<view class="publishActivaty" hover-class="btn-hover" hidden="{{hideBtn}}" >
+	<button class="btn" bindtap="onclickPublish"></button>
 	<!-- open-type="contact"  -->
 	<image src="../../static/images/icons/plus.png" mode="aspectFill" class="pic" />
 	<view class="line"></view>
@@ -15,7 +15,7 @@
 <!-- 发布活动弹出框 -->
 <van-dialog
   use-slot
-  title="发布活动"
+  title="{{ publishTitle }}"
   show="{{ showPublishActivatyWindow }}"
 	messageAlign="left"
 	closeOnClickOverlay
@@ -23,7 +23,7 @@
 	showCancelButton
   bind:close="onClose"
 	bind:confirm="confirmPublish"
-	confirmButtonText="确认发布"
+	confirmButtonText="{{ confirmButtonText }}"
 	customStyle="myvan-dialog"
 	before-close="onBeforeClose"
 >
@@ -78,7 +78,7 @@
 					bind:tap="choseTime"
 					input-align="left"
 					right-icon="arrow"
-					model:value="{{unregistrationTime}}"
+					model:value="{{unregistrationTime === 0 ? '':unregistrationTime}}"
 					data-idx="1"
 					disabled
 				/>
@@ -101,7 +101,7 @@
 					bind:tap="choseTime"
 					input-align="left"
 					right-icon="arrow"
-					model:value="{{endTime}}"
+					model:value="{{endTime === 0 ? '':endTime}}"
 					data-idx="3"
 					disabled
 				/>

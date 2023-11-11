@@ -52,6 +52,14 @@ export function getActivatyDetail(data) {
 	})
 }
 
+export function deleteActivity(data) {
+  return send_request({
+    url: "/activity/userDeleteActivity",
+    method: "DELETE",
+    data
+  })
+}
+
 // 报名活动
 export function signActivity(data) {
 	return send_request({
@@ -67,6 +75,22 @@ export function cancelSignActivity(data) {
 		method: "POST",
 		data
 	})
+}
+
+export function getApplicantList(data) {
+  return send_request({
+    url: "/activity/getApplicantList",
+    method: "GET",
+    data
+  })
+}
+
+export function auditApplicant(data) {
+  return send_request({
+    url: "/activity/auditApplicant",
+    method: "POST",
+    data
+  })
 }
 
 //拉取活动数据接口

@@ -79,6 +79,11 @@
   color: var(--themeColor);
 }
 
+.club-tag {
+  float: right;
+  margin-top: 0px;
+}
+
 .club-detail-desc {
   margin-left: 20px;
   margin-top: 10px;

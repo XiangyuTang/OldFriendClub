@@ -1,7 +1,9 @@
 const LoginBiz = require('../../common_biz/login.js')
 import {formatTime} from "../../utils/common.js"
-import {getActivatyDetail,signActivity,cancelSignActivity} from "../../api/apis"
+import {getActivatyDetail,signActivity,cancelSignActivity,deleteActivity} from "../../api/apis"
+import {hideButton} from "../../components/myfooter/myfooter"
 import Dialog from 'vant-weapp/dialog/dialog';
+const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
 let that = null
 Page({
 
@@ -17,16 +19,17 @@ Page({
       show: false
 		},
 		sign_form:[
-			{
-				des:"用于报名页展示",
-				id: "avatar",
-				prop:"头像",
-				type:"avatar"
-			},{
+			// {
+			// 	des:"用于报名页展示",
+			// 	id: "avatar",
+			// 	prop:"头像",
+			// 	type:"avatar"
+      // },
+      {
 				des:"输入真实姓名",
 				id: "name",
 				prop:"姓名",
-				type:"text"
+        type:"text"
 			},{
 				id:"gender",
 				prop:"性别",
@@ -42,12 +45,19 @@ Page({
 				prop:"手机号",
 				type:"number" //type=phone时面向非个体开发者，且调用收费
 			}
-		],
+    ],
+    input: {
+      name:"",
+      gender: "",
+      age:"",
+      tel:"",
+    },
 		sign_due:[],
-		sign_status:"",
+    sign_status:"",
+    activity_club:{},
 		// user: {
 		// 	open: 0
-		// }
+    // }
 	},
 	openLocation (e) {
     const {
@@ -63,7 +73,7 @@ Page({
   },
 	tosignlist () {
     wx.navigateTo({
-      url: '../sign_list/sign_list'//报名列表页
+      url: `../sign_list/sign_list?activity_id=${this.data.activity_id}&sign_status=${this.data.activity.sign_status}`,
     })
   },
 	ininput (e) {
@@ -88,7 +98,7 @@ Page({
 			// 	})
 			// })
     } else if (e.type === 'getphonenumber') {
-			console.log("手机号：",e)
+      console.log("手机号：",e)
       if (e.detail.errMsg.indexOf('deny') !== -1) {
         console.log('用户拒绝')
       } else if (e.detail.errMsg === 'getPhoneNumber:ok') {
@@ -117,6 +127,176 @@ Page({
       })
     }
   },
+
+  modifySignUp() {
+    this.setData({
+      form:{
+        show: true
+      }
+    })
+  },
+
+  checkModbile(mobile) {
+		var re = /^1[3,4,5,6,7,8,9][0-9]{9}$/;
+		var result = re.test(mobile); 
+		if(!result) {
+			// alert("手机号码格式不正确！");
+			return false;//若手机号码格式不正确则返回false
+			}
+		return true;
+	},
+
+  submitsign(e) {
+    console.log("submit");
+    console.log(e.detail);
+
+    if (e.detail.item.value == 0){
+      // 取消
+      this.setData({
+        form:{
+          show: false
+        }
+      })
+    } else if (e.detail.item.value == 1) {
+      // 报名
+      if (this.data.input.name == ''){
+        wx.showToast({
+          title: '请填写姓名！',
+          icon:'none',
+        })
+        return
+      }
+
+      if (this.data.input.gender == '') {
+        wx.showToast({
+          title: '请选择性别！',
+          icon:'none',
+        })
+        return
+      }
+
+      if (this.data.input.age == '') {
+        wx.showToast({
+          title: '请填写年龄！',
+          icon:'none',
+        })
+        return
+      }
+
+      if (this.data.input.tel == '') {
+        wx.showToast({
+          title: '请填写手机号！',
+          icon:'none',
+        })
+        return
+      }
+
+      if (Number(this.data.input.age) < 10 || Number(this.data.input.age) > 150) {
+        wx.showToast({
+          title: '请填写正确的年龄！',
+          icon:'none',
+        })
+        return
+      }
+
+      if (!this.checkModbile(this.data.input.tel)){
+        wx.showToast({
+          title: '请填写正确的手机号！',
+          icon:'none',
+        })
+        return
+      }
+      
+      let gender = 1;
+      if (this.data.input.gender == '男') {
+        gender = 1;
+      } else if (this.data.input.gender == '女') {
+        gender = 2;
+      }
+
+      let data= {
+        token:LoginBiz.getToken(),
+        biz_type:1,
+        activity_id:that.data.activity.activity_id,
+        user_name: this.data.input.name,
+        phone: this.data.input.tel,
+        gender: gender,
+        age: Number(this.data.input.age),
+      }
+      
+      signActivity(data).then(res=>{
+        console.log("报名活动返回结果");
+        console.log(res);
+        if(res.err_no!=0){
+          wx.showToast({
+            title: res.err_msg,
+            mask:true,
+            icon:"error"
+          });
+        }else if(res.err_no===0){
+          wx.showToast({
+            title: '报名成功！',
+            icon:'success'
+          })
+          var options = {"acid":that.data.activity_id}
+          that.onLoad(options);
+          that.setData({
+            sign_status: 1,
+            signed_num:res.data.signed_num
+          })
+          
+        }
+      }).catch((err) => {
+        // on cancel
+        wx.showToast({
+          title: '报名失败！',
+          icon:'error'
+        })
+      })
+
+      // 提交报名
+      this.setData({
+        form:{
+          show: false
+        }
+      })
+    } else if (e.detail.item.value == 2){
+      // 取消报名
+      let data= {
+        token:LoginBiz.getToken(),
+        biz_type:1,
+        activity_id:that.data.activity.activity_id
+      }
+      cancelSignActivity(data).then(res=>{
+        console.log("取消活动报名结果");
+        console.log(res);
+        if(res.err_no === 0){
+          var options = {"acid":that.data.activity_id}
+          // that.onLoad(options);
+          that.setData({
+            sign_status: 0,
+            signed_num:res.data.signed_num
+          })
+        }else{
+          wx.showToast({
+            title: '取消报名失败！',
+            icon:"error"
+          });
+        }
+      })
+    } else {
+      console.log("添加更多的value支持")
+    }
+  },
+
+  closesign() {
+    this.setData({
+      form:{
+        show: false
+      }
+    })
+  },
+
 	startsign () {
 		//不用填写表单，后台自动校验
     // that.setData({
@@ -256,9 +436,22 @@ Page({
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
-    that = this // 页面this指向指针变量
+    console.log(options);
     const acid= options.acid;
-		let data = {
+		
+    this.getActivityDetailData(acid);
+
+    this.myfooter = this.selectComponent('#myfooter');
+    console.log(this.myfooter.data);
+    this.myfooter.hideButton(true);
+
+    // 注册通知
+    WxNotificationCenter.addNotification('refreshActivityDetail', this.didRefreshNotification, this)
+  },
+
+  getActivityDetailData(acid){
+    that = this;
+    let data = {
 			token:LoginBiz.getToken(),
 			activity_id:acid,
 			biz_type: 1
@@ -266,27 +459,158 @@ Page({
 		wx.showLoading({
 			title: '加载中',
 		})
-		getActivatyDetail(data).then(res=>{
-			wx.hideLoading()
-			console.log(res);
-			var item = res.data.activity_data
-			res.data.activity_data.activity_start_time = formatTime(item.activity_start_time*1000,2)
-			res.data.activity_data.activity_end_time = formatTime(item.activity_end_time*1000,2)
-			res.data.activity_data.sign_start_time = formatTime(item.sign_start_time*1000,3)
-			res.data.activity_data.sigh_end_time = formatTime(item.sigh_end_time*1000,3)
+
+    getActivatyDetail(data).then(res=>{
+      wx.hideLoading()
+      console.log("活动详情")
+      console.log(res);
+      var item = res.data.activity_data
+
+      res.data.activity_data.activity_start_time_stamp = item.activity_start_time
+      res.data.activity_data.activity_start_time = formatTime(item.activity_start_time*1000,2)
+      
+      res.data.activity_data.activity_end_time_stamp = item.activity_end_time
+      if (res.data.activity_data.activity_end_time != 0){
+        res.data.activity_data.activity_end_time = formatTime(item.activity_end_time*1000,2);
+      }
+     
+      res.data.activity_data.sign_start_time_stamp = item.sign_start_time
+      res.data.activity_data.sign_start_time = formatTime(item.sign_start_time*1000,3)
+
+      res.data.activity_data.sign_end_time_stamp = item.sign_end_time
+      if (res.data.activity_data.activity_end_time != 0){
+        res.data.activity_data.sign_end_time = formatTime(item.sign_end_time*1000,3);
+      }
+
 			that.setData({
         activity_id:acid,
 				activity:res.data.activity_data,
 				like_num:res.data.like_num,
 				signed_num:res.data.activity_data.signed_num,
-				sign_due:[res.data.activity_data.sign_start_time,res.data.activity_data.sigh_end_time],
-				sign_status:res.data.activity_data.sign_status
-			})
+				sign_due:[res.data.activity_data.sign_start_time,res.data.activity_data.sign_end_time],
+        sign_status:res.data.activity_data.sign_status
+      })
+
+      if (res.data.activity_data.audit_status == -128 || res.data.activity_data.audit_status == -127) {
+        wx.showToast({
+          title: '该活动已被删除',
+          icon: 'error',
+          duration: 2000
+        });
+
+        var pages = getCurrentPages();
+        if (pages.length > 1) {
+          var beforePage = pages[pages.length-2];
+          beforePage.returnPage();
+        }
+        wx.navigateBack({
+          delta : 1
+        });
+        return
+      }
+
+      if (res.data.club_data) {
+        that.setData({
+          activity_club: res.data.club_data
+        })
+      }else {
+        that.setData({
+          activity_club: {
+            club_id:0
+          }
+        })
+      }
+
+      if (res.data.enroll_data.applicant_status == 1 || res.data.enroll_data.applicant_status == 2 || res.data.enroll_data.applicant_status == 5) {
+        that.setData({
+          input: {
+            name: res.data.enroll_data.applicant_sign_name,
+            gender: res.data.enroll_data.applicant_gender,
+            age: res.data.enroll_data.applicant_age,
+            tel: res.data.enroll_data.applicant_phone,
+          }
+        })
+
+        console.log(this.data.input);
+      }
 		}).catch(err=>{
 			console.log("出错了");
 			console.log(err);
-		})
-	},
+    })
+  },
+  
+  openClubDetail (e) {
+    console.log(e)
+    const {
+			info
+    } = e.currentTarget.dataset
+    console.log(info)
+    wx.navigateTo({
+      url: "../club_detail/club_detail?id="+info,
+    })
+  },
+
+  editActivity(e) {
+    console.log("编辑活动");
+    this.myfooter.onclickEdit(this.data);
+  },
+
+  deleteActivity(e) {
+    console.log("删除活动");
+    console.log(e.detail);
+  
+    console.log(e)
+    var that = this
+    wx.showModal({
+      title: "提示",
+      content: "确定要删除该活动吗？",
+      success: function (res) {
+        if (res.confirm) {
+          let data = {
+            token:LoginBiz.getToken(),
+            biz_type:1,
+            activity_id:that.data.activity.activity_id,
+          }
+
+          deleteActivity(data).then(res=>{
+            console.log("删除活动返回结果");
+            console.log(res);
+            if(res.err_no!=0){
+              wx.showToast({
+                title: res.err_msg,
+                mask:true,
+                icon:"error"
+              });
+            }else if(res.err_no===0){
+              wx.showToast({
+                title: '删除活动成功！',
+                icon:'success'
+              })
+
+              var pages = getCurrentPages();
+              if (pages.length > 1) {
+                var beforePage = pages[pages.length-2];
+                beforePage.returnPage();
+              }
+              wx.navigateBack({
+                delta : 1
+              }); 
+            }
+          }).catch((err) => {
+            // on cancel
+            console.log(err)
+            wx.showToast({
+              title: '删除活动失败！',
+              icon:'error'
+            })
+          })
+
+        } else if (res.cancel) {
+          console.log("用户点击取消")
+        }
+      }
+    })
+  },
 
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
@@ -313,14 +637,20 @@ Page({
 	 * 生命周期函数--监听页面卸载
 	 */
 	onUnload() {
-
+		//移除通知
+		WxNotificationCenter.removeNotification('refreshActivityDetail', this)
 	},
 
+  didRefreshNotification: function (activityID) {
+		console.log("收到刷新通知"+activityID);
+    this.getActivityDetailData(activityID);
+	},
 	/**
 	 * 页面相关事件处理函数--监听用户下拉动作
 	 */
 	onPullDownRefresh() {
-
+    var options = {"acid":this.data.activity_id};
+    this.getActivityDetailData(this.data.activity_id)
 	},
 
 	/**

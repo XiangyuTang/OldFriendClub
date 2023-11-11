@@ -5,7 +5,7 @@ function formatNum(num) {
 
 //日期格式化
 function formatTime(value,type=0) { //type是指输出的格式数组下标
-	var time = new Date(value);
+  var time = new Date(value);
 	var year = time.getFullYear();
 	var month = time.getMonth() + 1;
 	var date = time.getDate();
