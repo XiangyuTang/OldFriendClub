@@ -1,29 +1,26 @@
-.inform {
-  font-size: 30rpx !important;
+.footer {
+  padding: 50rpx 0;
+  text-align: center;
+  background-color: var(--globalBgColor);
+  border-top: 1px solid var(--themeColor);
+  color: var(--lessGrayColor);
+  font-size: 30rpx;
+  line-height: 1.8em;
 }
 
-.van-tab__title {
-  font-size: 35rpx;
+.publishActivity {
+  width: 100rpx;
+  height: 100rpx;
+  background-color: var(--themeColor);
+  position: fixed;
+  bottom: 100rpx;
+  right: 60rpx;
+  border-radius: 50%;
+  box-shadow: 0 0 50rpx #e18a39;
+  z-index: 10;
 }
 
-.van-tab--active .van-tab__title {
-  font-weight: 500;
-  color: #f09637;
-}
-
-.box-content {
-  display: flex;
-  margin: 5px;
-  /* margin-top: -8px; */
-}
-.box-left {
-  width: 50%;
-}
-.box-right {
-  width: 50%;
-}
-
-.btn {
+.publishActivity .btn {
   position: relative;
   z-index: 2;
   border-radius: 50%;
@@ -32,7 +29,7 @@
   opacity: 0;
 }
 
-.pic {
+.publishActivity .pic {
   width: 80%;
   height: 80%;
   top: 0;
@@ -44,7 +41,7 @@
   z-index: 1;
 }
 
-.line {
+.publishActivity .line {
   width: 100%;
   height: 100%;
   border: 3px solid #e18a39;
@@ -63,10 +60,6 @@
     opacity: 0;
     transform: scale(1.4);
   }
-}
-
-.btn-hover {
-  box-shadow: 0px 0px 30px #ff8500 inset;
 }
 
 .cell-group {
@@ -89,7 +82,7 @@ button {
 
 .wrap .img-wrap {
   font-size: 30rpx;
-  color: #33373e;
+  color: #33373E;
   margin-bottom: 10rpx;
 }
 
@@ -117,7 +110,7 @@ button {
   height: 150rpx;
   text-align: center;
   line-height: 146rpx;
-  border: 2rpx dashed #8b97a9;
+  border: 2rpx dashed #8B97A9;
   box-sizing: border-box;
 }
 
@@ -133,9 +126,7 @@ button {
   top: -14rpx;
   right: -12rpx;
 }
-.loading-wrap {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
+
+.btn-hover {
+  box-shadow: 0px 0px 30px #ff8500 inset;
 }

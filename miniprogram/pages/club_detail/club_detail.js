@@ -1,7 +1,8 @@
 // pages/club_detail.js
 
 const {
-  getClubDetail
+  getClubDetail,
+  joinClub
 } = require("../../utils/server/club");
 const {
   noBg
@@ -38,6 +39,7 @@ Page({
     scrollviewHeight: 300,
     noMore: false,
     isCreator: false,
+    showPopup: false,
   },
 
   /**
@@ -69,6 +71,7 @@ Page({
       this.setData({
         clubData: res.data.club_data,
         memberList: res.data.member_list,
+        showPopup: false,
         // clubList: mockData
       });
 
@@ -85,6 +88,10 @@ Page({
       // 注册通知
       WxNotificationCenter.addNotification('refreshClubActivity', this.didRefreshActivityNotification, this);
     })
+
+    this.publish_club = this.selectComponent('#publish-club');
+    console.log(this.publish_club.data);
+    this.publish_club.hideButton(true);
 
   },
 
@@ -208,6 +215,45 @@ Page({
       })
     }
   },
+
+  onShowPopup(){
+    this.setData({
+      showPopup: true,
+    })
+  },
+
+  onClosePopup(){
+    this.setData({
+      showPopup: false,
+    })
+  },
+
+  onClubJoin(e) {
+    // const {
+    //   refreshList
+    // } = this.props;
+    console.log(e);
+    joinClub(this.data.clubData.club_id).then((res) => {
+      if (res.err_no === 0) {
+        wx.showToast({
+          title: '申请成功',
+          icon: 'none',
+        });
+        var newClubData = this.data.clubData;
+        newClubData.join_status = 1;
+        this.setData({
+          clubData : newClubData,
+        });
+        // refreshList()
+      } else {
+        wx.showToast({
+          title: '加入社团失败',
+          icon: 'none',
+        })
+      }
+    })
+  },
+
   onConfirm() {
     if (this.data.abilityType === 1) {
 
@@ -216,7 +262,10 @@ Page({
           wx.showToast({
             title: '解散成功',
             icon: 'none',
-          })
+          });
+          this.setData({
+            showPopup: false,
+          });
           wx.switchTab({
             url: '../club/club',
           });
@@ -226,7 +275,10 @@ Page({
           wx.showToast({
             title: '解散社团失败',
             icon: 'none',
-          })
+          });
+          this.setData({
+            showPopup: false,
+          });
         }
       })
     } else {
@@ -236,6 +288,9 @@ Page({
             title: '退出成功',
             icon: 'none',
           })
+          this.setData({
+            showPopup: false,
+          });
           wx.switchTab({
             url: '/pages/club/club',
           })
@@ -244,6 +299,10 @@ Page({
             title: '退出社团失败',
             icon: 'none',
           })
+
+          this.setData({
+            showPopup: false,
+          });
         }
       })
     }
@@ -254,6 +313,11 @@ Page({
     wx.navigateTo({
       url: `/pages/activity_detail/activity_detail?acid=${e.currentTarget.dataset.acid}`,
     })
+  },
+
+  onEditClub(){
+    console.log("编辑社团");
+    this.publish_club.onClickEdit(this.data.clubData);
   },
 
   didRefreshActivityNotification: function (clubID) {
