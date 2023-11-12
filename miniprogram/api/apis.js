@@ -28,7 +28,7 @@ import { getUserLocation } from '../utils/server/club'
 		}
  * } data
 */
-export function publishActivaty(data) {
+export function publishActivity(data) {
 	return send_request({
 		url: "/activity/createActivity",
 		method: "POST",
@@ -44,7 +44,7 @@ export function publishActivaty(data) {
 		activity_id string// 活动id，必要
 		}} data 
  */
-export function getActivatyDetail(data) {
+export function getActivityDetail(data) {
 	return send_request({
 		url: "/activity/getActivityDetail",
 		method: "GET",

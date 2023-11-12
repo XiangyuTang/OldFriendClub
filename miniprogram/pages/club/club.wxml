@@ -36,13 +36,13 @@
 		<van-loading size="24px" wx:if="{{isLoading}}">加载中...</van-loading>
 		<view class="nodata" wx:if="{{finishLoading}}">没有更多数据了～</view>
 	</view> -->
-  <view class="publishClub" hover-class="btn-hover">
-    <button class="btn" bindtap="onclickPublishClub"></button>
+  <!-- <view class="publishClub" hover-class="btn-hover">
+    <button class="btn" bindtap="onclickPublishClub"></button> -->
     <!-- open-type="contact"  -->
-    <image src="../../static/images/icons/plus.png" mode="aspectFill" class="pic" />
+    <!-- <image src="../../static/images/icons/plus.png" mode="aspectFill" class="pic" />
     <view class="line"></view>
-  </view>
-  <van-dialog use-slot title="创建社团" show="{{ showPublishClub }}" messageAlign="left" closeOnClickOverlay showConfirmButton showCancelButton bind:close="onClose" bind:confirm="confirmPublish" confirmButtonText="创建" customStyle="myvan-dialog" before-close="onBeforeClose">
+  </view> -->
+  <!-- <van-dialog use-slot title="创建社团" show="{{ showPublishClub }}" messageAlign="left" closeOnClickOverlay showConfirmButton showCancelButton bind:close="onClose" bind:confirm="confirmPublish" confirmButtonText="创建" customStyle="myvan-dialog" before-close="onBeforeClose">
     <view class="cell-group" scroll-y>
       <van-cell-group class="van-cell-group">
         <van-field model:value="{{ club_name }}" required focus label="社团名称" placeholder="请输入社团名称" />
@@ -81,8 +81,11 @@
         </view>
       </van-cell-group>
     </view>
-  </van-dialog>
+  </van-dialog> -->
 </view>
+
+
+<publish-club></publish-club>
 
 
 

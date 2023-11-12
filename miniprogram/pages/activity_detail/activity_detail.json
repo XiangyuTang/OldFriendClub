@@ -5,6 +5,6 @@
 		"mp-cells": "weui-miniprogram/cells/cells",
 		"mp-cell": "weui-miniprogram/cell/cell",
     "van-dialog": "vant-weapp/dialog/index",
-    "myfooter": "../../components/myfooter/myfooter"
+    "publish-activity": "../../components/publish-activity/publish-activity"
 	}
 }

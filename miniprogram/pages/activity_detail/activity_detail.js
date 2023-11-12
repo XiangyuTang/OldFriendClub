@@ -1,7 +1,7 @@
 const LoginBiz = require('../../common_biz/login.js')
 import {formatTime} from "../../utils/common.js"
-import {getActivatyDetail,signActivity,cancelSignActivity,deleteActivity} from "../../api/apis"
-import {hideButton} from "../../components/myfooter/myfooter"
+import {getActivityDetail,signActivity,cancelSignActivity,deleteActivity} from "../../api/apis"
+import {hideButton} from "../../components/publish-activity/publish-activity"
 import Dialog from 'vant-weapp/dialog/dialog';
 const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
 let that = null
@@ -441,9 +441,9 @@ Page({
 		
     this.getActivityDetailData(acid);
 
-    this.myfooter = this.selectComponent('#myfooter');
-    console.log(this.myfooter.data);
-    this.myfooter.hideButton(true);
+    this.publish_activity = this.selectComponent('#publish-activity');
+    console.log(this.publish_activity.data);
+    this.publish_activity.hideButton(true);
 
     // 注册通知
     WxNotificationCenter.addNotification('refreshActivityDetail', this.didRefreshNotification, this)
@@ -460,7 +460,7 @@ Page({
 			title: '加载中',
 		})
 
-    getActivatyDetail(data).then(res=>{
+    getActivityDetail(data).then(res=>{
       wx.hideLoading()
       console.log("活动详情")
       console.log(res);
@@ -478,7 +478,7 @@ Page({
       res.data.activity_data.sign_start_time = formatTime(item.sign_start_time*1000,3)
 
       res.data.activity_data.sign_end_time_stamp = item.sign_end_time
-      if (res.data.activity_data.activity_end_time != 0){
+      if (res.data.activity_data.sign_end_time != 0){
         res.data.activity_data.sign_end_time = formatTime(item.sign_end_time*1000,3);
       }
 
@@ -552,7 +552,7 @@ Page({
 
   editActivity(e) {
     console.log("编辑活动");
-    this.myfooter.onclickEdit(this.data);
+    this.publish_activity.onClickEdit(this.data);
   },
 
   deleteActivity(e) {

@@ -64,12 +64,15 @@
   "usingComponents": {
     "myheader": "components/myheader/myheader",
     "myfooter": "components/myfooter/myfooter",
+    "publish-activity": "components/publish-activity/publish-activity",
+    "publish-club": "components/publish-club/publish-club",
     "van-button": "vant-weapp/button",
     "van-icon": "vant-weapp/icon",
     "van-loading": "vant-weapp/loading/index",
     "van-tab": "vant-weapp/tab/index",
     "van-tabs": "vant-weapp/tabs/index",
     "van-tag": "vant-weapp/tag/index",
+    "van-popup": "vant-weapp/popup/index",
     "double-club-item": "components/double-club-item/double-club-item",
     "club-item": "components/club-item/club-item",
     "activity-item": "components/activity-item/activity-item"

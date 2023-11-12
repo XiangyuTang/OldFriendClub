@@ -113,5 +113,5 @@
 </mp-half-screen-dialog>
 
 <view>
-  <myfooter id="myfooter"></myfooter>
+  <publish-activity id="publish-activity"></publish-activity>
 </view>
