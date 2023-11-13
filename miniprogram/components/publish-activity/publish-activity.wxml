@@ -20,7 +20,6 @@
 	bind:confirm="confirmPublish"
 	confirmButtonText="{{ confirmButtonText }}"
 	customStyle="myvan-dialog"
-	before-close="onBeforeClose"
 >
 	<view class="cell-group" scroll-y>
 		<scroll-view class="myscroll" scroll-y>
@@ -124,7 +123,8 @@
 							disabled
 							title-width = "600rpx"
 						/>
-						<view class="imglist">
+            <van-uploader file-list="{{ imgs }}" max-count="9" bind:delete="deleteImgs" bind:after-read="afterImgsRead" />
+						<!-- <view class="imglist">
 							<view class="item" wx:for="{{imgs}}" wx:key="item">
 								<image src="{{item}}" alt=""></image>
 								<view class='delete' bindtap='deleteImg' data-index="{{index}}">
@@ -134,7 +134,7 @@
 							<view class="last-item" wx:if="{{imgs.length >= 3 ? false : true}}" bindtap="bindUpload">
 								<text class="sign">+</text>
 							</view>
-						</view>
+						</view> -->
 					</view>
 				</view>
 			</van-cell-group>

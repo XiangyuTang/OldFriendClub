@@ -1,12 +1,12 @@
 <!--pages/club_detail.wxml-->
 <view class="club-detail-wrap">
   <view class="club-detail-bg-wrap">
-    <image class="club-detail-bg" mode="widthFix" src="{{clubData.club_back_img}}"></image>
+    <image class="club-detail-bg" mode="widthFix" src="{{clubData.club_back_img === ''?defaultClubBackImg:clubData.club_back_img}}"></image>
     <text class="club-detail-bg-text" wx:if="{{!clubData.club_back_img}}">暂时还未配置背景图片</text>
   </view>
   <view class="club-detail-info">
     <view class="club-detail-info-top">
-      <image class="club-detail-logo" mode="aspectFill" src="{{clubData.club_icon}}"></image>
+      <image class="club-detail-logo" mode="aspectFill" src="{{clubData.club_icon===''?defaultClubIcon:clubData.club_icon}}"></image>
       <view class="club-detail-avatar-wrap" bindtap="onClubMemberClick">
         <image wx:for="{{memberList}}" wx:key="_id" class="club-detail-avatar" src="{{item.avatar_url || './assets/noportrait.png'}}"></image>
       </view>
@@ -25,7 +25,7 @@
       <view class="club-detail-auditing">申请审核中</view>
     </block>
     <block wx:elif="{{clubData.join_status === 1 || clubData.join_status === 4}}">
-      <view class="club-detail-ability" bindtap="onShowPopup" >· · ·</view>
+      <view class="club-detail-ability" bindtap="onShowActionSheet" >· · ·</view>
       <!-- <view class="club-detail-ability" bindtap="onClubAbility" data-type="{{clubData.join_status}}">{{clubData.join_status === 4 ? '解散社团' : '退出社团'}}</view>  -->
     </block>
    
@@ -33,12 +33,20 @@
     <view class="club-detail-desc">{{clubData.club_summary}}</view>
 
   </view>
-    <van-popup show="{{showPopup}}" closeable close-icon-position="top-left" position="bottom"  bind:close="onClosePopup">
+    <van-action-sheet
+    show="{{ showActionSheet }}"
+    actions="{{ showAction }}"
+    bind:close="onCloseActionSheet"
+    bind:select="onSelectActionSheet"
+    bind:cancel="onCloseActionSheet"
+    cancel-text="取消"
+  />
+    <!-- <van-popup show="{{showPopup}}" close-icon-position="top-left" position="bottom"  bind:close="onClosePopup">
       <view class="club-popup-block">
         <view wx:if="{{clubData.join_status === 4}}" class="club-popup-detail-ability" bindtap="onEditClub" data-type="{{clubData.join_status}}">编辑社团</view> 
         <view class="club-popup-detail-ability" bindtap="onClubAbility" data-type="{{clubData.join_status}}">{{clubData.join_status === 4 ? '解散社团' : '退出社团'}}</view> 
       </view>
-		</van-popup>
+		</van-popup> -->
   <view class="club-detail-list">
     <scroll-view scroll-y bindscrolltolower="onScrollRefresh" style="height:{{scrollviewHeight}}px">
       <view wx:for="{{clubList}}">
@@ -69,7 +77,7 @@
       </view>
     </scroll-view>
   </view>
-  <van-dialog use-slot title="{{dialogTitle}}" show="{{ showDialog }}" messageAlign="left" closeOnClickOverlay showConfirmButton showCancelButton bind:close="onClose" bind:confirm="onConfirm" confirmButtonText="{{buttonText}}" customStyle="myvan-dialog" before-close="onBeforeClose">
+  <van-dialog use-slot title="{{dialogTitle}}" show="{{ showDialog }}" messageAlign="left" closeOnClickOverlay showConfirmButton showCancelButton bind:close="onClose" bind:confirm="onConfirm" confirmButtonText="{{buttonText}}" customStyle="myvan-dialog">
     <view class="cell-group" scroll-y>
       {{dialogContent}}
     </view>

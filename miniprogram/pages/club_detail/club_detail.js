@@ -39,7 +39,26 @@ Page({
     scrollviewHeight: 300,
     noMore: false,
     isCreator: false,
-    showPopup: false,
+
+    showActionSheet: false,
+    actionsConfig:[
+      {
+        name:'编辑社团',
+        color:'#000000',
+      },
+      {
+        name:'解散社团',
+        color:'#ee0a24',
+      },
+      {
+        name:'退出社团',
+        color:'#ee0a24',
+      },
+    ],
+    showAction: [],
+
+    defaultClubIcon:'../../static/images/icons/club.png',
+    defaultClubBackImg:'../../static/images/navicons/photos.png',
   },
 
   /**
@@ -55,44 +74,16 @@ Page({
       }
     });
     this.club_id = options.id;
-    getClubDetail({
-      clubId: options.id
-    }).then((res) => {
-      if (!res.data.club_data || res.data.club_data.club_id == '') {
-        wx.showToast({
-          title: '社团不存在！',
-          icon: 'none',
-          duration: 800
-        })
-        return
-      }
-
-      console.log(res);
-      this.setData({
-        clubData: res.data.club_data,
-        memberList: res.data.member_list,
-        showPopup: false,
-        // clubList: mockData
-      });
-
-      if (res.data.club_data.join_status == 4){
-        this.setData({
-          isCreator: true,
-        })
-      }
-
-      if (res.data.club_data && res.data.club_data.club_id != '') {
-        this.getActivityList(1);
-      };
-
-      // 注册通知
-      WxNotificationCenter.addNotification('refreshClubActivity', this.didRefreshActivityNotification, this);
-    })
+    this.getClubDetailData(options.id);
 
     this.publish_club = this.selectComponent('#publish-club');
     console.log(this.publish_club.data);
     this.publish_club.hideButton(true);
 
+    // 注册通知
+    WxNotificationCenter.addNotification('refreshClubDetail', this.didRefreshNotification, this);
+    // 注册通知
+    WxNotificationCenter.addNotification('refreshClubActivity', this.didRefreshActivityNotification, this);
   },
 
   getActivityList(pageNo) {
@@ -164,6 +155,8 @@ Page({
   onUnload() {
     //移除通知
     WxNotificationCenter.removeNotification('refreshClubActivity', this)
+    //移除通知
+		WxNotificationCenter.removeNotification('refreshClubDetail', this)
   },
 
   /**
@@ -196,8 +189,8 @@ Page({
       url: `/pages/member_list/member_list?memberListId=${memberListId}&isCreator=${isCreator}&clubId=${clubId}`,
     })
   },
-  onClubAbility(e) {
-    if (e.currentTarget.dataset.type === 4) {
+  onClubAbility(action) {
+    if (action === 1) {
       this.setData({
         showDialog: true,
         dialogTitle: '解散社团',
@@ -216,17 +209,51 @@ Page({
     }
   },
 
-  onShowPopup(){
+  onShowActionSheet(){
+    console.log("show action sheet");
     this.setData({
-      showPopup: true,
+      showActionSheet: true,
+    })
+
+    var actionList = [];
+    if (this.data.clubData.join_status == 4) {
+      actionList.push(this.data.actionsConfig[0]);
+      actionList.push(this.data.actionsConfig[1]);
+    } else {
+      actionList.push(this.data.actionsConfig[2]);
+    }
+
+    console.log(actionList);
+
+    this.setData({
+      showAction: actionList,
+    })
+
+    console.log(this.data);
+  },
+
+  onCloseActionSheet(e){
+    console.log("close sheet");
+    console.log(e);
+
+    this.setData({
+      showActionSheet: false,
     })
   },
 
-  onClosePopup(){
-    this.setData({
-      showPopup: false,
-    })
+  onSelectActionSheet(e){
+    console.log("select sheet");
+    console.log(e);
+
+    if (e.detail.name == '编辑社团') {
+      this.onEditClub();
+    } else if (e.detail.name == '解散社团') {
+      this.onClubAbility(1);
+    } else if (e.detail.name == '退出社团') {
+      this.onClubAbility(2);
+    }
   },
+
 
   onClubJoin(e) {
     // const {
@@ -254,6 +281,38 @@ Page({
     })
   },
 
+  getClubDetailData(clubId) {
+    getClubDetail({
+      clubId: clubId
+    }).then((res) => {
+      if (!res.data.club_data || res.data.club_data.club_id == '') {
+        wx.showToast({
+          title: '社团不存在！',
+          icon: 'none',
+          duration: 800
+        })
+        return
+      }
+
+      console.log(res);
+      this.setData({
+        clubData: res.data.club_data,
+        memberList: res.data.member_list,
+        // clubList: mockData
+      });
+
+      if (res.data.club_data.join_status == 4){
+        this.setData({
+          isCreator: true,
+        })
+      }
+
+      if (res.data.club_data && res.data.club_data.club_id != '') {
+        this.getActivityList(1);
+      };
+    })
+  },
+
   onConfirm() {
     if (this.data.abilityType === 1) {
 
@@ -263,9 +322,7 @@ Page({
             title: '解散成功',
             icon: 'none',
           });
-          this.setData({
-            showPopup: false,
-          });
+
           wx.switchTab({
             url: '../club/club',
           });
@@ -276,9 +333,7 @@ Page({
             title: '解散社团失败',
             icon: 'none',
           });
-          this.setData({
-            showPopup: false,
-          });
+
         }
       })
     } else {
@@ -288,21 +343,18 @@ Page({
             title: '退出成功',
             icon: 'none',
           })
-          this.setData({
-            showPopup: false,
-          });
+
           wx.switchTab({
             url: '/pages/club/club',
           })
+
+           // 向社团详情页发布通知重新刷新
+           WxNotificationCenter.postNotificationName('refreshClubList');
         } else {
           wx.showToast({
             title: '退出社团失败',
             icon: 'none',
           })
-
-          this.setData({
-            showPopup: false,
-          });
         }
       })
     }
@@ -317,6 +369,15 @@ Page({
 
   onEditClub(){
     console.log("编辑社团");
+    if (this.data.clubData.audit_status===0 || this.data.clubData.audit_status===1) {
+      wx.showToast({
+        title: '社团审核中，无法编辑',
+        icon: 'none',
+        duration: 2000
+      })
+      return
+    }
+
     this.publish_club.onClickEdit(this.data.clubData);
   },
 
@@ -327,5 +388,13 @@ Page({
       noMore: false,
     })
     this.getActivityList(1);
+  },
+  
+  didRefreshNotification: function (clubID) {
+    console.log("收到刷新通知"+clubID);
+    this.setData({
+      showActionSheet: false,
+    })
+    this.getClubDetailData(clubID);
 	},
 })

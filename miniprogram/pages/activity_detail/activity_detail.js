@@ -2,7 +2,7 @@ const LoginBiz = require('../../common_biz/login.js')
 import {formatTime} from "../../utils/common.js"
 import {getActivityDetail,signActivity,cancelSignActivity,deleteActivity} from "../../api/apis"
 import {hideButton} from "../../components/publish-activity/publish-activity"
-import Dialog from 'vant-weapp/dialog/dialog';
+import Dialog from '@vant/weapp/dialog/dialog';
 const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
 let that = null
 Page({
@@ -552,6 +552,15 @@ Page({
 
   editActivity(e) {
     console.log("编辑活动");
+    if (this.data.activity.audit_status == 0 || this.data.activity.audit_status == 1) {
+      wx.showToast({
+        title: '活动审核中，无法编辑',
+        icon:"none",
+        duration: 2000
+      })
+
+      return
+    }
     this.publish_activity.onClickEdit(this.data);
   },
 

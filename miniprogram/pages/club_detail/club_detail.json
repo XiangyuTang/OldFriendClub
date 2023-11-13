@@ -1,10 +1,11 @@
 {
   "usingComponents": {
     "activity-item": "../../components/activity-item/activity-item",
-    "van-dialog": "vant-weapp/dialog/index",
-    "van-popup": "vant-weapp/popup/index",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-popup": "@vant/weapp/popup/index",
     "myfooter": "../../components/myfooter/myfooter",
-    "publish-activity": "../../components/publish-activity/publish-activity"
+    "publish-activity": "../../components/publish-activity/publish-activity",
+    "van-action-sheet": "@vant/weapp/action-sheet/index"
   },
   
   "componentPlaceholder": {

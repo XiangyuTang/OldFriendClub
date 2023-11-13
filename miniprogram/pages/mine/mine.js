@@ -29,13 +29,17 @@ Page({
     userAge: '',
     userNickname: '',
     userPhone: '',
-    userAvatar: '',
+    userAvatar: [],
+    decodeUserAvatar: '',
     scrollviewHeight: 300,
     fixed: false,
     currentPageNo: 1,
     currentActivityPageNo: 1,
     clubNoMore: false,
-    activityNoMore: false
+    activityNoMore: false,
+
+    defaultClubIcon:'../../static/images/icons/club.png',
+    defaultClubBackImg:'../../static/images/navicons/photos.png',
   },
 
   selectGender(e) {
@@ -138,6 +142,7 @@ Page({
 
   onActivityScrollRefresh() {
     console.log('==onActivityScrollRefresh')
+    this.getActivity(this.data.currentActivityPageNo+1);
   },
   getUserData() {
     getUser().then(res => {
@@ -147,7 +152,12 @@ Page({
         userNickname: res.data.nick_name,
         curGender: res.data.gender,
         userPhone: res.data.phone,
-        userAvatar: res.data.avatar_url
+        userAvatar: [{
+          url:res.data.avatar_url,
+          name:"",
+          isImage: true,
+        }],
+        decodeUserAvatar: res.data.avatar_url,
       })
     })
   },
@@ -175,7 +185,7 @@ Page({
       let data = {
         biz_type: 1,
         page_no: pageNo,
-        scene: 0, // 0:默认推荐页  1:往期活动页
+        scene: 2, // 0:默认推荐页  1:往期活动页 2: 我的活动页
         sort_type: 0 // 排序类型，0:按照时间排序，1:按照点赞数排序
       }; // 传参
       listActivities2(data).then((res) => {
@@ -206,6 +216,7 @@ Page({
           currentPageNo: pageNo,
           clubNoMore: res.data.club_list.length < 10
         })
+
         wx.hideLoading()
       })
     }
@@ -294,7 +305,7 @@ Page({
     if (this.data.userAge < 0 ||
       this.data.userNickname == "" ||
       this.data.userPhone == "" ||
-      this.data.userAvatar == ""
+      this.data.userAvatar.length == 0
     ) {
       wx.showToast({
         title: '请检查必填项',
@@ -307,136 +318,169 @@ Page({
       return;
     }
     //上传图片至服务器，获得图片加密链接后再上传活动表单
-    var that = this
-    var imgUrl = '';
-    var tempFilePaths = that.data.userAvatar;
-    const isUploadAvatar = that.data.userAvatar.split('/')[2] === 'tmp';
-    const phoneIsUploadAvatar = that.data.userAvatar.split('/')[0] === 'wxfile:';
+    // var that = this
+    // var imgUrl = '';
+    // var tempFilePaths = that.data.userAvatar;
+    // const isUploadAvatar = that.data.userAvatar.split('/')[2] === 'tmp';
+    // const phoneIsUploadAvatar = that.data.userAvatar.split('/')[0] === 'wxfile:';
 
-    try {
-      if (isUploadAvatar || phoneIsUploadAvatar) {
-        wx.uploadFile({
-          url: 'http://124.220.84.200:5455/api/uploadStream',
-          filePath: tempFilePaths,
-          name: "file",
-          header: {
-            "content-type": "multipart/form-data"
-          },
-          formData: {
-            token: LoginBiz.getToken(), // 用户token
-            biz_type: 1, // 业务线  1：普通活动，必要
-          },
-          success: function (res) {
-            var jsonObj = JSON.parse(res.data);
-            if (res.statusCode == 200) {
-              imgUrl = jsonObj.data.file_download_http;
-              var data = {
-                age: Number(that.data.userAge),
-                nick_name: that.data.userNickname,
-                gender: Number(that.data.curGender),
-                Phone: that.data.userPhone,
-                avatar_url: imgUrl
-              }; //传参
-              wx.showLoading({
-                title: '修改中...'
-              })
-              editUser(data).then(res => {
-                if (res.err_no === 0) {
-                  wx.hideLoading()
-                  wx.showToast({
-                    title: '信息修改成功！',
-                    icon: 'success',
-                  });
-                  that.getUserData();
-                }
-
-              }).catch(err => {
-                console.log(err);
-              })
-            }
-          },
-          fail: function (err) {
-            console.log('11', err)
-            wx.showToast({
-              title: "图片上传失败",
-              icon: "none",
-              duration: 2000
-            })
-            that.setData({
-              userAge: that.data.userData.age,
-              userNickname: that.data.userData.nick_name,
-              curGender: that.data.userData.gender,
-              userPhone: that.data.userData.phone,
-              userAvatar: that.data.userData.avatar_url
-            })
-          },
-          complete: function (result) {
-            console.log(result.errMsg)
-          }
-        })
-      } else {
-        var data = {
-          age: Number(that.data.userAge),
-          nick_name: that.data.userNickname,
-          gender: Number(that.data.curGender),
-          Phone: that.data.userPhone,
-          avatar_url: that.data.userAvatar
-        }; //传参
-        console.log(data);
-        wx.showLoading({
-          title: '修改中...'
-        })
-        editUser(data).then(res => {
-          if (res.err_no === 0) {
-            wx.hideLoading()
-            wx.showToast({
-              title: '信息修改成功！',
-              icon: 'success',
-            })
-            that.getUserData();
-          }
-        }).catch(err => {
-          console.log(err);
-        })
-      }
-
-    } catch (err) {
-      console.log('121', err)
-      wx.showToast({
-        title: "图片上传失败",
-        icon: "none",
-        duration: 2000
-      })
-      that.setData({
-        userAge: that.data.userData.age,
-        userNickname: that.data.userData.nick_name,
-        curGender: that.data.userData.gender,
-        userPhone: that.data.userData.phone,
-        userAvatar: that.data.userData.avatar_url
-      })
-    }
-
-  },
-  bindUpload(e) {
-    console.log(e)
-    var that = this
-    wx.chooseMedia({
-      count: 1,
-      mediaType: ['image'],
-      sourceType: ['album', 'camera'],
-      maxDuration: 30,
-      camera: 'back',
-      success(res) {
-        console.log(res);
-        // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-        var tempFilePaths = res.tempFiles;
-        that.data.userAvatar = tempFilePaths[0].tempFilePath;
-        that.setData({
-          userAvatar: that.data.userAvatar
-        })
-      }
+    var data = {
+      age: Number(this.data.userAge),
+      nick_name: this.data.userNickname,
+      gender: Number(this.data.curGender),
+      Phone: this.data.userPhone,
+      avatar_url: this.data.decodeUserAvatar,
+    }; //传参
+    wx.showLoading({
+      title: '修改中...'
     })
+    editUser(data).then(res => {
+      if (res.err_no === 0) {
+        wx.hideLoading()
+        wx.showToast({
+          title: '信息修改成功！',
+          icon: 'success',
+        });
+        this.getUserData();
+      } else {
+        wx.hideLoading()
+        wx.showToast({
+          title: '信息修改失败，请稍后重试',
+          icon: 'none',
+          duration: 2000
+        });
+        console.log(res.err_no+' '+res.err_msg);
+      }
+
+    }).catch(err => {
+      console.log(err);
+    })
+  
+
+    // try {
+    //   if (isUploadAvatar || phoneIsUploadAvatar) {
+    //     wx.uploadFile({
+    //       url: 'http://124.220.84.200:5455/api/uploadStream',
+    //       filePath: tempFilePaths,
+    //       name: "file",
+    //       header: {
+    //         "content-type": "multipart/form-data"
+    //       },
+    //       formData: {
+    //         token: LoginBiz.getToken(), // 用户token
+    //         biz_type: 1, // 业务线  1：普通活动，必要
+    //       },
+    //       success: function (res) {
+    //         var jsonObj = JSON.parse(res.data);
+    //         if (res.statusCode == 200) {
+    //           imgUrl = jsonObj.data.file_download_http;
+    //           var data = {
+    //             age: Number(that.data.userAge),
+    //             nick_name: that.data.userNickname,
+    //             gender: Number(that.data.curGender),
+    //             Phone: that.data.userPhone,
+    //             avatar_url: imgUrl
+    //           }; //传参
+    //           wx.showLoading({
+    //             title: '修改中...'
+    //           })
+    //           editUser(data).then(res => {
+    //             if (res.err_no === 0) {
+    //               wx.hideLoading()
+    //               wx.showToast({
+    //                 title: '信息修改成功！',
+    //                 icon: 'success',
+    //               });
+    //               that.getUserData();
+    //             }
+
+    //           }).catch(err => {
+    //             console.log(err);
+    //           })
+    //         }
+    //       },
+    //       fail: function (err) {
+    //         console.log('11', err)
+    //         wx.showToast({
+    //           title: "图片上传失败",
+    //           icon: "none",
+    //           duration: 2000
+    //         })
+    //         that.setData({
+    //           userAge: that.data.userData.age,
+    //           userNickname: that.data.userData.nick_name,
+    //           curGender: that.data.userData.gender,
+    //           userPhone: that.data.userData.phone,
+    //           userAvatar: that.data.userData.avatar_url
+    //         })
+    //       },
+    //       complete: function (result) {
+    //         console.log(result.errMsg)
+    //       }
+    //     })
+    //   } else {
+    //     var data = {
+    //       age: Number(that.data.userAge),
+    //       nick_name: that.data.userNickname,
+    //       gender: Number(that.data.curGender),
+    //       Phone: that.data.userPhone,
+    //       avatar_url: that.data.userAvatar
+    //     }; //传参
+    //     console.log(data);
+    //     wx.showLoading({
+    //       title: '修改中...'
+    //     })
+    //     editUser(data).then(res => {
+    //       if (res.err_no === 0) {
+    //         wx.hideLoading()
+    //         wx.showToast({
+    //           title: '信息修改成功！',
+    //           icon: 'success',
+    //         })
+    //         that.getUserData();
+    //       }
+    //     }).catch(err => {
+    //       console.log(err);
+    //     })
+    //   }
+
+    // } catch (err) {
+    //   console.log('121', err)
+    //   wx.showToast({
+    //     title: "图片上传失败",
+    //     icon: "none",
+    //     duration: 2000
+    //   })
+    //   that.setData({
+    //     userAge: that.data.userData.age,
+    //     userNickname: that.data.userData.nick_name,
+    //     curGender: that.data.userData.gender,
+    //     userPhone: that.data.userData.phone,
+    //     userAvatar: that.data.userData.avatar_url
+    //   })
+    // }
+
   },
+  // bindUpload(e) {
+  //   console.log(e)
+  //   var that = this
+  //   wx.chooseMedia({
+  //     count: 1,
+  //     mediaType: ['image'],
+  //     sourceType: ['album', 'camera'],
+  //     maxDuration: 30,
+  //     camera: 'back',
+  //     success(res) {
+  //       console.log(res);
+  //       // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+  //       var tempFilePaths = res.tempFiles;
+  //       that.data.userAvatar = tempFilePaths[0].tempFilePath;
+  //       that.setData({
+  //         userAvatar: that.data.userAvatar
+  //       })
+  //     }
+  //   })
+  // },
   onClose() {
     setTimeout(() => {
       this.setData({
@@ -444,28 +488,165 @@ Page({
         userNickname: this.data.userData.nick_name,
         curGender: this.data.userData.gender,
         userPhone: this.data.userData.phone,
-        userAvatar: this.data.userData.avatar_url
+        userAvatar: [{
+          url:this.data.userData.avatar_url,
+          name:"",
+          isImage:true,
+        }]
       })
     }, 300)
   },
-  // 删除图片
-  deleteImg: function (e) {
-    console.log(e)
-    var that = this
-    wx.showModal({
-      title: "提示",
-      content: "是否删除",
-      success: function (res) {
-        if (res.confirm) {
-          that.setData({
-            userAvatar: ''
+  // // 删除图片
+  // deleteImg: function (e) {
+  //   console.log(e)
+  //   var that = this
+  //   wx.showModal({
+  //     title: "提示",
+  //     content: "是否删除",
+  //     success: function (res) {
+  //       if (res.confirm) {
+  //         that.setData({
+  //           userAvatar: ''
+  //         })
+
+  //       } else if (res.cancel) {
+  //         console.log("用户点击取消")
+  //       }
+  //     }
+  //   })
+  // },
+
+  afterUserAvatarRead(e) {
+    console.log("上传用户头像");
+    console.log(e);
+
+    const file = e.detail;
+    var that = this;
+
+    if (file.file.size > 2000000) {
+      wx.showToast({
+        title: '图片太大！',
+        icon: "error",
+        duration: 2000
+      })
+      return
+    }
+
+    that.setData({ 
+      userAvatar: [{
+        url: file.file.url,
+        name:"",
+        isImage: true,
+        status: 'uploading',
+        message: '上传中',
+      }],
+      decodeUserAvatar: '',
+    });
+
+    wx.uploadFile({
+      url: 'http://124.220.84.200:5455/api/uploadStream',
+      filePath: file.file.url,
+      name: "file",
+      header: {
+        "content-type": "multipart/form-data"
+      },
+      formData: {
+        token: LoginBiz.getToken(), // 用户token
+        biz_type: 1, // 业务线  1：普通活动，必要
+      },
+  
+      success(res) {
+        that.setData({ 
+          userAvatar: [],
+          decodeUserAvatar: '',
+        });
+        
+        if (res.statusCode == 200) {
+          var jsonObj = JSON.parse(res.data);
+          console.log(res);
+          if (jsonObj.err_no == 0) {
+            // 上传完成需要更新 fileList
+            that.setData({ 
+              userAvatar: [{
+                url: file.file.url,
+                name:"",
+                isImage: true,
+                status: 'done',
+                message: '上传成功',
+              }],
+              decodeUserAvatar: jsonObj.data.file_download_http,
+            });
+
+            console.log(that.data);
+          } else {
+            wx.showToast({
+              title: '图片上传失败！',
+              icon: 'error',
+              duration: 2000
+            })
+
+            that.setData({ 
+              userAvatar: [],
+              decodeUserAvatar: '',
+            });
+          }
+        } else {
+          wx.showToast({
+            title: '图片上传失败！',
+            icon: 'error',
+            duration: 2000
           })
 
-        } else if (res.cancel) {
-          console.log("用户点击取消")
+          that.setData({ 
+            userAvatar: [{
+              url: file.file.url,
+              name:"",
+              isImage: true,
+              status: 'failed',
+              message: '上传失败',
+            }],
+            decodeUserAvatar: '',
+          });
+
+          console.log(res);
         }
-      }
+      },
+
+      fail: function (err) {
+        wx.showToast({
+          title: "图片上传失败",
+          icon: "none",
+          duration: 2000
+        })
+        console.log(err);
+        that.setData({
+          userAvatar: [],
+          decodeUserAvatar: '',
+        })
+
+        that.setData({ 
+          userAvatar: [{
+            url: file.file.url,
+            name:"",
+            isImage: true,
+            status: 'failed',
+            message: '上传失败',
+          }],
+          decodeUserAvatar: '',
+        });
+      },
+    });
+  },
+
+  deleteUserAvatar(event){
+    console.log(event);
+    let list = this.data.userAvatar;
+    list.splice(event.detail.index, 1);
+    this.setData({
+      userAvatar: list,
+      decodeUserAvatar:'',
     })
+    console.log(this.data);
   },
 
 })

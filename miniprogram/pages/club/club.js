@@ -18,6 +18,8 @@ Page({
    * 页面的初始数据
    */
   data: {
+    noticeText:'这是一条Ikun公告这是一条Ikun公告这是一条Ikun公告这是一条Ikun公告这是一条Ikun公告', // 公告
+    
     selected: 0,
     tabsArr: ['我加入的', '我创建的', '其他社团'],
     tabKey: 0,
@@ -57,6 +59,9 @@ Page({
       }
     });
 
+    this.notice_bar = this.selectComponent('#notice-bar');
+    this.notice_bar.showNotice();
+
     // 注册通知
     WxNotificationCenter.addNotification('refreshClubList', this.didRefreshClubListNotification, this);
   },
@@ -83,8 +88,8 @@ Page({
           ...item,
           club_back_img_height: item.club_back_img_height ? item.club_back_img_height : 603,
           club_back_img_width: item.club_back_img_width ? item.club_back_img_width : 717,
-          club_back_img: item.club_back_img || 'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/dc27bcb8ed6da24c452ef24a7495df06.jpg',
-          club_icon: item.club_icon || 'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/e21405990022308da593789d244e3a30.png'
+          club_back_img: item.club_back_img,
+          club_icon: item.club_icon,
         }
       })
       const list = await addHeightArray(filterNoWidthClubList, 'club_back_img');

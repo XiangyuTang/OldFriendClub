@@ -167,3 +167,12 @@ export function listActivities(data) {
 		data
 	})
 }
+
+// 获取最新的公告
+export function getNewestPublicNotice(data) {
+	return send_request({
+		url: "/public_notice/getNewestPublicNotice",
+		method: "GET",
+		data
+	})
+}

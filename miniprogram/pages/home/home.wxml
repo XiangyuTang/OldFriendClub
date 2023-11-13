@@ -9,18 +9,23 @@
 	indicator-dots
 	indicator-active-color="#ef851a"
 	indicator-color="rgba(255,255,255,0.3)">
-		<swiper-item>
-			<image src="/static/images/banner1.jpg" mode="" />
+
+      <swiper-item wx:for="{{ bannerConfig }}" wx:key="item" wx:index="index">
+        <image src="{{ item.src }}" mode="" bindtap="onClickBannerImg" data-index="{{ index }}"/>
+      </swiper-item>
+
+		<!-- <swiper-item>
+			<image src="/static/images/banner1.jpg" mode="" bindtap="onClickBannerImg"  data-url="0"/>
 		</swiper-item>
 		<swiper-item>
-			<image src="/static/images/banner2.jpg" mode="" />
+			<image src="/static/images/banner2.jpg" mode="" bindtap="onClickBannerImg"  data-url="1"/>
 		</swiper-item>
 		<swiper-item>
-			<image src="/static/images/banner3.jpg" mode="" />
+			<image src="/static/images/banner3.jpg" mode="" bindtap="onClickBannerImg" data-url="2"/>
 		</swiper-item>
 		<swiper-item>
-			<image src="/static/images/banner4.png" mode="" />
-		</swiper-item>
+			<image src="/static/images/banner4.png" mode="" bindtap="onClickBannerImg" data-url="3"/>
+		</swiper-item> -->
 	</swiper>
 </view>
 

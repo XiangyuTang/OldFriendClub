@@ -12,7 +12,23 @@ Page({
 	 */
 	data: {
 		activeTab: 0,
-		page_no: 1,
+    page_no: 1,
+    
+    bannerConfig:[
+      {
+        src:"/static/images/banner1.jpg",
+      },
+      {
+        src:"/static/images/banner2.jpg",
+      },
+      {
+        src:"/static/images/banner3.jpg",
+      },
+      {
+        src:"/static/images/banner4.png",
+      }
+    ],
+
 		navArr: [
 			{
 				name: "菜市优惠",
@@ -236,7 +252,8 @@ Page({
 			activeTab: Number(index),
 			activatiesArr: [],
 			isLoading: false,
-			finishLoading: false,
+      finishLoading: false,
+      page_no:1,
 		})
 		// wx.showToast({
 		//   title: `切换到标签 ${index + 1}`,
@@ -322,5 +339,10 @@ Page({
 	 */
 	onShareAppMessage() {
 
-	}
+  },
+  
+  onClickBannerImg(e){
+    console.log("点击轮播banner");
+    console.log(e);
+  },
 })

@@ -1,13 +1,14 @@
 {
 	"usingComponents": {
-		"van-notice-bar": "vant-weapp/notice-bar/index",
+		"van-notice-bar": "@vant/weapp/notice-bar/index",
     "club-item":"../../components/club-item/club-item",
 		"double-club-item": "../../components/double-club-item/double-club-item",
-		"van-dialog": "vant-weapp/dialog/index",
-		"van-popup": "vant-weapp/popup/index",
-		"van-field": "vant-weapp/field/index",
-    "van-datetime-picker": "vant-weapp/datetime-picker/index",
-    "publish-club":"../../components/publish-club/publish-club"
+		"van-dialog": "@vant/weapp/dialog/index",
+		"van-popup": "@vant/weapp/popup/index",
+		"van-field": "@vant/weapp/field/index",
+    "van-datetime-picker": "@vant/weapp/datetime-picker/index",
+    "publish-club":"../../components/publish-club/publish-club",
+    "notice-bar":"../../components/public_notice/public_notice"
 	},
 	"enablePullDownRefresh": true
 }

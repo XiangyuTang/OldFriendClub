@@ -1,0 +1,5 @@
+<!--components/public_notice/public_notice.wxml-->
+<view wx:if="{{ showNotice }}" class='notice-bar'>
+  <van-notice-bar left-icon="volume-o" text="{{noticeText}}" custom-class="inform" mode="{{ noticeMode }}" bind:click="onClickNotice" bind:close="onCloseNotice" />
+</view>
+

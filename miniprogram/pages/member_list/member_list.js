@@ -51,9 +51,20 @@ Page({
         memberList: member_list,
         noMoreData: new_list.length < 10 ? true:false,
       });
+
+      console.log(this.data);
     })
   },
 
+  agreeSign(e){
+    console.log("审批通过");
+    console.log(e);
+  },
+
+  refuseSign(){
+    console.log("审批拒绝");
+    console.log(e);
+  },
 	/**
 	 * 生命周期函数--监听页面初次渲染完成
 	 */

@@ -13,18 +13,25 @@
 
   <block wx:else>
     <view class="member-item-idcard member-item-style2">成员</view>
-    <block wx:if="{{isCreator}}">
-      <!-- <view wx:if="{{applicantList[index].applicant_status === 1}}">
-            <view wx:if="{{signStatus === '4'}}">
-              <van-button round hairline size="mini" type="danger" style="margin-right: 20rpx;" data-uid="{{applicantList[index].applicant_uid}}" data-index="{{index}}" bind:click="refuseSign">审批拒绝</van-button>
-              <van-button round hairline size="mini" type="primary" style="margin-right: 10rpx;"  data-uid="{{applicantList[index].applicant_uid}}" data-index="{{index}}" bind:click="agreeSign">审批通过</van-button>
-            </view>
-            <view wx:else>
-              <van-tag plain type="primary">等待审核</van-tag>
-            </view>
-          </view> -->
+      <!-- <view wx:if="{{item.join_status === 2}}">
+        <view wx:if="{{isCreator}}">
+          <view class="member-item-audit-btn" >
+            <van-button round hairline size="mini" type="danger" style="margin-right: 20rpx;" data-uid="{{item.uid}}" data-index="{{index}}" bind:click="refuseSign">审批拒绝</van-button>
+            <van-button round hairline size="mini" type="primary" style="margin-right: 10rpx;"  data-uid="{{item.uid}}" data-index="{{index}}" bind:click="agreeSign">审批通过</van-button>
+          </view>
+        </view>
+        <view wx:else>
+          <view class="member-item-audit-tag" >
+            <van-tag plain type="primary">等待审核</van-tag>
+          </view>
+        </view>
+      </view>
+      <view wx:elif="{{item.join_status === 3 }}">
+        <view class="member-item-audit-tag" >
+            <van-tag plain type="primary">已拒绝申请</van-tag>
+        </view>
+      </view> -->
     </block>
-  </block>
 </view>
 
 <view class="no-more" style="padding: 10px 0;text-align: center;font-size: 14px;color: #7d7e80">

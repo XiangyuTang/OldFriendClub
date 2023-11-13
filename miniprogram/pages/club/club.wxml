@@ -1,8 +1,9 @@
 <!--pages/club/club.wxml-->
 <myheader></myheader>
-<view class='notice-bar'>
-  <van-notice-bar left-icon="volume-o" text="这是一条Ikun公告这是一条Ikun公告这是一条Ikun公告这是一条Ikun公告这是一条Ikun公告" custom-class="inform" mode="closeable" />
-</view>
+<notice-bar id="notice-bar"></notice-bar>
+<!-- <view wx:if="{{ noticeText != '' }}" class='notice-bar'>
+  <van-notice-bar left-icon="volume-o" text="{{noticeText}}" custom-class="inform" mode="closeable" />
+</view> -->
 
 <view class="page">
   <van-tabs active="{{ activeTab }}" bind:change="onChange" swipeable animated color="#f09636">
