@@ -18,7 +18,7 @@
         disabled
         title-width = "600rpx"
 		/>
-    <van-uploader file-list="{{ imgList }}" max-count="20" bind:after-read="afterReadImg" max-size="2000000" bind:delete="deleteImg" bind:oversize="imgOverSize" />
+    <van-uploader file-list="{{ imgList }}" max-count="20" multiple="true" bind:after-read="afterReadImg" max-size="2000000" bind:delete="deleteImg" bind:oversize="imgOverSize" />
   </view>
   <view class="edit-button" >
     <van-button type="primary" bind:click="onClickPublic">发布成果</van-button>

@@ -106,6 +106,66 @@ Page({
     })
   },
 
+  uploadImg(fileUrl) {
+    return new Promise((resolve, reject) => {
+      wx.uploadFile({
+        url: 'http://124.220.84.200:5455/api/uploadStream',
+        filePath: fileUrl,
+        name: "file",
+        header: {
+          "content-type": "multipart/form-data"
+        },
+        formData: {
+          token: LoginBiz.getToken(), // 用户token
+          biz_type: 1, // 业务线  1：普通活动，必要
+        },
+    
+        success(res) {
+          if (res.statusCode == 200) {
+            var jsonObj = JSON.parse(res.data);
+            console.log(res);
+            if (jsonObj.err_no == 0) {
+              // 上传完成需要更新 fileList
+              console.log("上传成功")
+
+              resolve({
+                data: jsonObj.data.file_download_http,
+              })
+             
+            } else{
+              wx.showToast({
+                title: '图片上传失败！',
+                icon: 'error',
+                duration: 2000
+              })
+
+              reject(jsonObj.err_msg);
+            }
+          } else {
+            wx.showToast({
+              title: '图片上传失败！',
+              icon: 'error',
+              duration: 2000
+            })
+
+            reject(res.statusCode);
+          }
+        },
+  
+        fail: function (err) {
+          wx.showToast({
+            title: '图片上传失败！',
+            icon: 'error',
+            duration: 2000
+          })
+    
+          reject(err);
+          console.log(err);
+        },
+      });
+    })
+  },
+
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
@@ -191,133 +251,95 @@ Page({
     return
   },
 
-  afterReadImg(e){
+  async afterReadImg(e){
     console.log("上传图片");
     console.log(e);
 
-    const file = e.detail;
+    const file = e.detail.file;
     var that = this;
 
-    var oldImg = that.data.imgList;
-    oldImg.push({
-      url: file.file.url,
-      name:"",
-      isImage: true,
-      status: 'uploading',
-      message: '上传中',
-    })
+    var oldImgs = that.data.imgList;
+    var oldDecodeImgs = that.data.decodeImgList
 
-    that.setData({ 
-      imgList: oldImg,
-    });
+    for (var i =0 ; i < file.length; i++) {
+      oldImgs.push({
+        url: file[i].url,
+        name:"",
+        isImage: true,
+        status: 'uploading',
+        message: '上传中',
+      });
+      oldDecodeImgs.push('');
 
-    wx.uploadFile({
-      url: 'http://124.220.84.200:5455/api/uploadStream',
-      filePath: file.file.url,
-      name: "file",
-      header: {
-        "content-type": "multipart/form-data"
-      },
-      formData: {
-        token: LoginBiz.getToken(), // 用户token
-        biz_type: 1, // 业务线  1：普通活动，必要
-      },
+      that.setData({
+        imgList: oldImgs,
+        decodeImgList: oldDecodeImgs,
+      })
   
-      success(res) {
-        oldImg.pop();
-        that.setData({ 
-          imgList: oldImg,
-        });
+      console.log(that.data);
 
-        if (res.statusCode == 200) {
-          var jsonObj = JSON.parse(res.data);
-          console.log(res);
-          if (jsonObj.err_no == 0) {
-            // 上传完成需要更新 fileList
-            oldImg.push({
-              url: file.file.url,
-              name:"",
-              isImage: true,
-              status: 'done',
-              message: '上传成功',
-            })
+      var decodeUrl = await this.uploadImg(file[i].url).catch(error => {
+        console.log(error)
 
-            var oldDecode = that.data.decodeImgList;
-            oldDecode.push(jsonObj.data.file_download_http);
-
-            that.setData({ 
-              imgList: oldImg,
-              decodeImgList:oldDecode,
-            });
-
-            console.log(that.data);
-          }else{
-            wx.showToast({
-              title: '图片上传失败！',
-              icon: 'error',
-              duration: 2000
-            })
-
-            oldImgs.push({
-              url: file.file.url,
-              name:"",
-              isImage: true,
-              status: 'failed',
-              message: '上传失败',
-            });
-
-            that.setData({ 
-              imgList: oldImg,
-            });
-
-            console.log(res);
-          }
-        } else {
-          wx.showToast({
-            title: '图片上传失败！',
-            icon: 'error',
-            duration: 2000
-          })
-
-          oldImgs.push({
-            url: file.file.url,
-            name:"",
-            isImage: true,
-            status: 'failed',
-            message: '上传失败',
-          });
-
-          that.setData({ 
-            imgList: oldImg,
-          });
-
-          console.log(res);
-        }
-      },
-
-      fail: function (err) {
-        wx.showToast({
-          title: "图片上传失败",
-          icon: "none",
-          duration: 2000
-        })
-        console.log(err);
-        oldImg.pop();
+        oldImgs.pop();
+        oldDecodeImgs.pop();
 
         oldImgs.push({
-          url: file.file.url,
+          url: file[i].url,
           name:"",
           isImage: true,
           status: 'failed',
           message: '上传失败',
         });
+        oldDecodeImgs.push('');
 
-        that.setData({ 
-          imgList: oldImg,
+        that.setData({
+          imgList: oldImgs,
+          decodeImgList: oldDecodeImgs,
+        })
+
+        console.log(that.data);
+      });
+      if (decodeUrl == '') {
+        oldImgs.pop();
+        oldDecodeImgs.pop();
+
+        oldImgs.push({
+          url: file[i].url,
+          name:"",
+          isImage: true,
+          status: 'failed',
+          message: '上传失败',
         });
+        oldDecodeImgs.push('');
 
-      },
-    });
+        that.setData({
+          imgList: oldImgs,
+          decodeImgList: oldDecodeImgs,
+        })
+
+        console.log(that.data);
+      } else {
+        oldImgs.pop();
+        oldDecodeImgs.pop();
+
+        oldImgs.push({
+          url: file[i].url,
+          name:"",
+          isImage: true,
+          status: 'done',
+          message: '上传成功',
+        });
+        oldDecodeImgs.push(decodeUrl.data);
+
+        that.setData({
+          imgList: oldImgs,
+          decodeImgList: oldDecodeImgs,
+        })
+
+        console.log(that.data);
+      }
+    }
   },
 
   deleteImg(event) {
