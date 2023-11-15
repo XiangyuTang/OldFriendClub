@@ -129,7 +129,7 @@
 							disabled
 							title-width = "600rpx"
 						/>
-            <van-uploader file-list="{{ imgs }}" max-count="9" max-size="2000000" bind:delete="deleteImgs" bind:after-read="afterImgsRead" bind:oversize="imgOverSize" />
+            <van-uploader file-list="{{ imgs }}" max-count="9" multiple="true" max-size="2000000" bind:delete="deleteImgs" bind:after-read="afterImgsRead" bind:oversize="imgOverSize" />
 						<!-- <view class="imglist">
 							<view class="item" wx:for="{{imgs}}" wx:key="item">
 								<image src="{{item}}" alt=""></image>

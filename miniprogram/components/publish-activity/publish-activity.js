@@ -683,132 +683,270 @@ Component({
       return
     },
 
-    afterImgsRead(e){
+    async afterImgsRead(e){
       console.log("上传活动图");
       console.log(e);
   
-      const file = e.detail;
+      const file = e.detail.file;
       var that = this;
-  
-      // if (file.file.size > 2000000) {
-      //   wx.showToast({
-      //     title: '图片太大！',
-      //     icon: "error",
-      //     duration: 2000
-      //   })
-      //   return
-      // }
 
       var oldImgs = that.data.imgs;
-      oldImgs.push({
-        url: file.file.url,
-        name:"",
-        isImage: true,
-        status: 'uploading',
-        message: '上传中',
-      });
-      that.setData({
-        imgs: oldImgs,
-      })
+      var oldDecodeImgs = that.data.decode_imgs
   
-      wx.uploadFile({
-        url: 'http://124.220.84.200:5455/api/uploadStream',
-        filePath: file.file.url,
-        name: "file",
-        header: {
-          "content-type": "multipart/form-data"
-        },
-        formData: {
-          token: LoginBiz.getToken(), // 用户token
-          biz_type: 1, // 业务线  1：普通活动，必要
-        },
-    
-        success(res) {
-          that.data.imgs.pop();
-          
-          if (res.statusCode == 200) {
-            var jsonObj = JSON.parse(res.data);
-            console.log(res);
-            if (jsonObj.err_no == 0) {
-              // 上传完成需要更新 fileList
-              var oldImgs = that.data.imgs;
-              var oldDecodeImgs = that.data.decode_imgs;
-              oldImgs.push({
-                url: file.file.url,
-                  name:"",
-                  isImage: true,
-                  status: 'done',
-                  message: '上传成功',
-              });
-              oldDecodeImgs.push(jsonObj.data.file_download_http);
+      for (var i =0 ; i < file.length; i++) {
+        oldImgs.push({
+          url: file[i].url,
+          name:"",
+          isImage: true,
+          status: 'uploading',
+          message: '上传中',
+        });
+        oldDecodeImgs.push('');
 
-              that.setData({ 
-                imgs: oldImgs,
-                decode_imgs: oldDecodeImgs,
-              });
+        that.setData({
+          imgs: oldImgs,
+          decode_imgs: oldDecodeImgs,
+        })
     
-              console.log(that.data);
-            } else{
+        console.log(that.data);
+
+        var decodeUrl = await this.uploadImg(file[i].url).catch(error => {
+          console.log(error)
+
+          oldImgs.pop();
+          oldDecodeImgs.pop();
+
+          oldImgs.push({
+            url: file[i].url,
+            name:"",
+            isImage: true,
+            status: 'failed',
+            message: '上传失败',
+          });
+          oldDecodeImgs.push('');
+  
+          that.setData({
+            imgs: oldImgs,
+            decode_imgs: oldDecodeImgs,
+          })
+
+          console.log(that.data);
+        });
+        if (decodeUrl == '') {
+          oldImgs.pop();
+          oldDecodeImgs.pop();
+
+          oldImgs.push({
+            url: file[i].url,
+            name:"",
+            isImage: true,
+            status: 'failed',
+            message: '上传失败',
+          });
+          oldDecodeImgs.push('');
+  
+          that.setData({
+            imgs: oldImgs,
+            decode_imgs: oldDecodeImgs,
+          })
+
+          console.log(that.data);
+        } else {
+          oldImgs.pop();
+          oldDecodeImgs.pop();
+
+          oldImgs.push({
+            url: file[i].url,
+            name:"",
+            isImage: true,
+            status: 'done',
+            message: '上传成功',
+          });
+          oldDecodeImgs.push(decodeUrl.data);
+  
+          that.setData({
+            imgs: oldImgs,
+            decode_imgs: oldDecodeImgs,
+          })
+
+          console.log(that.data);
+        }
+
+        // wx.uploadFile({
+        //   url: 'http://124.220.84.200:5455/api/uploadStream',
+        //   filePath: file[i].url,
+        //   name: "file",
+        //   header: {
+        //     "content-type": "multipart/form-data"
+        //   },
+        //   formData: {
+        //     token: LoginBiz.getToken(), // 用户token
+        //     biz_type: 1, // 业务线  1：普通活动，必要
+        //   },
+      
+        //   success(res) {
+        //     oldImgs.pop();
+        //     oldDecodeImgs.pop();
+
+        //     console.log(that.data);
+            
+        //     if (res.statusCode == 200) {
+        //       var jsonObj = JSON.parse(res.data);
+        //       console.log(res);
+        //       if (jsonObj.err_no == 0) {
+        //         // 上传完成需要更新 fileList
+        //         console.log("上传成功")
+               
+        //         oldImgs.push({
+        //             url: file[i].url,
+        //             name:"",
+        //             isImage: true,
+        //             status: 'done',
+        //             message: '上传成功',
+        //         });
+        //         oldDecodeImgs.push(jsonObj.data.file_download_http);
+  
+        //         that.setData({ 
+        //           imgs: oldImgs,
+        //           decode_imgs: oldDecodeImgs,
+        //         });
+      
+        //         console.log(that.data);
+        //       } else{
+        //         wx.showToast({
+        //           title: '图片上传失败！',
+        //           icon: 'error',
+        //           duration: 2000
+        //         })
+          
+        //         oldImgs.push({
+        //           url: file[i].url,
+        //           name:"",
+        //           isImage: true,
+        //           status: 'failed',
+        //           message: '上传失败',
+        //         });
+        //         oldDecodeImgs.push('');
+    
+        //         that.setData({ 
+        //           imgs: oldImgs,
+        //           decode_imgs: oldDecodeImgs,
+        //         });
+        //       }
+        //     } else {
+        //       wx.showToast({
+        //         title: '图片上传失败！',
+        //         icon: 'error',
+        //         duration: 2000
+        //       })
+        
+        //       oldImgs.push({
+        //         url: file[i].url,
+        //         name:"",
+        //         isImage: true,
+        //         status: 'failed',
+        //         message: '上传失败',
+        //       });
+        //       oldDecodeImgs.push('');
+  
+        //       that.setData({ 
+        //         imgs: oldImgs,
+        //         decode_imgs: oldDecodeImgs,
+        //       });
+    
+        //       console.log(res);
+        //     }
+        //   },
+    
+        //   fail: function (err) {
+        //     oldImgs.pop();
+        //     oldDecodeImgs.pop();
+
+        //     wx.showToast({
+        //       title: '图片上传失败！',
+        //       icon: 'error',
+        //       duration: 2000
+        //     })
+      
+        //     oldImgs.push({
+        //       url: file[i].url,
+        //       name:"",
+        //       isImage: true,
+        //       status: 'failed',
+        //       message: '上传失败',
+        //     });
+        //     oldDecodeImgs.push('');
+
+        //     that.setData({ 
+        //       imgs: oldImgs,
+        //       decode_imgs: oldDecodeImgs,
+        //     });
+  
+        //     console.log(err);
+        //   },
+        // });
+      }
+
+    },
+
+    uploadImg(fileUrl) {
+      return new Promise((resolve, reject) => {
+        wx.uploadFile({
+          url: 'http://124.220.84.200:5455/api/uploadStream',
+          filePath: fileUrl,
+          name: "file",
+          header: {
+            "content-type": "multipart/form-data"
+          },
+          formData: {
+            token: LoginBiz.getToken(), // 用户token
+            biz_type: 1, // 业务线  1：普通活动，必要
+          },
+      
+          success(res) {
+            if (res.statusCode == 200) {
+              var jsonObj = JSON.parse(res.data);
+              console.log(res);
+              if (jsonObj.err_no == 0) {
+                // 上传完成需要更新 fileList
+                console.log("上传成功")
+
+                resolve({
+                  data: jsonObj.data.file_download_http,
+                })
+               
+              } else{
+                wx.showToast({
+                  title: '图片上传失败！',
+                  icon: 'error',
+                  duration: 2000
+                })
+
+                reject(jsonObj.err_msg);
+              }
+            } else {
               wx.showToast({
                 title: '图片上传失败！',
                 icon: 'error',
                 duration: 2000
               })
-  
-              var oldImgs = that.data.imgs;
-  
-              that.setData({ 
-                imgs: oldImgs,
-              });
+
+              reject(res.statusCode);
             }
-          } else {
+          },
+    
+          fail: function (err) {
             wx.showToast({
               title: '图片上传失败！',
               icon: 'error',
               duration: 2000
             })
-
-            var oldImgs = that.data.imgs;
-        
-            oldImgs.push({
-              url: file.file.url,
-                name:"",
-                isImage: true,
-                status: 'failed',
-                message: '上传失败',
-            });
-
-            that.setData({ 
-              imgs: oldImgs,
-            });
-  
-            console.log(res);
-          }
-        },
-  
-        fail: function (err) {
-          wx.showToast({
-            title: "图片上传失败",
-            icon: "none",
-            duration: 2000
-          })
-          var oldImgs = that.data.imgs;
-        
-          oldImgs.push({
-            url: file.file.url,
-              name:"",
-              isImage: true,
-              status: 'failed',
-              message: '上传失败',
-          });
-
-          that.setData({ 
-            imgs: oldImgs,
-          });
-
-          console.log(err);
-        },
-      });
+      
+            reject(err);
+            console.log(err);
+          },
+        });
+      })
     },
   
     deleteImgs(event) {
