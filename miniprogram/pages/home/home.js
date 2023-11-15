@@ -352,6 +352,10 @@ Page({
     console.log(e);
 
     console.log(this.data.bannerConfig[e.currentTarget.dataset.index]);
+    var jumpUrl = this.data.bannerConfig[e.currentTarget.dataset.index].jump_url;
+    wx.navigateTo({
+      url: '../../pages/out_web/out_web?src=' + encodeURIComponent(jumpUrl),
+    })
   },
 
   getValidBannerData(){

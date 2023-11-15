@@ -51,6 +51,10 @@ Component({
     onClickNotice(){
       console.log("点击链接");
       console.log(this.data);
+
+      wx.navigateTo({
+        url: '../../pages/out_web/out_web?src=' + encodeURIComponent(this.data.noticeJumpUrl),
+      })
     },
 
     onCloseNotice(){

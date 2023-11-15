@@ -11,7 +11,8 @@
 		"pages/club_detail/club_detail",
 		"pages/member_list/member_list",
 		"pages/activity_result/activity_result",
-		"pages/edit_activity_result/edit_activity_result"
+		"pages/edit_activity_result/edit_activity_result",
+		"pages/out_web/out_web"
 	],
 	"permission": {
 		"scope.userFuzzyLocation": {
