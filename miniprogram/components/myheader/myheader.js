@@ -19,6 +19,7 @@ Component({
 	 */
 	methods: {
 		callus(){
+      
 			wx.makePhoneCall({
 				phoneNumber: '13872601314',
 			})

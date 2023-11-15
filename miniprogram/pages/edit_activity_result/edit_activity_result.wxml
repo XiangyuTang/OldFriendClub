@@ -1,0 +1,39 @@
+<!--pages/edit_activity_result/edit_activity_result.wxml-->
+<view class="">
+  <view class="info_model" >
+      <view class="activity_title">编辑活动成果</view>
+	</view>
+
+  <view class="content_model">
+    <textarea class="input-text" auto-focus="true" style="overflow-y:visible" maxlength='{{maxWord}}' bindinput='limitContextWord' placeholder="输入活动成果" value="{{ resultText }}"></textarea>
+    <view>
+      <text style="float:right">{{ currentWord }}/ {{ maxWord }}（最多可输入300字）</text>
+    </view>
+  </view>
+
+  <view class="image_model">
+    <van-field
+        value=""
+        label="活动照片（最多可上传20张照片）"
+        disabled
+        title-width = "600rpx"
+		/>
+    <van-uploader file-list="{{ imgList }}" max-count="20" bind:after-read="afterReadImg" max-size="2000000" bind:delete="deleteImg" bind:oversize="imgOverSize" />
+  </view>
+  <view class="edit-button" >
+    <van-button type="primary" bind:click="onClickPublic">发布成果</van-button>
+  </view>
+
+  <view>  
+    <van-action-sheet
+      show="{{ showActionSheet }}"
+      actions="{{ actions }}"
+      cancel-text="取消"
+      bind:close="onCloseActionSheet"
+      bind:select="onSelectActionSheet"
+      bind:cancel="onCloseActionSheet"
+    />
+  </view>
+
+
+</view>

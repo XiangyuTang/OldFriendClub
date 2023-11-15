@@ -5,6 +5,6 @@
 	</navigator>
 	<view class="search">
 		<!-- <van-icon name="search"/> -->
-		<van-icon name="phone-o" bindtap="callus"/>
+		<!-- <van-icon name="phone-o" bindtap="callus"/> -->
 	</view>
 </view>

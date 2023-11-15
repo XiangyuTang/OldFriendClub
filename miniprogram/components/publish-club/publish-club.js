@@ -650,14 +650,14 @@ Component({
     const file = e.detail;
     var that = this;
 
-    if (file.file.size > 2000000) {
-      wx.showToast({
-        title: '图片太大！',
-        icon: "error",
-        duration: 2000
-      })
-      return
-    }
+    // if (file.file.size > 2000000) {
+    //   wx.showToast({
+    //     title: '图片太大！',
+    //     icon: "error",
+    //     duration: 2000
+    //   })
+    //   return
+    // }
 
     that.setData({ 
       club_icon: [{
@@ -768,14 +768,14 @@ Component({
     const file = e.detail;
     var that = this;
 
-    if (file.file.size > 2000000) {
-      wx.showToast({
-        title: '图片太大！',
-        icon: "error",
-        duration: 2000
-      })
-      return
-    }
+    // if (file.file.size > 2000000) {
+    //   wx.showToast({
+    //     title: '图片太大！',
+    //     icon: "error",
+    //     duration: 2000
+    //   })
+    //   return
+    // }
 
     that.setData({ 
       club_back_img: [{
@@ -905,6 +905,16 @@ Component({
     })
     console.log(this.data);
   },
+
+  imgOverSize(e) {
+    wx.showToast({
+      title: '图片太大！',
+      icon: "error",
+      duration: 2000
+    })
+    return
+  },
+
 
   onClose() {
     this.setData({

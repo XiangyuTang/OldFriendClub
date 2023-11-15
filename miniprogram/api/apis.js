@@ -176,3 +176,12 @@ export function getNewestPublicNotice(data) {
 		data
 	})
 }
+
+// 获取生效的banner
+export function getValidBanner(data) {
+	return send_request({
+		url: "/banner/getValidBanner",
+		method: "GET",
+		data
+	})
+}

@@ -52,7 +52,7 @@
       <view wx:for="{{clubList}}">
         <view class="club-item {{hideBorder ? '': 'club-item-border'}}" data-acid="{{item.activity_id}}" bindtap="onJumpAct">
           <view class="pic">
-            <image class="img" src="{{item.cover_image_url==''?'../../static/images/banner3.jpg':item.cover_image_url}}" mode="aspectFill" />
+            <image class="img" src="{{item.cover_image_url==''?'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/8f7a5758df4d810ff236798a2c103267.jpg':item.cover_image_url}}" mode="aspectFill" />
           </view>
           <view class="club-info">
             <view class="club-name">

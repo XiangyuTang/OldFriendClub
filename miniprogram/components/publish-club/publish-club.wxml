@@ -17,7 +17,7 @@
         <!-- <view class="wrap"> -->
           <!-- <view class="img-wrap"> -->
             <van-field value="" label="社团图标" disabled title-width="600rpx" />
-            <van-uploader file-list="{{ club_icon }}" max-count="1" bind:delete="deleteClubIcon" bind:after-read="afterClubIconRead" />
+            <van-uploader file-list="{{ club_icon }}" max-count="1"  max-size="2000000" bind:delete="deleteClubIcon" bind:after-read="afterClubIconRead"  bind:oversize="imgOverSize"  />
             <!-- <view class="imglist">
               <view class="item" wx:if="{{club_icon === '' ? false : true}}">
                 <image mode="aspectFill" src="{{club_icon}}" alt=""></image>
@@ -34,7 +34,7 @@
         <!-- <view class="wrap"> -->
           <!-- <view class="img-wrap"> -->
             <van-field value="" label="社团背景" disabled title-width="600rpx" />
-            <van-uploader file-list="{{ club_back_img }}" max-count="1"  bind:delete="deleteClubBackImg" bind:after-read="afterClubBackImgRead" />
+            <van-uploader file-list="{{ club_back_img }}" max-count="1" max-size="2000000" bind:delete="deleteClubBackImg" bind:after-read="afterClubBackImgRead"  bind:oversize="imgOverSize" />
             <!-- <view class="imglist">
               <view class="item" wx:if="{{club_back_img === '' ? false : true}}">
                 <image class="img-logo" mode="aspectFill" src="{{club_back_img}}" alt=""></image>

@@ -51,6 +51,7 @@ Page({
     // })
     // wx.startPullDownRefresh()
     this.init(1);
+    console.log(this.data);
   },
 
   onScrollRefresh: function () {
@@ -141,6 +142,7 @@ Page({
       wx.showToast({
         title: '获取报名者列表失败，请稍后重试',
         icon: 'none',
+        duration: 2000,
       })
     })
 

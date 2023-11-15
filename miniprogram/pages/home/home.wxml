@@ -11,7 +11,7 @@
 	indicator-color="rgba(255,255,255,0.3)">
 
       <swiper-item wx:for="{{ bannerConfig }}" wx:key="item" wx:index="index">
-        <image src="{{ item.src }}" mode="" bindtap="onClickBannerImg" data-index="{{ index }}"/>
+        <image src="{{ item.url }}" mode="" bindtap="onClickBannerImg" data-index="{{ index }}"/>
       </swiper-item>
 
 		<!-- <swiper-item>

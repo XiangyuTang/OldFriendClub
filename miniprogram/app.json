@@ -1,81 +1,85 @@
 {
-  "pages": [
-    "pages/home/home",
-    "pages/activity_page/activity_page",
-    "pages/sign_list/sign_list",
-    "pages/club/club",
-    "pages/earns/earns",
-    "pages/mine/mine",
-    "pages/activity_detail/activity_detail",
-    "pages/navi_pages/shopping_market/shopping_market",
-    "pages/club_detail/club_detail",
-    "pages/member_list/member_list"
-  ],
-  "permission": {
-    "scope.userFuzzyLocation": {
-      "desc": "你的位置信息将用于小程序中的信息展示"
-    },
-    "scope.userLocation": {
-      "desc": "你的位置信息将用于小程序中的信息展示"
-    }
-  },
-  "requiredPrivateInfos": [
-    "getFuzzyLocation"
-  ],
-  "window": {
-    "navigationBarBackgroundColor": "#ef851a",
-    "navigationBarTitleText": "聚荟乐享社团",
-    "enablePullDownRefresh": true,
-    "backgroundColor": "#ee8633"
-  },
-  "useExtendedLib": {
-    "weui": true
-  },
-  "sitemapLocation": "sitemap.json",
-  "tabBar": {
-    "selectedColor": "#ef851a",
-    "color": "#8a8a8a",
-    "list": [{
-        "pagePath": "pages/home/home",
-        "text": "活动广场",
-        "iconPath": "static/images/icons/park.png",
-        "selectedIconPath": "static/images/icons/park_fill.png"
-      },
-      {
-        "pagePath": "pages/club/club",
-        "text": "活力社团",
-        "iconPath": "static/images/icons/club.png",
-        "selectedIconPath": "static/images/icons/club_fill.png"
-      },
-      {
-        "pagePath": "pages/earns/earns",
-        "text": "周边优惠",
-        "iconPath": "static/images/icons/money.png",
-        "selectedIconPath": "static/images/icons/money_fill.png"
-      },
-      {
-        "pagePath": "pages/mine/mine",
-        "text": "个人中心",
-        "iconPath": "static/images/icons/user.png",
-        "selectedIconPath": "static/images/icons/user_fill.png"
-      }
-    ]
-  },
-  "usingComponents": {
-    "myheader": "components/myheader/myheader",
-    "myfooter": "components/myfooter/myfooter",
-    "publish-activity": "components/publish-activity/publish-activity",
-    "publish-club": "components/publish-club/publish-club",
-    "van-button": "@vant/weapp/button",
-    "van-icon": "@vant/weapp/icon",
-    "van-loading": "@vant/weapp/loading/index",
-    "van-tab": "@vant/weapp/tab/index",
-    "van-tabs": "@vant/weapp/tabs/index",
-    "van-tag": "@vant/weapp/tag/index",
-    "van-popup": "@vant/weapp/popup/index",
-    "van-uploader": "@vant/weapp/uploader/index",
-    "double-club-item": "components/double-club-item/double-club-item",
-    "club-item": "components/club-item/club-item",
-    "activity-item": "components/activity-item/activity-item"
-  }
+	"pages": [
+		"pages/home/home",
+		"pages/activity_page/activity_page",
+		"pages/sign_list/sign_list",
+		"pages/club/club",
+		"pages/earns/earns",
+		"pages/mine/mine",
+		"pages/activity_detail/activity_detail",
+		"pages/navi_pages/shopping_market/shopping_market",
+		"pages/club_detail/club_detail",
+		"pages/member_list/member_list",
+		"pages/activity_result/activity_result",
+		"pages/edit_activity_result/edit_activity_result",
+		"pages/publish_activity/publish_activity"
+	],
+	"permission": {
+		"scope.userFuzzyLocation": {
+			"desc": "你的位置信息将用于小程序中的信息展示"
+		},
+		"scope.userLocation": {
+			"desc": "你的位置信息将用于小程序中的信息展示"
+		}
+	},
+	"requiredPrivateInfos": [
+		"getFuzzyLocation"
+	],
+	"window": {
+		"navigationBarBackgroundColor": "#ef851a",
+		"navigationBarTitleText": "聚荟乐享社团",
+		"enablePullDownRefresh": true,
+		"backgroundColor": "#ee8633"
+	},
+	"useExtendedLib": {
+		"weui": true
+	},
+	"sitemapLocation": "sitemap.json",
+	"tabBar": {
+		"selectedColor": "#ef851a",
+		"color": "#8a8a8a",
+		"list": [
+			{
+				"pagePath": "pages/home/home",
+				"text": "活动广场",
+				"iconPath": "static/images/icons/park.png",
+				"selectedIconPath": "static/images/icons/park_fill.png"
+			},
+			{
+				"pagePath": "pages/club/club",
+				"text": "活力社团",
+				"iconPath": "static/images/icons/club.png",
+				"selectedIconPath": "static/images/icons/club_fill.png"
+			},
+			{
+				"pagePath": "pages/earns/earns",
+				"text": "周边优惠",
+				"iconPath": "static/images/icons/money.png",
+				"selectedIconPath": "static/images/icons/money_fill.png"
+			},
+			{
+				"pagePath": "pages/mine/mine",
+				"text": "个人中心",
+				"iconPath": "static/images/icons/user.png",
+				"selectedIconPath": "static/images/icons/user_fill.png"
+			}
+		]
+	},
+	"usingComponents": {
+		"myheader": "components/myheader/myheader",
+		"myfooter": "components/myfooter/myfooter",
+		"publish-activity": "components/publish-activity/publish-activity",
+		"publish-club": "components/publish-club/publish-club",
+		"van-button": "@vant/weapp/button",
+		"van-icon": "@vant/weapp/icon",
+		"van-loading": "@vant/weapp/loading/index",
+		"van-tab": "@vant/weapp/tab/index",
+		"van-tabs": "@vant/weapp/tabs/index",
+		"van-tag": "@vant/weapp/tag/index",
+		"van-popup": "@vant/weapp/popup/index",
+		"van-uploader": "@vant/weapp/uploader/index",
+		"double-club-item": "components/double-club-item/double-club-item",
+		"club-item": "components/club-item/club-item",
+		"activity-item": "components/activity-item/activity-item"
+	}
 }

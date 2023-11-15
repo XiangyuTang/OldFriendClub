@@ -30,4 +30,7 @@ page{
 	--globalBgColor: #f6f7f8;
   --line: #efefef;
   --shadow: 0 2px 4px rgba(0,0,0,.2);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
+  Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei',
+  sans-serif;
 }

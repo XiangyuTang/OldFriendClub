@@ -3,6 +3,7 @@ import {formatTime} from "../../utils/common.js"
 import {publishActivity,wxGetAddress} from "../../api/apis"
 const LoginBiz = require('../../common_biz/login.js')
 const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
+import { verifyPhoneNum }from  "../../utils/util"
 
 let choose_date_idx = ""
 Component({
@@ -54,6 +55,7 @@ Component({
     hide_btn: false,
     before_images : [],
     editActivityID: "",
+    creator_phone:'',
 	},
 	
 	/**
@@ -99,7 +101,7 @@ Component({
 						console.log(err)   
 				}                    
 			})
-		},
+    },
 		
 		onclickPublish(){
 			this.setData({
@@ -174,6 +176,7 @@ Component({
         beginTimestamp:e.activity.activity_start_time_stamp,
         endTime: e.activity.activity_end_time,
         activity_address: e.activity.activity_location,
+        creator_phone: e.creator_phone,
         imgs: activityImages,
         decode_imgs: decodeImages,
         location: {
@@ -220,7 +223,7 @@ Component({
 			this.data.max_people_num == "" ||
 			this.data.registrationTimestamp == ""||
 			this.data.beginTimestamp == ""||
-			this.data.activity_address == ""
+			this.data.activity_address == "" || this.data.creator_phone == ''
 			){
 				wx.showToast({
 					title: '请检查必填项',
@@ -239,7 +242,17 @@ Component({
 					duration: 2000
 				})
 				return;
-			} 
+      } 
+      
+      if (!verifyPhoneNum(this.data.creator_phone)){
+        wx.showToast({
+					title: '请输入正确的手机号',
+					icon: 'none',
+					duration: 2000
+				})
+				return;
+      }
+
 			//上传图片至服务器，获得图片加密链接后再上传活动表单
 			// var that = this
 			var imgUrl = []
@@ -262,6 +275,7 @@ Component({
         token:LoginBiz.getToken(),
         activity_id: activityID,
         biz_type:1,
+        creator_phone_num: this.data.creator_phone,
         location:this.data.location,
         title:this.data.activity_title,
         max_sign_num:Number(this.data.max_people_num),
@@ -285,6 +299,7 @@ Component({
           wx.showToast({
             title: "活动发布成功！",
             icon: "success",
+            duration:2000,
           });
           
           if (activityID != '' && activityID != '0') {
@@ -304,6 +319,7 @@ Component({
           wx.showToast({
             title: "活动发布失败，请稍后重试",
             icon: "none",
+            duration:2000,
           });
         }
       }).catch(err=>{
@@ -514,7 +530,7 @@ Component({
 			else if(this.data.max_people_num == ""){
 				this.setData({illegal_message:""})
 			}
-			else if(this.data.max_people_num >999){
+			else if(this.data.max_people_num >999 || this.data.max_people_num <= 0){
 				this.setData({illegal_message:"最多允许999人参与！"})
 			}
 			else{
@@ -658,6 +674,15 @@ Component({
       })
     },
 
+    imgOverSize(e) {
+      wx.showToast({
+        title: '图片太大！',
+        icon: "error",
+        duration: 2000
+      })
+      return
+    },
+
     afterImgsRead(e){
       console.log("上传活动图");
       console.log(e);
@@ -665,14 +690,14 @@ Component({
       const file = e.detail;
       var that = this;
   
-      if (file.file.size > 2000000) {
-        wx.showToast({
-          title: '图片太大！',
-          icon: "error",
-          duration: 2000
-        })
-        return
-      }
+      // if (file.file.size > 2000000) {
+      //   wx.showToast({
+      //     title: '图片太大！',
+      //     icon: "error",
+      //     duration: 2000
+      //   })
+      //   return
+      // }
 
       var oldImgs = that.data.imgs;
       oldImgs.push({

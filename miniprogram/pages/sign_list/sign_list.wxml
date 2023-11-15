@@ -4,10 +4,10 @@
   <view class="sign_card">
     <van-card
       title="{{applicantList[index].display_name}}"
-      thumb="{{applicantList[index].applicant_avatar || 'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/e21405990022308da593789d244e3a30.png'}}"
+      thumb="{{applicantList[index].applicant_avatar || '../../static/images/icons/user.png'}}"
     > 
 
-      <view slot="desc" wx:if="{{applicantList[index].applicant_status !=4}}">
+      <view slot="desc" wx:if="{{applicantList[index].applicant_status != 4}}">
         <block wx:if="{{signStatus === '4'}}">
           <block wx:if="{{applicantList[index].applicant_status === 2}}">
            电话：{{applicantList[index].applicant_phone}}
@@ -17,12 +17,20 @@
           </block>
         </block>
         <block wx:else>电话：保密</block>
-        
       </view>
+      <view slot="desc" wx:else>
+        <block wx:if="{{ signStatus == 2}}">
+          电话：{{applicantList[index].applicant_phone}}
+        </block>
+        <block wx:else>
+          电话：保密（通过审核后可查看）
+        </block>
+      </view>
+
       <view slot="desc">
-        <block wx:if="{{applicantList[index].applicant_gender===0}}">性别：保密</block>
         <block wx:if="{{applicantList[index].applicant_gender===1}}">性别：男</block>
-        <block wx:if="{{applicantList[index].applicant_gender===2}}">性别：女</block>
+        <block wx:elif="{{applicantList[index].applicant_gender===2}}">性别：女</block>
+        <block wx:else>性别：保密</block>
       </view>
 
       <view slot="desc" wx:if="{{applicantList[index].applicant_status !=4}}">

@@ -12,7 +12,6 @@ Page({
 	data: {
     memberList:[],
     clubId:"",
-    isCreator: false,
     currentPage: 1,
     noMoreData: false,
 	},
@@ -25,7 +24,6 @@ Page({
 
     this.setData({
       clubId: options.clubId,
-      isCreator: options.isCreator,
     });
 
     this.getMemberData(1);

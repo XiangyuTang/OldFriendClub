@@ -15,7 +15,7 @@
 
 <view class="club-item {{hideBorder ? '': 'club-item-border'}}">
 	<view class="pic">
-		<image class="img" src="../../static/images/banner2.jpg" mode="aspectFill"/>
+		<image class="img" src="https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/c506fcc9a2c14fdc1594e542e4886a10.jpg" mode="aspectFill"/>
 	</view>
 	<view class="club-info">
 		<view class="club-name">

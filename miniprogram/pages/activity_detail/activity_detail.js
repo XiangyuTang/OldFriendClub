@@ -4,6 +4,7 @@ import {getActivityDetail,signActivity,cancelSignActivity,deleteActivity} from "
 import {hideButton} from "../../components/publish-activity/publish-activity"
 import Dialog from '@vant/weapp/dialog/dialog';
 const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
+import {verifyPhoneNum} from "../../utils/util"
 let that = null
 Page({
 
@@ -55,6 +56,7 @@ Page({
 		sign_due:[],
     sign_status:"",
     activity_club:{},
+    creator_phone:'',
 		// user: {
 		// 	open: 0
     // }
@@ -76,6 +78,13 @@ Page({
       url: `../sign_list/sign_list?activity_id=${this.data.activity_id}&sign_status=${this.data.activity.sign_status}`,
     })
   },
+
+  toActivityResult(){
+    wx.navigateTo({
+      url: `../activity_result/activity_result?activity_id=${this.data.activity_id}&sign_status=${this.data.activity.sign_status}&title=${this.data.activity.title}`
+    })
+  },
+
 	ininput (e) {
 		const { info } = e.currentTarget.dataset
 		console.log(info);
@@ -136,15 +145,15 @@ Page({
     })
   },
 
-  checkModbile(mobile) {
-		var re = /^1[3,4,5,6,7,8,9][0-9]{9}$/;
-		var result = re.test(mobile); 
-		if(!result) {
-			// alert("手机号码格式不正确！");
-			return false;//若手机号码格式不正确则返回false
-			}
-		return true;
-	},
+  // checkModbile(mobile) {
+	// 	var re = /^1[3,4,5,6,7,8,9][0-9]{9}$/;
+	// 	var result = re.test(mobile); 
+	// 	if(!result) {
+	// 		// alert("手机号码格式不正确！");
+	// 		return false;//若手机号码格式不正确则返回false
+	// 		}
+	// 	return true;
+	// },
 
   submitsign(e) {
     console.log("submit");
@@ -199,7 +208,7 @@ Page({
         return
       }
 
-      if (!this.checkModbile(this.data.input.tel)){
+      if (!verifyPhoneNum(this.data.input.tel)){
         wx.showToast({
           title: '请填写正确的手机号！',
           icon:'none',
@@ -488,7 +497,8 @@ Page({
 				like_num:res.data.like_num,
 				signed_num:res.data.activity_data.signed_num,
 				sign_due:[res.data.activity_data.sign_start_time,res.data.activity_data.sign_end_time],
-        sign_status:res.data.activity_data.sign_status
+        sign_status:res.data.activity_data.sign_status,
+        creator_phone: res.data.enroll_data.applicant_phone,
       })
 
       if (res.data.activity_data.audit_status == -128 || res.data.activity_data.audit_status == -127) {

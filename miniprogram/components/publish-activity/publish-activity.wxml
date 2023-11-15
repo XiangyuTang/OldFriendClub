@@ -115,6 +115,12 @@
 					required
 					bindtap="onClickAddr"
 				/>
+        <van-field
+					model:value="{{ creator_phone }}"
+					label="联系方式"
+					placeholder="请输入手机号"
+					required
+				/>
 				<view class="wrap">
 					<view class="img-wrap">
 						<van-field
@@ -123,7 +129,7 @@
 							disabled
 							title-width = "600rpx"
 						/>
-            <van-uploader file-list="{{ imgs }}" max-count="9" bind:delete="deleteImgs" bind:after-read="afterImgsRead" />
+            <van-uploader file-list="{{ imgs }}" max-count="9" max-size="2000000" bind:delete="deleteImgs" bind:after-read="afterImgsRead" bind:oversize="imgOverSize" />
 						<!-- <view class="imglist">
 							<view class="item" wx:for="{{imgs}}" wx:key="item">
 								<image src="{{item}}" alt=""></image>

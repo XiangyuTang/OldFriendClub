@@ -60,3 +60,13 @@ export class Cache {
 }
 
 export const globalCache = new Cache();
+
+export const verifyPhoneNum = (mobile) => {
+  var re = /^1[3,4,5,6,7,8,9][0-9]{9}$/;
+  var result = re.test(mobile); 
+  if(!result) {
+    // alert("手机号码格式不正确！");
+    return false;//若手机号码格式不正确则返回false
+    }
+  return true;
+}

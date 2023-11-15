@@ -1,0 +1,46 @@
+<!--pages/activity_result/activity_result.wxml-->
+
+<view class="">
+  <view class="info_model" >
+      <view class="activity_title">{{ title }}</view>
+	</view>
+
+  <view class="img_swiper" wx:if="{{ imgsUrls.length > 0 }}">
+    <swiper 
+    previous-margin="30rpx" 
+    circular
+    indicator-dots
+    indicator-active-color="#ef851a"
+    indicator-color="rgba(255,255,255,0.3)">
+
+        <swiper-item wx:for="{{ imgsUrls }}" wx:key="item" wx:index="index">
+          <image src="{{ item }}" mode="" data-index="{{ index }}"/>
+        </swiper-item>
+
+    </swiper>
+  </view>
+
+  <view class="content_model">
+    <textarea class="input-text" disabled placeholder="{{ placeHolderText }}" value="{{ resultText }}"></textarea>
+    <van-tag class="audit-tag" wx:if="{{ resultId != '' && resultId != '0' && (auditStatus == 0 || auditStatus == 1 )}}" type="success">审核中</van-tag>
+    <van-tag class="audit-tag" wx:elif="{{ resultId != '' && resultId != '0' && (auditStatus == -1 || auditStatus == -2 || auditStatus == -3 )}}" type="danger">审核未通过</van-tag>
+  </view>
+
+  <view wx:if="{{ signStatus==4 }}">
+    <view wx:if="{{ editBtnShow }}">
+      <view wx:if="{{ resultId != '' && resultId != '0' && (auditStatus == 2 || auditStatus == 3 || auditStatus == -1 || auditStatus == -2 || auditStatus == -3 )}}" class="edit-button" >
+        <van-button type="primary" bind:click="onClickEdit">编辑成果</van-button>
+      </view>
+      <view wx:elif="{{ resultId != '' && resultId != '0' && ( auditStatus == 0 || auditStatus == 1 )}} " class="edit-button" >
+        <van-button type="info" plain disabled>成果审核中，暂不能编辑</van-button>
+      </view>
+      <view class="delete-button" >
+        <van-button type="danger" bind:click="onClickDelete">删除成果</van-button>
+      </view>
+    </view>
+    <view class="publish-button" wx:else >
+      <van-button type="primary" bind:click="onClickPublish">发布成果</van-button>
+    </view>
+  </view>
+
+</view>

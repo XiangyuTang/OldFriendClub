@@ -1,6 +1,6 @@
 // pages/home/home.js
 import { formatNum, formatTime } from "../../utils/common.js"
-import { listActivities, listActivities2, wxGetAddress } from "../../api/apis";
+import { listActivities, listActivities2, wxGetAddress, getValidBanner } from "../../api/apis";
 import { globalCache } from '../../utils/util';
 const db = wx.cloud.database()
 const LoginBiz = require('../../common_biz/login.js')
@@ -16,16 +16,19 @@ Page({
     
     bannerConfig:[
       {
-        src:"/static/images/banner1.jpg",
+        url:"https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/3ff64a2e4f5f288c5dbbc49bd4ca475c.jpg",
+        jump_url:'',
       },
       {
-        src:"/static/images/banner2.jpg",
+        url:"https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/c506fcc9a2c14fdc1594e542e4886a10.jpg",
+        jump_url:'',
       },
       {
-        src:"/static/images/banner3.jpg",
+        url:"https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/8f7a5758df4d810ff236798a2c103267.jpg", jump_url:'',
       },
       {
-        src:"/static/images/banner4.png",
+        url:"https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/2ceadb2e8b9eccf958f6a50f73f51701.png",
+        jump_url:'',
       }
     ],
 
@@ -74,7 +77,10 @@ Page({
 		if (!await LoginBiz.loginSilence(this)) {
 			console.log("fail to login")
 			return;
-		}
+    }
+    
+    this.getValidBannerData();
+
 		await this.getMyAddr();
 		// while(this.data.location == {});
 		await this.getActivatiesList2();
@@ -344,5 +350,43 @@ Page({
   onClickBannerImg(e){
     console.log("点击轮播banner");
     console.log(e);
+
+    console.log(this.data.bannerConfig[e.currentTarget.dataset.index]);
   },
+
+  getValidBannerData(){
+    var data = {}
+    getValidBanner(data).then(res=>{
+        console.log(res);
+        if (res.err_no == 0) {
+          if (res.data.banner_list.length > 0) {
+            var banner_list = [];
+
+            for (var i in res.data.banner_list) {
+              banner_list.push({
+                url:res.data.banner_list[i].banner_img_url,
+                jump_url:res.data.banner_list[i].banner_jump_url,
+              })
+            }
+            
+            this.setData({
+              bannerConfig: banner_list,
+            })
+
+            console.log(this.data);
+          }
+        } else {
+          console.log("获取banner失败"+res.err_no+" "+ res.err_msg);
+        }
+      }).catch(err=>{
+        console.log(err);
+      })
+  },
+
+  onclickPublish(){
+    console.log("发布活动");
+    wx.navigateTo({
+      url: `/pages/publish_activity/publish_activity`,
+    })
+  }
 })
