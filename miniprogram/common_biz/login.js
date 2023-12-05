@@ -39,6 +39,20 @@ class LoginBiz {
                 that.setData({
                     isLogin: true
                 });
+
+                // 刷新token
+              let res = await serverBiz.refreshToken(token).then(result => {
+                  LoginBiz.clearToken();
+                  console.log(result);
+                  if (result && utilsCommon.isDefined(result.data) && result.data) {
+                      LoginBiz.setToken(result.data);
+                      return true;
+                  }
+              }).catch(err => {
+                  console.log(err);
+                  LoginBiz.clearToken();
+                  return false;
+              });
             return true;
         } else {
             if (that) that.setData({

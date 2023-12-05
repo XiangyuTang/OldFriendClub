@@ -3,6 +3,6 @@
 <view class="footer">
 	<view class="row">解释权归麦赛塔信息科技（郑州）有限公司所有</view>
 	<view class="row">Copyright © {{year}} 版权所有</view>
-	<view class="row">北京市聚荟乐享社团创新实验室</view>
+	<view class="row">北京市乐享聚荟创新实验室</view>
 </view>
 

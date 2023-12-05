@@ -29,6 +29,7 @@ Page({
     userAge: '',
     userNickname: '',
     userPhone: '',
+    wxId: '',
     userAvatar: [],
     decodeUserAvatar: '',
     scrollviewHeight: 300,
@@ -146,19 +147,27 @@ Page({
   },
   getUserData() {
     getUser().then(res => {
+      var user_avatar = res.data.avatar_url
+
       this.setData({
         userData: res.data,
         userAge: res.data.age,
         userNickname: res.data.nick_name,
         curGender: res.data.gender,
         userPhone: res.data.phone,
-        userAvatar: [{
-          url:res.data.avatar_url,
-          name:"",
-          isImage: true,
-        }],
-        decodeUserAvatar: res.data.avatar_url,
+        wxId: res.data.wx_id,
       })
+
+      if (user_avatar != '') {
+        this.setData({
+          userAvatar: [{
+            url:res.data.avatar_url,
+            name:"",
+            isImage: true,
+          }],
+          decodeUserAvatar: res.data.avatar_url,
+        })
+      }
     })
   },
 
@@ -330,10 +339,13 @@ Page({
       gender: Number(this.data.curGender),
       Phone: this.data.userPhone,
       avatar_url: this.data.decodeUserAvatar,
+      wx_id: this.data.wxId,
     }; //传参
     wx.showLoading({
       title: '修改中...'
     })
+
+    console.log(data);
     editUser(data).then(res => {
       if (res.err_no === 0) {
         wx.hideLoading()
@@ -488,6 +500,7 @@ Page({
         userNickname: this.data.userData.nick_name,
         curGender: this.data.userData.gender,
         userPhone: this.data.userData.phone,
+        wxId: this.data.userData.wx_id,
         userAvatar: [{
           url:this.data.userData.avatar_url,
           name:"",
@@ -544,7 +557,8 @@ Page({
     });
 
     wx.uploadFile({
-      url: 'http://124.220.84.200:5455/api/uploadStream',
+      url: 'https://www.mirthdata.com/api/uploadStream',
+      // url: 'http://124.220.84.200:5455/api/uploadStream',
       filePath: file.file.url,
       name: "file",
       header: {

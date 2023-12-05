@@ -32,8 +32,9 @@ export function request(params) {
     })
   })
 }
-// export const URL = 'http://www.mirthdata.com:5455'
-export const serverURL = 'http://124.220.84.200:5455' //聚荟后端API
+// export const URL = 'https://www.mirthdata.com'
+// export const serverURL = 'http://124.220.84.200:5455' //聚荟后端API
+export const serverURL = 'https://www.mirthdata.com' //聚荟后端API
 export function send_request(params) {
   let dataObj = params.data || {};
   let headerObj = {

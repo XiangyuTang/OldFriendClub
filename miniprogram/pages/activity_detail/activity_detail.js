@@ -1,6 +1,7 @@
 const LoginBiz = require('../../common_biz/login.js')
 import {formatTime} from "../../utils/common.js"
 import {getActivityDetail,signActivity,cancelSignActivity,deleteActivity} from "../../api/apis"
+import { getActivityResult } from "../../utils/server/activity"
 import {hideButton} from "../../components/publish-activity/publish-activity"
 import Dialog from '@vant/weapp/dialog/dialog';
 const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
@@ -13,7 +14,8 @@ Page({
 	 */
 	data: {
     activity_id: '',
-		activity: {},
+    activity: {},
+    activity_result_id: '',
 		like_num:0,
 		signed_num:0,
     form: {
@@ -80,8 +82,42 @@ Page({
   },
 
   toActivityResult(){
-    wx.navigateTo({
-      url: `../activity_result/activity_result?activity_id=${this.data.activity_id}&sign_status=${this.data.activity.sign_status}&title=${this.data.activity.title}`
+    console.log(this.data);
+    if (this.data.sign_status == 4 && (this.data.activity_result_id == '' || this.data.activity_result_id == '0')) {
+      // 活动创建者，且当前没有创建过活动成果
+      wx.navigateTo({
+        url: `../edit_activity_result/edit_activity_result?activity_id=${this.data.activity_id}&sign_status=${this.data.sign_status}`,
+      })
+    } else {
+      wx.navigateTo({
+        url: `../activity_result/activity_result?activity_id=${this.data.activity_id}&sign_status=${this.data.activity.sign_status}&title=${this.data.activity.title}`
+      })
+    }
+  },
+
+  getActivityResultData(activityID) {
+    var that = this;
+
+    let data = {
+      activityId: activityID,
+    }
+
+    getActivityResult(data).then(res => {
+      console.log(res);
+      if (res.err_no == 0) {
+        var resultData = res.data.activity_result;
+        if (resultData.result_id != '0') {
+          that.setData({
+            activity_result_id: resultData.result_id,
+          })
+
+          console.log(that.data);
+        }
+      }else {
+        console.log(res.err_no+' '+res.err_msg)
+      }
+    }).catch(err => {
+      console.log(err)
     })
   },
 
@@ -453,6 +489,10 @@ Page({
     this.publish_activity = this.selectComponent('#publish-activity');
     console.log(this.publish_activity.data);
     this.publish_activity.hideButton(true);
+
+    this.getActivityResultData(acid);
+
+    console.log(this.data);
 
     // 注册通知
     WxNotificationCenter.addNotification('refreshActivityDetail', this.didRefreshNotification, this)

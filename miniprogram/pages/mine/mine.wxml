@@ -93,35 +93,38 @@
 
 <van-dialog use-slot title="修改信息" show="{{ showEditUser }}" messageAlign="left" closeOnClickOverlay showConfirmButton showCancelButton bind:close="onClose" bind:confirm="confirmEdit" confirmButtonText="确定修改" customStyle="myvan-dialog">
   <view class="cell-group" scroll-y>
-    <van-cell-group class="van-cell-group">
-      <van-field model:value="{{ userNickname }}" required focus label="用户昵称" placeholder="请输入用户昵称" />
-      <van-field model:value="{{ userAge }}" label="年龄" placeholder="请输入年龄" required autosize bind:input="verifyAge" error-message="{{illegal_message_age}}" />
-      <view class="gender-wrap">
-        <view class="gender-title">性别</view>
-        <view class="gender-select">
-          <view bind:tap="selectGender" data-gender="1" class="gender-select-item {{curGender == '1' ? 'gender-select-item-active': ''}}">男</view>
-          <view data-gender="2" bind:tap="selectGender" class="gender-select-item {{curGender == '2' ? 'gender-select-item-active': ''}}">女</view>
+		<scroll-view class="myscroll" scroll-y>
+      <van-cell-group class="van-cell-group">
+        <van-field model:value="{{ userNickname }}" required focus label="用户昵称" placeholder="请输入用户昵称" />
+        <van-field model:value="{{ userAge }}" label="年龄" placeholder="请输入年龄" required autosize bind:input="verifyAge" error-message="{{illegal_message_age}}" />
+        <view class="gender-wrap">
+          <view class="gender-title">性别</view>
+          <view class="gender-select">
+            <view bind:tap="selectGender" data-gender="1" class="gender-select-item {{curGender == '1' ? 'gender-select-item-active': ''}}">男</view>
+            <view data-gender="2" bind:tap="selectGender" class="gender-select-item {{curGender == '2' ? 'gender-select-item-active': ''}}">女</view>
+          </view>
         </view>
-      </view>
-      <van-field model:value="{{ userPhone }}" label="手机号" placeholder="请输入手机号" required autosize bind:input="verifyNum" error-message="{{illegal_message}}" maxlength="100" />
-      <view class="wrap">
-        <view class="img-wrap">
-          <van-field value="" label="用户头像" disabled required title-width="600rpx" />
-          <van-uploader file-list="{{ userAvatar }}" max-count="1" bind:delete="deleteUserAvatar" bind:after-read="afterUserAvatarRead" />
-          <!-- <view class="imglist">
-            <view class="item" wx:if="{{userAvatar === '' ? false : true}}">
-              <image mode="aspectFill" src="{{userAvatar}}" alt=""></image>
-              <view class='delete' bindtap='deleteImg' data-img-type="logo">
-                <image src="../../static/images/icons/delete.png"></image>
+        <van-field model:value="{{ userPhone }}" label="手机号" placeholder="请输入手机号" required autosize bind:input="verifyNum" error-message="{{illegal_message}}" maxlength="100" />
+        <van-field model:value="{{ wxId }}" label="微信号" placeholder="请输入微信号" autosize maxlength="100" />
+        <view class="wrap">
+          <view class="img-wrap">
+            <van-field value="" label="用户头像" disabled required title-width="600rpx" />
+            <van-uploader file-list="{{ userAvatar }}" max-count="1" bind:delete="deleteUserAvatar" bind:after-read="afterUserAvatarRead" />
+            <!-- <view class="imglist">
+              <view class="item" wx:if="{{userAvatar === '' ? false : true}}">
+                <image mode="aspectFill" src="{{userAvatar}}" alt=""></image>
+                <view class='delete' bindtap='deleteImg' data-img-type="logo">
+                  <image src="../../static/images/icons/delete.png"></image>
+                </view>
               </view>
-            </view>
-            <view class="last-item" wx:if="{{userAvatar !== '' ? false : true}}" bindtap="bindUpload" data-img-type="logo">
-              <text class="sign">+</text>
-            </view>
-          </view> -->
+              <view class="last-item" wx:if="{{userAvatar !== '' ? false : true}}" bindtap="bindUpload" data-img-type="logo">
+                <text class="sign">+</text>
+              </view>
+            </view> -->
+          </view>
         </view>
-      </view>
-    </van-cell-group>
+      </van-cell-group>
+    </scroll-view>
   </view>
 </van-dialog>
 

@@ -27,7 +27,7 @@
 	],
 	"window": {
 		"navigationBarBackgroundColor": "#ef851a",
-		"navigationBarTitleText": "聚荟乐享社团",
+		"navigationBarTitleText": "乐享聚荟",
 		"enablePullDownRefresh": true,
 		"backgroundColor": "#ee8633"
 	},
@@ -73,13 +73,14 @@
 		"van-button": "@vant/weapp/button",
 		"van-icon": "@vant/weapp/icon",
 		"van-loading": "@vant/weapp/loading/index",
-		"van-tab": "@vant/weapp/tab/index",
-		"van-tabs": "@vant/weapp/tabs/index",
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tabs": "@vant/weapp/tabs/index",
 		"van-tag": "@vant/weapp/tag/index",
 		"van-popup": "@vant/weapp/popup/index",
 		"van-uploader": "@vant/weapp/uploader/index",
 		"double-club-item": "components/double-club-item/double-club-item",
 		"club-item": "components/club-item/club-item",
 		"activity-item": "components/activity-item/activity-item"
-	}
+  },
+  "lazyCodeLoading": "requiredComponents"
 }

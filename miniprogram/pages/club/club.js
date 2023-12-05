@@ -197,7 +197,8 @@ Page({
             continue;
           }
           wx.uploadFile({
-            url: 'http://124.220.84.200:5455/api/uploadStream',
+            url: 'https://www.mirthdata.com/api/uploadStream',
+            // url: 'http://124.220.84.200:5455/api/uploadStream',
             filePath: tempFilePaths[i],
             name: "file",
             header: {

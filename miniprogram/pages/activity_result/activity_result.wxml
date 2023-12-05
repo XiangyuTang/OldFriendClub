@@ -39,7 +39,7 @@
       </view>
     </view>
     <view class="publish-button" wx:else >
-      <van-button type="primary" bind:click="onClickPublish">发布成果</van-button>
+      <van-button type="primary" bind:click="onClickPublish">创建成果</van-button>
     </view>
   </view>
 

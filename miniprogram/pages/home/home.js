@@ -152,7 +152,13 @@ Page({
 			}
 			res.data.activity_datas.forEach(item => {
 				item.max_sign_num = formatNum(item.max_sign_num)
-				item.sign_start_time = formatTime(item.sign_start_time * 1000, 5)
+        item.sign_start_time = formatTime(item.sign_start_time * 1000, 5)
+        
+        // 防止地址太长，导致显示问题
+        if (item.activity_location.length > 7) {
+          var locationDesc = item.activity_location.slice(0,7);
+          item.activity_location = locationDesc;
+        }
       })
       console.log("oldList")
       console.log(this.data.activatiesArr)
@@ -353,9 +359,11 @@ Page({
 
     console.log(this.data.bannerConfig[e.currentTarget.dataset.index]);
     var jumpUrl = this.data.bannerConfig[e.currentTarget.dataset.index].jump_url;
-    wx.navigateTo({
-      url: '../../pages/out_web/out_web?src=' + encodeURIComponent(jumpUrl),
-    })
+    if (jumpUrl != '') {
+      wx.navigateTo({
+        url: '../../pages/out_web/out_web?src=' + encodeURIComponent(jumpUrl),
+      })
+    }
   },
 
   getValidBannerData(){

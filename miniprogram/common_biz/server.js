@@ -1,8 +1,12 @@
 // const host = 'http://124.220.84.200'
-const host = 'http://124.220.84.200';
-// const host = "http://www.mirthdata.com"
-const port = '5455'
+
+import LoginBiz from '../common_biz/login'
+
+const host = 'https://www.mirthdata.com';
+const port =''
+// const port = '5455'
 const serverLoginInterface = '/wxApi/miniProgram/login'
+const refreshTokenInterface = '/login/refreshToken'
 
 function getFuzzyLocation() {
     wx.getSetting({
@@ -62,7 +66,35 @@ async function serverLogin() {
     })
 }
 
+async function refreshToken(oldToken) {
+  return new Promise(function(resolve, reject) {
+          
+        wx.request({
+            url: host + ':'+ port + refreshTokenInterface,
+            data: {
+              token: oldToken,
+            },
+            method: 'GET',
+  
+            success: res => {
+                if (res.data.err_no == 0) {
+                    resolve(res.data)
+                    return;
+                } else {
+                    reject(res.data)
+                    return;
+                }
+            },
+            fail: error => {
+                reject(error)
+                return;
+            }
+        })
+      });
+}
+
 module.exports = {
     getFuzzyLocation,
-    serverLogin
+    serverLogin,
+    refreshToken
 }
