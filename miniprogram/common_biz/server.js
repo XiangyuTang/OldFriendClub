@@ -1,10 +1,7 @@
-// const host = 'http://124.220.84.200'
-
 import LoginBiz from '../common_biz/login'
+import { serverURL } from '../utils/request';
+import {wxGetAddress} from '../api/apis'
 
-const host = 'https://www.mirthdata.com';
-const port =''
-// const port = '5455'
 const serverLoginInterface = '/wxApi/miniProgram/login'
 const refreshTokenInterface = '/login/refreshToken'
 
@@ -28,16 +25,48 @@ function getFuzzyLocation() {
     })
 }
 
-async function serverLogin() {
+async function getAddr() {
+  return new Promise(function(resolve, reject) {
+    wx.authorize({
+      scope: 'scope.userFuzzyLocation',
+      success(res) {
+          console.log(res)
+          if(res.errMsg == 'authorize:ok'){
+              wx.getFuzzyLocation({
+                  type: 'wgs84',
+                  async success(res) {
+                    console.log(res)  //此时里面有经纬度
+                    let result = await wxGetAddress(res.longitude, res.latitude);
+                    console.log(result);
+                    resolve(result.regeocodeData)
+                    return;
+                  }
+              });
+          }
+      },
+      fail(err) {
+          console.log(err)   
+          reject(error)
+          return;
+      }                    
+    })
+  })
+}
+
+async function serverLogin(address,city_id) {
     return new Promise(function(resolve, reject) {
+      console.log(address);
         wx.login({
             success: res => {
                 // 获取到用户的 code 之后：res.code
                 console.log("用户的code:" + res.code);
+
                 wx.request({
-                    url: host + ':'+ port + serverLoginInterface,
+                    url: serverURL + serverLoginInterface,
                     data: {
-                        code: res.code
+                        code: res.code,
+                        login_address: address,
+                        login_city_id: Number(city_id),
                     },
                     method: 'POST',
                     header: {
@@ -70,7 +99,7 @@ async function refreshToken(oldToken) {
   return new Promise(function(resolve, reject) {
           
         wx.request({
-            url: host + ':'+ port + refreshTokenInterface,
+            url: serverURL + refreshTokenInterface,
             data: {
               token: oldToken,
             },
@@ -96,5 +125,6 @@ async function refreshToken(oldToken) {
 module.exports = {
     getFuzzyLocation,
     serverLogin,
-    refreshToken
+    refreshToken,
+    getAddr
 }

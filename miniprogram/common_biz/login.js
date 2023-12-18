@@ -58,9 +58,19 @@ class LoginBiz {
             if (that) that.setData({
                 isLogin: false
             });
-				}
+        }
+        
+        console.log("进入获取地址");
+        var address = '';
+        var city_id = 0;
 
-        let res = await serverBiz.serverLogin().then(result => {
+        let addressRes = await serverBiz.getAddr().then(result => {
+          console.log(result);
+          address = result.addressComponent.province+'-'+result.addressComponent.district
+          city_id = result.addressComponent.adcode
+        })
+
+        let res = await serverBiz.serverLogin(address,city_id).then(result => {
             LoginBiz.clearToken();
             if (result && utilsCommon.isDefined(result.data) && result.data &&
                 utilsCommon.isDefined(result.data.token) && result.data.token) {

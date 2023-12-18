@@ -20,7 +20,7 @@
       </view>
       <view class="block">
         <van-icon name="friends-o" />
-        <text>0/{{item.max_sign_num}}</text>
+        <text>{{item.signed_num}}/{{item.max_sign_num}}</text>
       </view>
       <view class="block">
         <van-icon name="location-o" />

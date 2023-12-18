@@ -8,6 +8,7 @@ import {
   editUser
 } from "../../utils/server/club";
 import LoginBiz from "../../common_biz/login"
+import { serverURL } from "../../utils/request";
 
 Page({
 
@@ -557,7 +558,7 @@ Page({
     });
 
     wx.uploadFile({
-      url: 'https://www.mirthdata.com/api/uploadStream',
+      url: serverURL + '/api/uploadStream',
       // url: 'http://124.220.84.200:5455/api/uploadStream',
       filePath: file.file.url,
       name: "file",

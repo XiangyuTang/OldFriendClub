@@ -1,5 +1,6 @@
 // pages/edit_activity_result/edit_activity_result.js
 import LoginBiz from "../../common_biz/login"
+import { serverURL } from "../../utils/request";
 
 import {createActivityResult, getActivityResult} from "../../utils/server/activity"
 
@@ -109,7 +110,7 @@ Page({
   uploadImg(fileUrl) {
     return new Promise((resolve, reject) => {
       wx.uploadFile({
-        url: 'https://www.mirthdata.com/api/uploadStream',
+        url: serverURL + '/api/uploadStream',
         // url: 'http://124.220.84.200:5455/api/uploadStream',
         filePath: fileUrl,
         name: "file",

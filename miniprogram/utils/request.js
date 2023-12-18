@@ -1,5 +1,9 @@
 const testURL = 'https://tea.qingnian8.com'; //公共请求API
 
+// export const URL = 'https://www.mirthdata.com'
+export const serverURL = 'http://124.220.84.200:5455' //聚荟后端API
+// export const serverURL = 'https://miniprogram.mirthdata.com' //聚荟后端API
+
 export function request(params) {
 
   let dataObj = params.data || {};
@@ -32,9 +36,7 @@ export function request(params) {
     })
   })
 }
-// export const URL = 'https://www.mirthdata.com'
-// export const serverURL = 'http://124.220.84.200:5455' //聚荟后端API
-export const serverURL = 'https://www.mirthdata.com' //聚荟后端API
+
 export function send_request(params) {
   let dataObj = params.data || {};
   let headerObj = {

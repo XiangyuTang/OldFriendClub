@@ -15,6 +15,7 @@ Page({
 	data: {
     activity_id: '',
     activity: {},
+    enroll_data: {},
     activity_result_id: '',
 		like_num:0,
 		signed_num:0,
@@ -174,11 +175,14 @@ Page({
   },
 
   modifySignUp() {
-    this.setData({
-      form:{
-        show: true
-      }
+    wx.navigateTo({
+      url: `/pages/sign_activity/sign_activity?activity_id=${this.data.activity_id}&enroll_id=${this.data.enroll_data.enroll_id}`,
     })
+    // this.setData({
+    //   form:{
+    //     show: true
+    //   }
+    // })
   },
 
   // checkModbile(mobile) {
@@ -533,7 +537,8 @@ Page({
 
 			that.setData({
         activity_id:acid,
-				activity:res.data.activity_data,
+        activity:res.data.activity_data,
+        enroll_data: res.data.enroll_data,
 				like_num:res.data.like_num,
 				signed_num:res.data.activity_data.signed_num,
 				sign_due:[res.data.activity_data.sign_start_time,res.data.activity_data.sign_end_time],

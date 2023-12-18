@@ -32,6 +32,11 @@
 			<mp-icon class="icon" icon="done2" color="#343434" size="{{20}}"></mp-icon>
 			<view class="content">{{tool.execTime(sign_due).text}}</view>
 		</view>
+
+    <view class="item">
+			<van-icon name="manager-o" color="#343434" size="{{20}}"></van-icon>
+			<view class="content">活动创建者：{{activity.author.nick_name}}</view>
+		</view>
     
     <block wx:if="{{activity_club.club_id != 0}}">
       <view class="item arrow_model" bindtap="openClubDetail" data-info="{{activity_club.club_id}}">

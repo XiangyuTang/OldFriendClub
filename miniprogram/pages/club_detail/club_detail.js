@@ -92,7 +92,6 @@ Page({
       noMore
     } = this.data;
 
-    console.log('==>>');
     if (noMore) {
       return;
     }
@@ -101,6 +100,7 @@ Page({
       pageNo,
     }).then(res => {
       const list = res.data.activity_datas
+      console.log(list)
       this.setData({
         // clubList: [].concat(clubList, res.data.activity_datas),
         clubList: [].concat(clubList, list),

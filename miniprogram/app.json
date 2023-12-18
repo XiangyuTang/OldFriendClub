@@ -12,13 +12,11 @@
 		"pages/member_list/member_list",
 		"pages/activity_result/activity_result",
 		"pages/edit_activity_result/edit_activity_result",
-		"pages/out_web/out_web"
+		"pages/out_web/out_web",
+		"pages/sign_activity/sign_activity"
 	],
 	"permission": {
 		"scope.userFuzzyLocation": {
-			"desc": "你的位置信息将用于小程序中的信息展示"
-		},
-		"scope.userLocation": {
 			"desc": "你的位置信息将用于小程序中的信息展示"
 		}
 	},
@@ -73,14 +71,14 @@
 		"van-button": "@vant/weapp/button",
 		"van-icon": "@vant/weapp/icon",
 		"van-loading": "@vant/weapp/loading/index",
-    "van-tab": "@vant/weapp/tab/index",
-    "van-tabs": "@vant/weapp/tabs/index",
+		"van-tab": "@vant/weapp/tab/index",
+		"van-tabs": "@vant/weapp/tabs/index",
 		"van-tag": "@vant/weapp/tag/index",
 		"van-popup": "@vant/weapp/popup/index",
 		"van-uploader": "@vant/weapp/uploader/index",
 		"double-club-item": "components/double-club-item/double-club-item",
 		"club-item": "components/club-item/club-item",
 		"activity-item": "components/activity-item/activity-item"
-  },
-  "lazyCodeLoading": "requiredComponents"
+	},
+	"lazyCodeLoading": "requiredComponents"
 }

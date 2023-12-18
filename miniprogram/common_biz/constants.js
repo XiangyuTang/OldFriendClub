@@ -5,6 +5,7 @@
 module.exports = {
 	CACHE_TOKEN: 'CACHE_TOKEN', // 登录 
     CACHE_TOKEN_EXPIRE: 86400, //登录有效时间/秒 
+    // CACHE_TOKEN_EXPIRE: 60, //登录有效时间/秒 
     
     SESSION_KEY: 'SESSION_KEY', // 用户本次登录的session_key
     SESSION_KEY_EXPIRE: 86400, // 登录有效时间/秒

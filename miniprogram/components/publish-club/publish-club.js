@@ -12,6 +12,7 @@ import {
   getClubList,
   createClub
 } from "../../utils/server/club";
+import { serverURL } from "../../utils/request.js";
 
 Component({
 	/**
@@ -670,7 +671,7 @@ Component({
     });
 
     wx.uploadFile({
-      url: 'https://www.mirthdata.com/api/uploadStream',
+      url: serverURL + '/api/uploadStream',
       // url: 'http://124.220.84.200:5455/api/uploadStream',
       filePath: file.file.url,
       name: "file",
@@ -789,7 +790,7 @@ Component({
     });
 
     wx.uploadFile({
-      url: 'https://www.mirthdata.com/api/uploadStream',
+      url: serverURL + '/api/uploadStream',
       // url: 'http://124.220.84.200:5455/api/uploadStream',
       filePath: file.file.url,
       name: "file",

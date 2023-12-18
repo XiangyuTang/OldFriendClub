@@ -1,0 +1,15 @@
+{
+	"usingComponents": {
+    "mp-icon": "weui-miniprogram/icon/icon",
+		"mp-half-screen-dialog": "weui-miniprogram/half-screen-dialog/half-screen-dialog",
+		"mp-cells": "weui-miniprogram/cells/cells",
+		"mp-cell": "weui-miniprogram/cell/cell",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-icon":"@vant/weapp/icon/index",
+    "van-cell":"@vant/weapp/cell/index",
+    "van-cell-group":"@vant/weapp/cell-group/index",
+    "van-field":"@vant/weapp/field/index",
+    "van-picker":"@vant/weapp/picker/index",
+    "publish-activity": "../../components/publish-activity/publish-activity"
+  }
+}

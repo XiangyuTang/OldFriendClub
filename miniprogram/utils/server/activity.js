@@ -38,7 +38,17 @@ export const getActivityResult = (data) => {
   })
 };
 
-
+export const getEnrollData = (data) => {
+  let params = {
+    token: LoginBiz.getToken(),
+    enroll_id: data.enrollId,
+  }
+  return send_request({
+    url: "/activity/getEnrollData",
+    method: "get",
+    data: params
+  })
+};
 
 export const deleteActivityResult = (data) => {
   let params = {

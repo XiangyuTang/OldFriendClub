@@ -17,7 +17,7 @@ Page({
     bannerConfig:[
       {
         url:"https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/3ff64a2e4f5f288c5dbbc49bd4ca475c.jpg",
-        jump_url:'',
+        jump_url:'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231214232903.jpg',
       },
       {
         url:"https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/c506fcc9a2c14fdc1594e542e4886a10.jpg",

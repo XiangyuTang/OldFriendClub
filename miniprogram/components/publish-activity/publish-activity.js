@@ -4,6 +4,7 @@ import {publishActivity,wxGetAddress} from "../../api/apis"
 const LoginBiz = require('../../common_biz/login.js')
 const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
 import { verifyPhoneNum }from  "../../utils/util"
+import { serverURL } from "../../utils/request.js"
 
 let choose_date_idx = ""
 Component({
@@ -71,6 +72,10 @@ Component({
 		},
 		
 		onClickAddr(){
+      if (this.data.activity_address !== '') {
+        return
+      } 
+      
 			console.log("进入获取地址");
 			var that = this
 			wx.authorize({
@@ -892,7 +897,7 @@ Component({
     uploadImg(fileUrl) {
       return new Promise((resolve, reject) => {
         wx.uploadFile({
-          url: 'https://www.mirthdata.com/api/uploadStream',
+          url: serverURL + '/api/uploadStream',
           // url: 'http://124.220.84.200:5455/api/uploadStream',
           filePath: fileUrl,
           name: "file",

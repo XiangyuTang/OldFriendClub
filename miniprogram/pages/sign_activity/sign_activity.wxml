@@ -1,0 +1,97 @@
+<wxs module="tool" src="./tool.wxs"></wxs>
+<view class="">
+  <block wx:if="{{enroll_data.applicant_status == 1}}">
+    <van-cell-group>
+     
+        <van-cell title="姓名" value="{{enroll_data.applicant_name}}" />
+   
+
+	  </van-cell-group>
+  </block>
+
+  <block wx:else>
+    <van-cell-group>
+      <van-field
+        model:value="{{ enroll_name }}"
+        placeholder="请输入姓名"
+        required
+        clearable
+        label="姓名"
+      />
+
+      <van-field
+        model:value="{{ enroll_phone }}"
+        placeholder="请输入联系电话"
+        required
+        clearable
+        label="联系电话"
+      />
+
+      <van-field
+        model:value="{{ enroll_age }}"
+        placeholder="请输入年龄"
+        required
+        clearable
+        type="number"
+        label="年龄"
+      /> 
+
+      <van-field
+        is-link
+        label="性别"
+        readonly
+        bind:click-input="showGenderPicker" 
+        value="{{ enroll_gender }}"
+      />
+
+      <van-popup 
+      show="{{ showGenderPicker }}" 
+      position="bottom"
+      bind:close="onCancelGender">
+        <van-picker
+          show-toolbar
+          title="性别"
+          columns="{{ genderColumns }}"
+          default-index="{{ 0 }}"
+          bind:cancel="onCancelGender"
+          bind:confirm="onConfirmGender"
+        />
+      </van-popup>
+      
+      <van-cell>
+        <view slot="title">
+          <view class="van-cell-text">添加同行人</view>
+          <van-button size="small" class="male_tag" round type="info" bind:click="addMale">+ ♂男</van-button>
+          <van-button color="#fa8072" size="small" class="female_tag" round type="primary" bind:click="addFemale">+ ♀女</van-button>
+        </view>
+      </van-cell>
+
+      <block wx:if="{{ accompany_list.length > 0 }}">
+        <block wx:for="{{ accompany_list }}" wx:key="index">
+          <van-field 
+            id="{{ index }}"
+            model:value="{{ item.enroll_name }}"
+            placeholder="请输入同行人姓名"
+            required
+            clearable
+            label="同行人姓名"
+            use-button-slot
+            bind:change="changeAccompanyName"
+          >
+
+          <van-icon slot="icon" id="{{ index }}" name="close" size="20px" bind:click="delAccompany"/>
+          </van-field>
+
+        </block>
+      </block>
+
+    </van-cell-group>
+
+    <view class="sign_btn">
+      <van-button type="primary" bind:click="submitSign">报名</van-button>
+    </view>
+  </block>
+	
+</view>
+
+

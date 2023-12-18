@@ -7,6 +7,7 @@ import {
   clearHeight
 } from "../../utils/styleCount";
 import LoginBiz from "../../common_biz/login"
+import { serverURL } from "../../utils/request";
 const WxNotificationCenter = require('../../utils/WxNotificationCenter.js');
 
 // pages/club/club.js
@@ -197,7 +198,7 @@ Page({
             continue;
           }
           wx.uploadFile({
-            url: 'https://www.mirthdata.com/api/uploadStream',
+            url: serverURL + '/api/uploadStream',
             // url: 'http://124.220.84.200:5455/api/uploadStream',
             filePath: tempFilePaths[i],
             name: "file",
