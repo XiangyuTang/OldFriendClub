@@ -484,9 +484,14 @@ Page({
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
-	onLoad(options) {
+	onLoad: async function(options) {
     console.log(options);
     const acid= options.acid;
+
+    if (!await LoginBiz.loginSilence(this)) {
+			console.log("fail to login")
+			return;
+    }
 		
     this.getActivityDetailData(acid);
 
@@ -708,7 +713,13 @@ Page({
   didRefreshNotification: function (activity_id) {
 		console.log("收到刷新通知"+activity_id);
     this.getActivityDetailData(activity_id);
-	},
+  },
+  
+  onClickShare(e) {
+    console.log(e);
+    var pages = getCurrentPages();
+    console.log(pages[pages.length-1])
+  },
 	/**
 	 * 页面相关事件处理函数--监听用户下拉动作
 	 */

@@ -34,7 +34,7 @@ page {
 }
 
 .top_model .title {
-  width: calc(100% - 40rpx);
+  width: 100%;
   position: absolute;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.65);
@@ -44,6 +44,13 @@ page {
   padding: 20rpx;
   font-weight: 900;
   letter-spacing: 1px;
+}
+
+.share_icon {
+  position: absolute;
+  bottom: 0;
+  margin-left: 290px;
+  color: #FFFFFF;
 }
 
 .info_model {

@@ -4,7 +4,7 @@
   <view class="sign_card">
     <van-card
       title="{{applicantList[index].display_name}}"
-      thumb="{{applicantList[index].user_avatar || '../../static/images/icons/user.png'}}"
+      thumb="{{applicantList[index].user_avatar ===''?'../../../../static/images/icons/user.png':applicantList[index].user_avatar}}"
     > 
 
       <view slot="desc" wx:if="{{applicantList[index].enroll_status != 4}}">
@@ -42,8 +42,8 @@
       <view slot="footer" > <!-- style="display:flex; justify-content:center"  -->
         <view wx:if="{{applicantList[index].enroll_status === 1 && applicantList[index].enroll_uid !== '0' && applicantList[index].enroll_uid !== ''}}">
           <view wx:if="{{signStatus === '4'}}">
-            <van-button round hairline size="mini" type="danger" style="margin-right: 20rpx;" data-id="{{applicantList[index].enroll_id}}" data-index="{{index}}" bind:click="refuseSign">审批拒绝</van-button>
-            <van-button round hairline size="mini" type="primary" style="margin-right: 10rpx;"  data-id="{{applicantList[index].enroll_id}}" data-index="{{index}}" bind:click="agreeSign">审批通过</van-button>
+            <van-button round size="mini" type="danger" data-id="{{applicantList[index].enroll_id}}" data-index="{{index}}" bind:click="refuseSign">审批拒绝</van-button>
+            <van-button round size="mini" type="primary" data-id="{{applicantList[index].enroll_id}}" data-index="{{index}}" bind:click="agreeSign">审批通过</van-button>
           </view>
           <view wx:else>
             <van-tag plain type="primary">等待审核</van-tag>

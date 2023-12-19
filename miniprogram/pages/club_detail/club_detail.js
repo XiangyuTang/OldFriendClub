@@ -1,5 +1,5 @@
 // pages/club_detail.js
-
+const LoginBiz = require('../../common_biz/login.js')
 const {
   getClubDetail,
   joinClub
@@ -64,7 +64,11 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
+  onLoad: async function(options) {
+    if (!await LoginBiz.loginSilence(this)) {
+			console.log("fail to login")
+			return;
+    }
     const _this = this;
     wx.getSystemInfo({
       success: function (res) {
