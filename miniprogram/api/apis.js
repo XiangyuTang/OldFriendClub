@@ -68,6 +68,15 @@ export function signActivity(data) {
 		data
 	})
 }
+
+// 获取报名数据
+export function getEnrollData(data) {
+	return send_request({
+		url: "/activity/getEnrollData",
+		method: "GET",
+		data
+	})
+}
 //取消报名活动
 export function cancelSignActivity(data) {
 	return send_request({

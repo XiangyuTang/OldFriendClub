@@ -705,9 +705,9 @@ Page({
 		WxNotificationCenter.removeNotification('refreshActivityDetail', this)
 	},
 
-  didRefreshNotification: function (activityID) {
-		console.log("收到刷新通知"+activityID);
-    this.getActivityDetailData(activityID);
+  didRefreshNotification: function (activity_id) {
+		console.log("收到刷新通知"+activity_id);
+    this.getActivityDetailData(activity_id);
 	},
 	/**
 	 * 页面相关事件处理函数--监听用户下拉动作

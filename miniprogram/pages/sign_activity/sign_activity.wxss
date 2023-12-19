@@ -243,3 +243,14 @@ page {
 .del_btn {
   width: 10%;
 }
+
+.gender_tag {
+  margin-left: -190px;
+  position:absolute;
+}
+
+.show_gender_tag {
+  margin-left: 50px;
+  margin-top: -25px;
+  position:absolute;
+}

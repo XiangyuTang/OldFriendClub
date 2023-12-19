@@ -1,5 +1,8 @@
 // pages/sign_activity/sign_activity.js
-import {getEnrollData} from "../../api/apis"
+import {getEnrollData, signActivity} from "../../api/apis"
+import { verifyPhoneNum }from  "../../utils/util"
+const LoginBiz = require('../../common_biz/login.js')
+const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
 
 Page({
 
@@ -9,10 +12,7 @@ Page({
 	data: {
     activity_id: "",
     enroll_data: {},
-    accompany_list: [
-      {enroll_name:''},
-      {enroll_name:''},
-    ],
+    accompany_list: [],
 
     showGenderPicker: false,
     genderColumns:[
@@ -22,9 +22,11 @@ Page({
 
     enroll_name: "",
     enroll_gender: "男",
+    enroll_phone:'',
+    enroll_age: '',
   },
   
-  getEnrollData(enrollId) {
+  getUserEnrollData(enrollId) {
     wx.showLoading({
       title: '读取报名信息中',
     })
@@ -36,17 +38,21 @@ Page({
     var that = this;
 
     let data = {
-      enrollId: enrollId,
+      token: LoginBiz.getToken(),
+      enroll_id: enrollId,
     }
     getEnrollData(data).then(res => {
-  
       console.log(res);
       if (res.err_no == 0) {
         var resultData = res.data.enroll_data;
         if (resultData.enroll_id != '0') {
           that.setData({
             enroll_data: res.data.enroll_data,
-            accompany_list: accompany_list,
+            accompany_list: res.data.accompany_list,
+            enroll_age: res.data.enroll_data.applicant_age,
+            enroll_gender: res.data.enroll_data.applicant_gender ==1?'男':'女',
+            enroll_name: res.data.enroll_data.applicant_name,
+            enroll_phone: res.data.enroll_data.applicant_phone,
           })
 
           console.log(that.data);
@@ -96,20 +102,41 @@ Page({
 
   addMale() {
     console.log('add male');
+    let accompany_list = this.data.accompany_list;
+    accompany_list.push({
+      applicant_name: '',
+      applicant_gender: 1,
+    })
+    this.setData({
+      accompany_list: accompany_list,
+    })
   },
 
   addFemale() {
     console.log('add female');
+    let accompany_list = this.data.accompany_list;
+    accompany_list.push({
+      applicant_name: '',
+      applicant_gender: 2,
+    })
+    this.setData({
+      accompany_list: accompany_list,
+    })
   },
 
   delAccompany(e) {
     console.log(e);
+    let accompany_list = this.data.accompany_list;
+    accompany_list.splice(Number(e.currentTarget.id),1)
+    this.setData({
+      accompany_list: accompany_list,
+    })
   },
 
   changeAccompanyName(e) {
     console.log(e);
     let accompanyList = this.data.accompany_list;
-    accompanyList[e.currentTarget.id].enroll_name = e.detail;
+    accompanyList[e.currentTarget.id].applicant_name = e.detail;
     this.setData({
       accompany_list: accompanyList,
     })
@@ -117,6 +144,76 @@ Page({
 
   submitSign() {
     console.log(this.data);
+
+    if (!verifyPhoneNum(this.data.enroll_phone)){
+      wx.showToast({
+        title: '手机号格式错误',
+        icon: 'error',
+      })
+      return
+    }
+
+    let gender = 0;
+    if (this.data.enroll_gender == '男') {
+      gender = 1;
+    } else if (this.data.enroll_gender == '女') {
+      gender = 2;
+    }
+   
+    let data= {
+      token:LoginBiz.getToken(),
+      enroll_id: '',
+      biz_type:1,
+      activity_id:this.data.activity_id,
+      user_name: this.data.enroll_name,
+      phone: this.data.enroll_phone,
+      gender: Number(gender),
+      age: Number(this.data.enroll_age),
+      new_accompany_list: this.data.accompany_list,
+    }
+    
+    signActivity(data).then(res=>{
+      console.log("报名活动返回结果");
+      console.log(res);
+      if(res.err_no!=0){
+        wx.showToast({
+          title: '报名失败！',
+          icon:"error"
+        });
+        console.log(res.err_msg)
+      }else if(res.err_no===0){
+        WxNotificationCenter.postNotificationName('refreshActivityDetail',this.data.activity_id);
+        wx.showToast({
+          title: '报名成功！',
+          icon:"success",
+          duration: 2000,
+          complete: function () {
+            setTimeout(() => {
+              wx.navigateBack({
+                delta : 1
+              });
+          }, 2000)
+        }
+        });
+      }
+    }).catch((err) => {
+      // on cancel
+      wx.showToast({
+        title: '报名失败！',
+        icon:'error'
+      })
+      console.log(err);
+    })
+  },
+
+  // 取消报名
+  cancelSign(e) {
+    console.log(e);
+    if (e.currentTarget.id === '') {
+      // 取消所有报名
+    } else {
+      
+    }
   },
 
   onChangeEnrollName() {},
@@ -128,7 +225,7 @@ Page({
     console.log(options);
 
     if (options.enroll_id !== '0' && options.enroll_id !== '') {
-      getEnrollData(options.enroll_id);
+      this.getUserEnrollData(options.enroll_id);
     }
 
     this.setData({

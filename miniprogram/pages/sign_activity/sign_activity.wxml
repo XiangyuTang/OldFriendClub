@@ -2,10 +2,27 @@
 <view class="">
   <block wx:if="{{enroll_data.applicant_status == 1}}">
     <van-cell-group>
-     
-        <van-cell title="姓名" value="{{enroll_data.applicant_name}}" />
-   
+     <van-cell title="姓名" value="{{enroll_data.applicant_name}}" />
+     <van-cell title="联系电话" value="{{enroll_data.applicant_phone}}" />
+     <van-cell title="年龄" value="{{enroll_data.applicant_age}}" />
+     <van-cell title="性别" value="{{enroll_data.applicant_gender==1?'男':'女'}}" />
 
+     <block wx:if="{{ accompany_list.length > 0 }}">
+        <block wx:for="{{ accompany_list }}" wx:key="index">
+          <van-cell value="{{item.applicant_name}}">
+            <van-icon slot="right-icon" name="close" size="15px" id="{{ item.enroll_id }}" bind:click="cancelSign" />
+          <view slot="title">
+            <view>同行人</view>
+            <van-tag class="show_gender_tag" wx:if="{{ item.applicant_gender === 1 }}" type="primary">♂</van-tag>
+            <van-tag class="show_gender_tag" wx:if="{{ item.applicant_gender === 2 }}" color="#f2826a">♀</van-tag>
+          </view>
+        </van-cell>
+        </block>
+      </block>
+
+      <view class="sign_btn">
+        <van-button type="danger" id="{{ enroll_data.enroll_id }}" bind:click="cancelSign">取消所有报名</van-button>
+      </view>
 	  </van-cell-group>
   </block>
 
@@ -70,7 +87,7 @@
         <block wx:for="{{ accompany_list }}" wx:key="index">
           <van-field 
             id="{{ index }}"
-            model:value="{{ item.enroll_name }}"
+            model:value="{{ item.applicant_name }}"
             placeholder="请输入同行人姓名"
             required
             clearable
@@ -78,7 +95,9 @@
             use-button-slot
             bind:change="changeAccompanyName"
           >
-
+      
+          <van-tag slot="icon" class="gender_tag" wx:if="{{ item.applicant_gender === 1 }}" type="primary">♂</van-tag>
+          <van-tag slot="icon" class="gender_tag" wx:if="{{ item.applicant_gender === 2 }}" color="#f2826a">♀</van-tag>
           <van-icon slot="icon" id="{{ index }}" name="close" size="20px" bind:click="delAccompany"/>
           </van-field>
 
