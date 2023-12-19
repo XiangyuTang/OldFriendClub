@@ -86,7 +86,7 @@
 </view>
  <van-dialog id="van-dialog" />
 
-  <mp-half-screen-dialog show="{{form.show}}" bindbuttontap="submitsign" bindclose="closesign" maskClosable="{{false}}" title="{{tool.signBtnstatus(sign_status,sign_due).title}}" buttons="{{tool.signBtnstatus(sign_status,sign_due).btnlist}}">
+  <!-- <mp-half-screen-dialog show="{{form.show}}" bindbuttontap="submitsign" bindclose="closesign" maskClosable="{{false}}" title="{{tool.signBtnstatus(sign_status,sign_due).title}}" buttons="{{tool.signBtnstatus(sign_status,sign_due).btnlist}}">
 	<mp-cells slot="desc">
 		<block wx:for="{{sign_form}}" wx:key="id">
       <block wx:if="{{sign_status== 1}}">
@@ -123,7 +123,7 @@
       </block>
 		</block>
 	</mp-cells>
-</mp-half-screen-dialog>
+</mp-half-screen-dialog> -->
 
 <view>
   <publish-activity id="publish-activity"></publish-activity>

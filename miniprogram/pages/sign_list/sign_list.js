@@ -117,11 +117,23 @@ Page({
       //   }
       // }
 
+      let mainEnrollMap = {};
+
       for (var i in list) {
-        if (list[i].applicant_status == 4) {
+        if (list[i].enroll_uid !== '' && list[i].enroll_uid !== '0') {
+            mainEnrollMap[list[i].enroll_uid] = list[i].enroll_name;
+        } 
+      }
+
+      for (var i in list) {
+        if (list[i].enroll_status == 4) {
           list[i].display_name = "活动创建者";
         } else {
-          list[i].display_name = "报名用户："+list[i].applicant_sign_name;
+          if (list[i].main_enroll_uid !== '' && list[i].main_enroll_uid !== '0') {
+            list[i].display_name = "报名用户："+mainEnrollMap[list[i].main_enroll_uid]+"的同行人";
+          } else {
+            list[i].display_name = "报名用户："+list[i].enroll_name;
+          }
         }
       }
 
@@ -149,12 +161,12 @@ Page({
     wx.hideLoading()
   },
 
-  auditApplicant(uid,index,audit_status) {
+  auditApplicant(id,index,audit_status) {
     let data = {
       token:LoginBiz.getToken(),
       biz_type: 1,
       activity_id:this.data.activityId,
-      applicant_uid: uid,
+      enroll_id: id,
       audit_status: audit_status,
     }
     
@@ -165,7 +177,11 @@ Page({
       var applicantData = this.data.applicantList
       for (let i in applicantData) {
         if (i == index) {
-          applicantData[i].applicant_status = audit_status;
+          applicantData[i].enroll_status = audit_status;
+        }
+
+        if (applicantData[i].main_enroll_uid === applicantData[index].enroll_uid) {
+            applicantData[i].enroll_status = audit_status;
         }
       }
 
@@ -182,14 +198,14 @@ Page({
   refuseSign(e){
     console.log("拒绝申请");
     console.log(e);
-    console.log(e.currentTarget.dataset.uid);
-    this.auditApplicant(e.currentTarget.dataset.uid, e.currentTarget.dataset.index, 3) // 3为拒绝报名
+    console.log(e.currentTarget.dataset.id);
+    this.auditApplicant(e.currentTarget.dataset.id, e.currentTarget.dataset.index, 3) // 3为拒绝报名
   },
 
   agreeSign(e){
     console.log("同意申请");
-    console.log(e.currentTarget.dataset.uid);
-    this.auditApplicant(e.currentTarget.dataset.uid, e.currentTarget.dataset.index,2) // 2为通过报名
+    console.log(e.currentTarget.dataset.id);
+    this.auditApplicant(e.currentTarget.dataset.id, e.currentTarget.dataset.index,2) // 2为通过报名
   },
 
   toDetail (e) {

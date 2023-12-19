@@ -1,5 +1,5 @@
 // pages/sign_activity/sign_activity.js
-import {getEnrollData, signActivity} from "../../api/apis"
+import {getEnrollData, signActivity, cancelSignActivity} from "../../api/apis"
 import { verifyPhoneNum }from  "../../utils/util"
 const LoginBiz = require('../../common_biz/login.js')
 const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
@@ -13,6 +13,7 @@ Page({
     activity_id: "",
     enroll_data: {},
     accompany_list: [],
+    sign_status: '',
 
     showGenderPicker: false,
     genderColumns:[
@@ -49,10 +50,10 @@ Page({
           that.setData({
             enroll_data: res.data.enroll_data,
             accompany_list: res.data.accompany_list,
-            enroll_age: res.data.enroll_data.applicant_age,
-            enroll_gender: res.data.enroll_data.applicant_gender ==1?'男':'女',
-            enroll_name: res.data.enroll_data.applicant_name,
-            enroll_phone: res.data.enroll_data.applicant_phone,
+            enroll_age: res.data.enroll_data.enroll_age,
+            enroll_gender: res.data.enroll_data.enroll_gender ==1?'男':'女',
+            enroll_name: res.data.enroll_data.enroll_name,
+            enroll_phone: res.data.enroll_data.enroll_phone,
           })
 
           console.log(that.data);
@@ -101,11 +102,19 @@ Page({
   },
 
   addMale() {
+    if (this.data.accompany_list.length >= 5) {
+        wx.showToast({
+            title: '每人最多添加5位同行人！',
+            icon: 'none',
+            duration: 2000,
+        });
+        return
+    }
     console.log('add male');
     let accompany_list = this.data.accompany_list;
     accompany_list.push({
-      applicant_name: '',
-      applicant_gender: 1,
+        enroll_name: '',
+        enroll_gender: 1,
     })
     this.setData({
       accompany_list: accompany_list,
@@ -113,11 +122,19 @@ Page({
   },
 
   addFemale() {
+    if (this.data.accompany_list.length >= 5) {
+        wx.showToast({
+            title: '每人最多添加5位同行人！',
+            icon: 'none',
+            duration: 2000,
+        });
+        return
+    }
     console.log('add female');
     let accompany_list = this.data.accompany_list;
     accompany_list.push({
-      applicant_name: '',
-      applicant_gender: 2,
+        enroll_name: '',
+      enroll_gender: 2,
     })
     this.setData({
       accompany_list: accompany_list,
@@ -136,7 +153,7 @@ Page({
   changeAccompanyName(e) {
     console.log(e);
     let accompanyList = this.data.accompany_list;
-    accompanyList[e.currentTarget.id].applicant_name = e.detail;
+    accompanyList[e.currentTarget.id].enroll_name = e.detail;
     this.setData({
       accompany_list: accompanyList,
     })
@@ -160,6 +177,14 @@ Page({
       gender = 2;
     }
    
+    let newAccompanyList = [];
+    this.data.accompany_list.forEach(item => {
+        newAccompanyList.push({
+            enroll_name: item.enroll_name,
+            enroll_gender: item.enroll_gender,
+        })
+    })
+
     let data= {
       token:LoginBiz.getToken(),
       enroll_id: '',
@@ -169,7 +194,7 @@ Page({
       phone: this.data.enroll_phone,
       gender: Number(gender),
       age: Number(this.data.enroll_age),
-      new_accompany_list: this.data.accompany_list,
+      new_accompany_list: newAccompanyList,
     }
     
     signActivity(data).then(res=>{
@@ -187,6 +212,7 @@ Page({
           title: '报名成功！',
           icon:"success",
           duration: 2000,
+          mask:true,
           complete: function () {
             setTimeout(() => {
               wx.navigateBack({
@@ -209,11 +235,60 @@ Page({
   // 取消报名
   cancelSign(e) {
     console.log(e);
-    if (e.currentTarget.id === '') {
-      // 取消所有报名
-    } else {
-      
-    }
+    var that = this
+    wx.showModal({
+        title: "提示",
+        content: "确定要取消报名吗？",
+        success: function (res) {
+          if (res.confirm) {
+            let cancel_enroll_id = e.currentTarget.id;
+
+            let data= {
+                token:LoginBiz.getToken(),
+                enroll_id: cancel_enroll_id,
+                biz_type:1,
+                activity_id:that.data.activity_id,
+              }
+              
+              cancelSignActivity(data).then(res=>{
+                console.log("取消报名返回结果");
+                console.log(res);
+                if(res.err_no!=0){
+                  wx.showToast({
+                    title: '取消报名失败！',
+                    icon:"error"
+                  });
+                  console.log(res.err_msg)
+                }else if(res.err_no===0){
+                  WxNotificationCenter.postNotificationName('refreshActivityDetail',that.data.activity_id);
+                  wx.showToast({
+                    title: '取消报名成功！',
+                    icon:"success",
+                    duration: 2000,
+                    mask:true,
+                    complete: function () {
+                      setTimeout(() => {
+                        wx.navigateBack({
+                          delta : 1
+                        });
+                    }, 2000)
+                  }
+                  });
+                }
+              }).catch((err) => {
+                // on cancel
+                wx.showToast({
+                  title: '取消报名失败！',
+                  icon:'error'
+                })
+                console.log(err);
+              })
+  
+          } else if (res.cancel) {
+            console.log("用户点击取消")
+          }
+        }
+      })    
   },
 
   onChangeEnrollName() {},
@@ -230,6 +305,7 @@ Page({
 
     this.setData({
       activity_id: options.activity_id,
+      sign_status: options.sign_status,
     })
 	},
 

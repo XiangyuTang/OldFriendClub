@@ -19,43 +19,43 @@ Page({
     activity_result_id: '',
 		like_num:0,
 		signed_num:0,
-    form: {
-      show: false
-		},
-		sign_form:[
-			// {
-			// 	des:"用于报名页展示",
-			// 	id: "avatar",
-			// 	prop:"头像",
-			// 	type:"avatar"
-      // },
-      {
-				des:"输入真实姓名",
-				id: "name",
-				prop:"姓名",
-        type:"text"
-			},{
-				id:"gender",
-				prop:"性别",
-				selects:["男","女"],
-				type:"select"
-			},{
-				id:"age",
-				prop:"年龄",
-				type:"number",
-				unit:"岁"
-			},{
-				id:"tel",
-				prop:"手机号",
-				type:"number" //type=phone时面向非个体开发者，且调用收费
-			}
-    ],
-    input: {
-      name:"",
-      gender: "",
-      age:"",
-      tel:"",
-    },
+    // form: {
+    //   show: false
+	// 	},
+	// 	sign_form:[
+	// 		// {
+	// 		// 	des:"用于报名页展示",
+	// 		// 	id: "avatar",
+	// 		// 	prop:"头像",
+	// 		// 	type:"avatar"
+    //   // },
+    //   {
+	// 			des:"输入真实姓名",
+	// 			id: "name",
+	// 			prop:"姓名",
+    //     type:"text"
+	// 		},{
+	// 			id:"gender",
+	// 			prop:"性别",
+	// 			selects:["男","女"],
+	// 			type:"select"
+	// 		},{
+	// 			id:"age",
+	// 			prop:"年龄",
+	// 			type:"number",
+	// 			unit:"岁"
+	// 		},{
+	// 			id:"tel",
+	// 			prop:"手机号",
+	// 			type:"number" //type=phone时面向非个体开发者，且调用收费
+	// 		}
+    // ],
+    // input: {
+    //   name:"",
+    //   gender: "",
+    //   age:"",
+    //   tel:"",
+    // },
 		sign_due:[],
     sign_status:"",
     activity_club:{},
@@ -176,7 +176,7 @@ Page({
 
   modifySignUp() {
     wx.navigateTo({
-      url: `/pages/sign_activity/sign_activity?activity_id=${this.data.activity_id}&enroll_id=${this.data.enroll_data.enroll_id}`,
+      url: `/pages/sign_activity/sign_activity?activity_id=${this.data.activity_id}&enroll_id=${this.data.enroll_data.enroll_id}&sign_status=${this.data.sign_status}`,
     })
     // this.setData({
     //   form:{
@@ -195,244 +195,244 @@ Page({
 	// 	return true;
 	// },
 
-  submitsign(e) {
-    console.log("submit");
-    console.log(e.detail);
+//   submitsign(e) {
+//     console.log("submit");
+//     console.log(e.detail);
 
-    if (e.detail.item.value == 0){
-      // 取消
-      this.setData({
-        form:{
-          show: false
-        }
-      })
-    } else if (e.detail.item.value == 1) {
-      // 报名
-      if (this.data.input.name == ''){
-        wx.showToast({
-          title: '请填写姓名！',
-          icon:'none',
-        })
-        return
-      }
+//     if (e.detail.item.value == 0){
+//       // 取消
+//       this.setData({
+//         form:{
+//           show: false
+//         }
+//       })
+//     } else if (e.detail.item.value == 1) {
+//       // 报名
+//       if (this.data.input.name == ''){
+//         wx.showToast({
+//           title: '请填写姓名！',
+//           icon:'none',
+//         })
+//         return
+//       }
 
-      if (this.data.input.gender == '') {
-        wx.showToast({
-          title: '请选择性别！',
-          icon:'none',
-        })
-        return
-      }
+//       if (this.data.input.gender == '') {
+//         wx.showToast({
+//           title: '请选择性别！',
+//           icon:'none',
+//         })
+//         return
+//       }
 
-      if (this.data.input.age == '') {
-        wx.showToast({
-          title: '请填写年龄！',
-          icon:'none',
-        })
-        return
-      }
+//       if (this.data.input.age == '') {
+//         wx.showToast({
+//           title: '请填写年龄！',
+//           icon:'none',
+//         })
+//         return
+//       }
 
-      if (this.data.input.tel == '') {
-        wx.showToast({
-          title: '请填写手机号！',
-          icon:'none',
-        })
-        return
-      }
+//       if (this.data.input.tel == '') {
+//         wx.showToast({
+//           title: '请填写手机号！',
+//           icon:'none',
+//         })
+//         return
+//       }
 
-      if (Number(this.data.input.age) < 10 || Number(this.data.input.age) > 150) {
-        wx.showToast({
-          title: '请填写正确的年龄！',
-          icon:'none',
-        })
-        return
-      }
+//       if (Number(this.data.input.age) < 10 || Number(this.data.input.age) > 150) {
+//         wx.showToast({
+//           title: '请填写正确的年龄！',
+//           icon:'none',
+//         })
+//         return
+//       }
 
-      if (!verifyPhoneNum(this.data.input.tel)){
-        wx.showToast({
-          title: '请填写正确的手机号！',
-          icon:'none',
-        })
-        return
-      }
+//       if (!verifyPhoneNum(this.data.input.tel)){
+//         wx.showToast({
+//           title: '请填写正确的手机号！',
+//           icon:'none',
+//         })
+//         return
+//       }
       
-      let gender = 1;
-      if (this.data.input.gender == '男') {
-        gender = 1;
-      } else if (this.data.input.gender == '女') {
-        gender = 2;
-      }
+//       let gender = 1;
+//       if (this.data.input.gender == '男') {
+//         gender = 1;
+//       } else if (this.data.input.gender == '女') {
+//         gender = 2;
+//       }
 
-      let data= {
-        token:LoginBiz.getToken(),
-        biz_type:1,
-        activity_id:that.data.activity.activity_id,
-        user_name: this.data.input.name,
-        phone: this.data.input.tel,
-        gender: gender,
-        age: Number(this.data.input.age),
-      }
+//       let data= {
+//         token:LoginBiz.getToken(),
+//         biz_type:1,
+//         activity_id:that.data.activity.activity_id,
+//         user_name: this.data.input.name,
+//         phone: this.data.input.tel,
+//         gender: gender,
+//         age: Number(this.data.input.age),
+//       }
       
-      signActivity(data).then(res=>{
-        console.log("报名活动返回结果");
-        console.log(res);
-        if(res.err_no!=0){
-          wx.showToast({
-            title: res.err_msg,
-            mask:true,
-            icon:"error"
-          });
-        }else if(res.err_no===0){
-          wx.showToast({
-            title: '报名成功！',
-            icon:'success'
-          })
-          var options = {"acid":that.data.activity_id}
-          that.onLoad(options);
-          that.setData({
-            sign_status: 1,
-            signed_num:res.data.signed_num
-          })
+//       signActivity(data).then(res=>{
+//         console.log("报名活动返回结果");
+//         console.log(res);
+//         if(res.err_no!=0){
+//           wx.showToast({
+//             title: res.err_msg,
+//             mask:true,
+//             icon:"error"
+//           });
+//         }else if(res.err_no===0){
+//           wx.showToast({
+//             title: '报名成功！',
+//             icon:'success'
+//           })
+//           var options = {"acid":that.data.activity_id}
+//           that.onLoad(options);
+//           that.setData({
+//             sign_status: 1,
+//             signed_num:res.data.signed_num
+//           })
           
-        }
-      }).catch((err) => {
-        // on cancel
-        wx.showToast({
-          title: '报名失败！',
-          icon:'error'
-        })
-      })
+//         }
+//       }).catch((err) => {
+//         // on cancel
+//         wx.showToast({
+//           title: '报名失败！',
+//           icon:'error'
+//         })
+//       })
 
-      // 提交报名
-      this.setData({
-        form:{
-          show: false
-        }
-      })
-    } else if (e.detail.item.value == 2){
-      // 取消报名
-      let data= {
-        token:LoginBiz.getToken(),
-        biz_type:1,
-        activity_id:that.data.activity.activity_id
-      }
-      cancelSignActivity(data).then(res=>{
-        console.log("取消活动报名结果");
-        console.log(res);
-        if(res.err_no === 0){
-          var options = {"acid":that.data.activity_id}
-          // that.onLoad(options);
-          that.setData({
-            sign_status: 0,
-            signed_num:res.data.signed_num
-          })
-        }else{
-          wx.showToast({
-            title: '取消报名失败！',
-            icon:"error"
-          });
-        }
-      })
-    } else {
-      console.log("添加更多的value支持")
-    }
-  },
+//       // 提交报名
+//       this.setData({
+//         form:{
+//           show: false
+//         }
+//       })
+//     } else if (e.detail.item.value == 2){
+//       // 取消报名
+//       let data= {
+//         token:LoginBiz.getToken(),
+//         biz_type:1,
+//         activity_id:that.data.activity.activity_id
+//       }
+//       cancelSignActivity(data).then(res=>{
+//         console.log("取消活动报名结果");
+//         console.log(res);
+//         if(res.err_no === 0){
+//           var options = {"acid":that.data.activity_id}
+//           // that.onLoad(options);
+//           that.setData({
+//             sign_status: 0,
+//             signed_num:res.data.signed_num
+//           })
+//         }else{
+//           wx.showToast({
+//             title: '取消报名失败！',
+//             icon:"error"
+//           });
+//         }
+//       })
+//     } else {
+//       console.log("添加更多的value支持")
+//     }
+//   },
 
-  closesign() {
-    this.setData({
-      form:{
-        show: false
-      }
-    })
-  },
+//   closesign() {
+//     this.setData({
+//       form:{
+//         show: false
+//       }
+//     })
+//   },
 
-	startsign () {
-		//不用填写表单，后台自动校验
-    // that.setData({
-    //   'form.show': true
-    // })
-    if(this.data.sign_status === 1){//已报名，审核中
-      Dialog.confirm({
-        title: '取消报名',
-        message: '您确认【取消】报名本活动吗？'
-      }).then(() => {
-        let data= {
-          token:LoginBiz.getToken(),
-          biz_type:1,
-          activity_id:that.data.activity.activity_id
-        }
-        cancelSignActivity(data).then(res=>{
-          console.log("取消活动报名结果");
-          console.log(res);
-          if(res.err_no === 0){
-            var options = {"acid":that.data.activity_id}
-            // that.onLoad(options);
-            that.setData({
-              sign_status: 0,
-              signed_num:res.data.signed_num
-            })
-          }else{
-            wx.showToast({
-              title: '取消报名失败！',
-              icon:"error"
-            });
-          }
-        })
-      }).catch((err) => {
-        // on cancel
-        console.log(err);
-      });
-    }
-    else if(this.data.sign_status === 0 || this.data.sign_status === 5){//没有报名或取消报名
-      console.log(this.data.sign_status);
-      Dialog.confirm({
-        title: '报名确认',
-        message: '确认报名本活动吗？'
-      }).then(() => {
-        // on confirm
-        let data= {
-          token:LoginBiz.getToken(),
-          biz_type:1,
-          activity_id:that.data.activity.activity_id
-        }
+	// startsign () {
+	// 	//不用填写表单，后台自动校验
+    // // that.setData({
+    // //   'form.show': true
+    // // })
+    // if(this.data.sign_status === 1){//已报名，审核中
+    //   Dialog.confirm({
+    //     title: '取消报名',
+    //     message: '您确认【取消】报名本活动吗？'
+    //   }).then(() => {
+    //     let data= {
+    //       token:LoginBiz.getToken(),
+    //       biz_type:1,
+    //       activity_id:that.data.activity.activity_id
+    //     }
+    //     cancelSignActivity(data).then(res=>{
+    //       console.log("取消活动报名结果");
+    //       console.log(res);
+    //       if(res.err_no === 0){
+    //         var options = {"acid":that.data.activity_id}
+    //         // that.onLoad(options);
+    //         that.setData({
+    //           sign_status: 0,
+    //           signed_num:res.data.signed_num
+    //         })
+    //       }else{
+    //         wx.showToast({
+    //           title: '取消报名失败！',
+    //           icon:"error"
+    //         });
+    //       }
+    //     })
+    //   }).catch((err) => {
+    //     // on cancel
+    //     console.log(err);
+    //   });
+    // }
+    // else if(this.data.sign_status === 0 || this.data.sign_status === 5){//没有报名或取消报名
+    //   console.log(this.data.sign_status);
+    //   Dialog.confirm({
+    //     title: '报名确认',
+    //     message: '确认报名本活动吗？'
+    //   }).then(() => {
+    //     // on confirm
+    //     let data= {
+    //       token:LoginBiz.getToken(),
+    //       biz_type:1,
+    //       activity_id:that.data.activity.activity_id
+    //     }
         
-        signActivity(data).then(res=>{
-          console.log("报名活动返回结果");
-          console.log(res);
-          if(res.err_no!=0){
-            wx.showToast({
-              title: res.err_msg,
-              mask:true,
-              icon:"error"
-            });
-          }else if(res.err_no===0){
-            wx.showToast({
-              title: '报名成功！',
-              icon:'success'
-            })
-            var options = {"acid":that.data.activity_id}
-            that.onLoad(options);
-            that.setData({
-              sign_status: 1,
-              signed_num:res.data.signed_num
-            })
+    //     signActivity(data).then(res=>{
+    //       console.log("报名活动返回结果");
+    //       console.log(res);
+    //       if(res.err_no!=0){
+    //         wx.showToast({
+    //           title: res.err_msg,
+    //           mask:true,
+    //           icon:"error"
+    //         });
+    //       }else if(res.err_no===0){
+    //         wx.showToast({
+    //           title: '报名成功！',
+    //           icon:'success'
+    //         })
+    //         var options = {"acid":that.data.activity_id}
+    //         that.onLoad(options);
+    //         that.setData({
+    //           sign_status: 1,
+    //           signed_num:res.data.signed_num
+    //         })
             
-          }
-        }).catch((err) => {
-          // on cancel
-          wx.showToast({
-            title: '报名失败！',
-            icon:'error'
-          })
-        })
+    //       }
+    //     }).catch((err) => {
+    //       // on cancel
+    //       wx.showToast({
+    //         title: '报名失败！',
+    //         icon:'error'
+    //       })
+    //     })
         
-      }).catch((err) => {
-        // on cancel
-        console.log(err);
-      });
-    }
+    //   }).catch((err) => {
+    //     // on cancel
+    //     console.log(err);
+    //   });
+    // }
 		
-	},
+	// },
 	// async submitsign (e) {
   //   const { input, project } = that.data
   //   if (e.detail?.item?.value === 1) {
@@ -476,11 +476,11 @@ Page({
   //     'form.show': false
   //   })
   // },
-  closesign () {
-    that.setData({
-      'form.show': false
-    })
-  },
+//   closesign () {
+//     that.setData({
+//       'form.show': false
+//     })
+//   },
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
@@ -543,7 +543,7 @@ Page({
 				signed_num:res.data.activity_data.signed_num,
 				sign_due:[res.data.activity_data.sign_start_time,res.data.activity_data.sign_end_time],
         sign_status:res.data.activity_data.sign_status,
-        creator_phone: res.data.enroll_data.applicant_phone,
+        creator_phone: res.data.enroll_data.enroll_phone,
       })
 
       if (res.data.activity_data.audit_status == -128 || res.data.activity_data.audit_status == -127) {
@@ -576,13 +576,13 @@ Page({
         })
       }
 
-      if (res.data.enroll_data.applicant_status == 1 || res.data.enroll_data.applicant_status == 2 || res.data.enroll_data.applicant_status == 5) {
+      if (res.data.enroll_data.enroll_status == 1 || res.data.enroll_data.enroll_status == 2 || res.data.enroll_data.enroll_status == 5) {
         that.setData({
           input: {
-            name: res.data.enroll_data.applicant_sign_name,
-            gender: res.data.enroll_data.applicant_gender,
-            age: res.data.enroll_data.applicant_age,
-            tel: res.data.enroll_data.applicant_phone,
+            name: res.data.enroll_data.enroll_name,
+            gender: res.data.enroll_data.enroll_gender,
+            age: res.data.enroll_data.enroll_age,
+            tel: res.data.enroll_data.enroll_phone,
           }
         })
 

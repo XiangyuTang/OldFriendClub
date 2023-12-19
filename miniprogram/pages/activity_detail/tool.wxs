@@ -110,12 +110,12 @@ function signBtnstatus (useropen, time) {
     // res.btnlist = [sign_btnlist[3], sign_btnlist[2]]
   } else if (useropen === 2) {
     res.text = '已通过报名'
-    res.disable = true
+    res.disable = false
     res.title = '报名信息-已通过'
     res.btnlist = []
   } else if (useropen === 3) {
     res.text = '报名未通过'
-    res.disable = true
+    res.disable = false
     res.title = '报名信息-未通过'
     res.btnlist = []
   }else if (useropen === 4) {
