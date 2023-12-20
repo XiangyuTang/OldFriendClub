@@ -60,6 +60,15 @@ Page({
 
     defaultClubIcon:'../../static/images/icons/club.png',
     defaultClubBackImg:'../../static/images/navicons/photos.png',
+
+    showShare: false,
+    shareOptions:[
+      { name: '微信', icon: 'wechat', openType: 'share' },
+      // { name: '微博', icon: 'weibo' },
+      { name: '复制链接', icon: 'link' },
+      // { name: '分享海报', icon: 'poster' },
+      // { name: '二维码', icon: 'qrcode' },
+    ],
   },
 
   /**
@@ -409,29 +418,37 @@ Page({
         console.log(pages[pages.length-1]);
         console.log(this.data.activity_id);
 
-        this.onShowSharePop();
+        this.onShowShare();
     },
 
-    onShowSharePop() {
+    onShowShare() {
         this.setData({
-          showSharePop: true,
+          showShare: true,
         })
     },
   
-    onCloseSharePop() {
+    onCloseShare() {
       this.setData({
-        showSharePop: false,
+        showShare: false,
       })
     },
   
     onClickSharePage() {
         console.log('sharePage')
-        this.onCloseSharePop();
+        this.onCloseShare();
     },
 
     assembleShareInfo(scheme) {
         var shareInfo = this.data.clubData.club_name+'\n'+'社团简介：'+this.data.clubData.club_summary+'\n'+'社团创建者：'+this.data.clubData.creator.nick_name+'\n'+'社团链接：'+scheme;
         return shareInfo;
+    },
+
+    onSelectShare(e) {
+      console.log(e);
+  
+      if (e.detail.name === '复制链接') {
+          this.onCopyInfo();
+      }
     },
   
     onCopyInfo() {
@@ -480,6 +497,6 @@ Page({
               })
       })
   
-        this.onCloseSharePop();
+        this.onCloseShare();
     },
 })

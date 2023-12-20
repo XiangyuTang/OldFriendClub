@@ -1,4 +1,6 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "van-cell": "@vant/weapp/cell/index"
+  },
   "navigationBarTitleText": "报名须知"
 }

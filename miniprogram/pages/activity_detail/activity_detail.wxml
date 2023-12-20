@@ -128,16 +128,12 @@
 	</mp-cells>
 </mp-half-screen-dialog> -->
 
-<van-popup show="{{ showSharePop }}" position="bottom" bind:close="onCloseSharePop" custom-style="height: 50%;" round>
+<!-- <van-popup show="{{ showSharePop }}" position="bottom" bind:close="onCloseSharePop" custom-style="height: 50%;" round>
     <view class="share_pop_title">分享活动</view>
     <van-grid column-num="2" gutter="{{ 30 }}" center clickable class="share_pop" >
         
         <van-grid-item use-slot>
             <button plain="true" style="width: 60%;height: 60px; background-image:url(../../static/images/icons/Chat-02-512.png); background-image:width(60%); background-image:height(60px); background-size:100% 100%;" open-type="share"> 
-            <!-- <image
-            style="width: 60%; height: 60px;"
-            src="../../static/images/icons/Chat-02-512.png"
-            /> -->
             </button>
         分享页面
         </van-grid-item>
@@ -151,7 +147,15 @@
             复制活动信息
         </van-grid-item>
     </van-grid>
-</van-popup>
+</van-popup> -->
+
+<van-share-sheet
+  show="{{ showShare }}"
+  title="立即分享给好友"
+  options="{{ shareOptions }}"
+  bind:select="onSelectShare"
+  bind:close="onCloseShare"
+/>
 
 <view>
   <publish-activity id="publish-activity"></publish-activity>

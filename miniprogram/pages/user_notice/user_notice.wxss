@@ -22,3 +22,29 @@
   font-size:15px;
   font-weight:700;
 }
+
+.content{
+  font-size:15px;
+}
+
+.danger_content{
+  font-size:15px;
+  color: #fd0000;
+}
+
+.van-cell__value{
+  flex:1;
+}
+
+::v-deep .step_css{
+  margin: 30rpx auto;
+  display: flex;
+  justify-content: center;
+}
+
+
+.van-cell__value>text{
+  display: inline-block;
+  text-align: left;
+  word-break: break-all;
+}

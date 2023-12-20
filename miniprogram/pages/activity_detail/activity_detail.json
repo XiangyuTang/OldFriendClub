@@ -7,7 +7,6 @@
         "van-dialog": "@vant/weapp/dialog/index",
         "van-icon":"@vant/weapp/icon/index",
         "publish-activity": "../../components/publish-activity/publish-activity",
-        "van-grid": "@vant/weapp/grid/index",
-        "van-grid-item": "@vant/weapp/grid-item/index"
+        "van-share-sheet": "@vant/weapp/share-sheet/index"
 	}
 }

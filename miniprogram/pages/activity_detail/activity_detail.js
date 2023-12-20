@@ -60,7 +60,14 @@ Page({
     sign_status:"",
     activity_club:{},
     creator_phone:'',
-    showSharePop: false,
+    showShare: false,
+    shareOptions:[
+      { name: '微信', icon: 'wechat', openType: 'share' },
+      // { name: '微博', icon: 'weibo' },
+      { name: '复制链接', icon: 'link' },
+      // { name: '分享海报', icon: 'poster' },
+      // { name: '二维码', icon: 'qrcode' },
+    ],
 		// user: {
 		// 	open: 0
     // }
@@ -722,24 +729,32 @@ Page({
     console.log(pages[pages.length-1]);
     console.log(this.data.activity_id);
 
-    this.onShowSharePop();
+    this.onShowShare()
   },
 
-  onShowSharePop() {
+  onShowShare() {
       this.setData({
-        showSharePop: true,
+        showShare: true,
       })
   },
 
-  onCloseSharePop() {
+  onCloseShare() {
     this.setData({
-      showSharePop: false,
+      showShare: false,
     })
+  },
+
+  onSelectShare(e) {
+    console.log(e);
+
+    if (e.detail.name === '复制链接') {
+        this.onCopyInfo();
+    }
   },
 
   onClickSharePage() {
       console.log('sharePage')
-      this.onCloseSharePop();
+      this.onCloseShare();
   },
 
   assembleShareInfo(scheme) {
@@ -795,7 +810,7 @@ Page({
             })
     })
 
-      this.onCloseSharePop();
+      this.onCloseShare();
   },
 	/**
 	 * 页面相关事件处理函数--监听用户下拉动作

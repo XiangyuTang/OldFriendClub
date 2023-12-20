@@ -93,13 +93,8 @@
   <publish-activity id="publish-activity" activity_club_id = "{{clubData.club_id}}"></publish-activity>
 </view>
 
-<van-popup show="{{ showSharePop }}" position="bottom" bind:close="onCloseSharePop" custom-style="height: 50%;" round>
+<!-- <van-popup show="{{ showSharePop }}" position="bottom" bind:close="onCloseSharePop" custom-style="height: 50%;" round>
     <view class="share_pop_title">分享社团</view>
-    <!-- <van-grid direction="horizontal" column-num="2">
-  <van-grid-item icon="photo-o" text="文字" />
-  <van-grid-item icon="photo-o" text="文字" />
-  <van-grid-item icon="photo-o" text="文字" />
-</van-grid> -->
     <van-grid column-num="2" gutter="{{ 30 }}" clickable class="share_pop" >
 
         <van-grid-item use-slot>
@@ -116,8 +111,16 @@
             复制社团信息
         </van-grid-item>
     </van-grid>
-</van-popup>
+</van-popup> -->
 
+
+<van-share-sheet
+  show="{{ showShare }}"
+  title="立即分享给好友"
+  options="{{ shareOptions }}"
+  bind:select="onSelectShare"
+  bind:close="onCloseShare"
+/>
 
 <view>
   <publish-club id="publish-club" club_data = "{{clubData}}"></publish-club>
