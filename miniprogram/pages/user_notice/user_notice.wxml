@@ -1,0 +1,11 @@
+<!--pages/user_notice/user_notice.wxml-->
+<view>
+  <text class="bold">
+    参加本次活动前，请您充分理解并知晓如下事宜：
+  </text>
+  <text>
+    1.
+    
+    2.
+  </text>
+</view>

@@ -1,6 +1,5 @@
 const testURL = 'https://tea.qingnian8.com'; //公共请求API
 
-// export const URL = 'https://www.mirthdata.com'
 export const serverURL = 'http://124.220.84.200:5455' //聚荟后端API
 // export const serverURL = 'https://miniprogram.mirthdata.com' //聚荟后端API
 

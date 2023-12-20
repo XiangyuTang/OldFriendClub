@@ -13,6 +13,7 @@ Page({
     activity_id: "",
     enroll_data: {},
     accompany_list: [],
+    sign_status: '0',
 
     showGenderPicker: false,
     genderColumns:[
@@ -24,6 +25,7 @@ Page({
     enroll_gender: "男",
     enroll_phone:'',
     enroll_age: '',
+    userNoticeChecked: false,
   },
   
   getUserEnrollData(enrollId) {
@@ -49,10 +51,10 @@ Page({
           that.setData({
             enroll_data: res.data.enroll_data,
             accompany_list: res.data.accompany_list,
-            enroll_age: res.data.enroll_data.applicant_age,
-            enroll_gender: res.data.enroll_data.applicant_gender ==1?'男':'女',
-            enroll_name: res.data.enroll_data.applicant_name,
-            enroll_phone: res.data.enroll_data.applicant_phone,
+            enroll_age: res.data.enroll_data.enroll_age,
+            enroll_gender: res.data.enroll_data.enroll_gender ==1?'男':'女',
+            enroll_name: res.data.enroll_data.enroll_name,
+            enroll_phone: res.data.enroll_data.enroll_phone,
           })
 
           console.log(that.data);
@@ -268,8 +270,17 @@ Page({
 
     this.setData({
       activity_id: options.activity_id,
+      sign_status: options.sign_status,
     })
-	},
+  },
+  
+  onUserNoticeChange(e) {
+    console.log(e);
+   
+    this.setData({
+      userNoticeChecked: e.detail,
+    })
+  },
 
 	/**
 	 * 生命周期函数--监听页面初次渲染完成

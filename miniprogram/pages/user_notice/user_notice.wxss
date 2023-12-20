@@ -1,0 +1,24 @@
+/* pages/user_notice/user_notice.wxss */
+
+.title {
+  font-size: 30px;
+  display: flex;
+  text-align: center;
+  justify-content: center;  
+  align-items: center;
+  margin-top: -90px;
+}
+
+.passage{
+  font-size: 30px;
+  display: flex;
+  text-align: center;
+  justify-content: center;  
+  align-items: center;
+  margin-top: 90px;
+}
+
+.bold{
+  font-size:15px;
+  font-weight:700;
+}

@@ -21,9 +21,6 @@
       </block>
 	  </van-cell-group>
 
-      <view class="sign_btn">
-        <van-button type="danger" id="{{ enroll_data.enroll_id }}" bind:click="cancelSign">取消所有报名</van-button>
-      </view>
   </block>
 
   <block wx:else>
@@ -105,9 +102,25 @@
       </block>
 
     </van-cell-group>
+  </block>
 
+  <block wx:if="{{sign_status === '1' || sign_status === '2'}}">
     <view class="sign_btn">
-      <van-button type="primary" bind:click="submitSign">{{ sign_status === '0'?'报名':'重新报名' }}</van-button>
+        <van-button type="danger" id="{{ enroll_data.enroll_id }}" bind:click="cancelSign">取消所有报名</van-button>
+      </view>
+  </block>
+
+  <block wx:else>
+    <van-cell>
+      <van-checkbox label-disabled value="{{ userNoticeChecked }}" bind:change="onUserNoticeChange">我已仔细阅读并同意         
+      <navigator url="../user_notice/user_notice">
+        <text class="userNotice">《报名须知》
+        </text>
+      </navigator>
+      </van-checkbox>
+    </van-cell>
+    <view class="sign_btn">
+      <van-button type="primary" bind:click="submitSign" disabled="{{ !userNoticeChecked }}">{{ sign_status === '0'?'报名':'重新报名' }}</van-button>
     </view>
   </block>
 	

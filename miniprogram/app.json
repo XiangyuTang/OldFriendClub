@@ -13,7 +13,8 @@
 		"pages/activity_result/activity_result",
 		"pages/edit_activity_result/edit_activity_result",
 		"pages/out_web/out_web",
-		"pages/sign_activity/sign_activity"
+		"pages/sign_activity/sign_activity",
+		"pages/user_notice/user_notice"
 	],
 	"permission": {
 		"scope.userFuzzyLocation": {
