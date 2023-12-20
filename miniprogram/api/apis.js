@@ -194,3 +194,11 @@ export function getValidBanner(data) {
 		data
 	})
 }
+
+export function generateScheme(data) {
+    return send_request({
+		url: "/wxApi/miniProgram/generateScheme",
+		method: "POST",
+		data
+	})
+}

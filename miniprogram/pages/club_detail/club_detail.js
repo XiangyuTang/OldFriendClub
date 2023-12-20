@@ -9,7 +9,8 @@ const {
 } = require("../../utils/styleCount");
 const WxNotificationCenter = require('../../utils/WxNotificationCenter.js');
 import {
-  listActivities2
+  listActivities2,
+  generateScheme
 } from '../../api/apis';
 import {
   globalCache
@@ -400,5 +401,85 @@ Page({
       showActionSheet: false,
     })
     this.getClubDetailData(clubID);
-	},
+    },
+    
+    onClickShare(e) {
+        console.log(e);
+        var pages = getCurrentPages();
+        console.log(pages[pages.length-1]);
+        console.log(this.data.activity_id);
+
+        this.onShowSharePop();
+    },
+
+    onShowSharePop() {
+        this.setData({
+          showSharePop: true,
+        })
+    },
+  
+    onCloseSharePop() {
+      this.setData({
+        showSharePop: false,
+      })
+    },
+  
+    onClickSharePage() {
+        console.log('sharePage')
+        this.onCloseSharePop();
+    },
+
+    assembleShareInfo(scheme) {
+        var shareInfo = this.data.clubData.club_name+'\n'+'社团简介：'+this.data.clubData.club_summary+'\n'+'社团创建者：'+this.data.clubData.creator.nick_name+'\n'+'社团链接：'+scheme;
+        return shareInfo;
+    },
+  
+    onCopyInfo() {
+        console.log('copyInfo');
+  
+        var pages = getCurrentPages();
+        console.log(pages[pages.length-1]);
+        let pagePath = '/' + pages[pages.length-1].route
+        
+      let data = {
+              token:LoginBiz.getToken(),
+              query:'id='+this.data.clubData.club_id,
+              path: pagePath
+          }
+          wx.showLoading({
+              title: '加载中',
+          })
+  
+      generateScheme(data).then(res=>{
+        wx.hideLoading()
+  
+        console.log(res);
+  
+        if (res.err_no ===0) {
+            var openLink = res.data
+            wx.setClipboardData({
+              data: this.assembleShareInfo(openLink),
+            })
+        }else {
+          console.log("出错了");
+          console.log(res.err_msg);
+          wx.showToast({
+            title: '获取分享信息失败',
+            duration: 2000,
+            icon: 'none'
+          })
+        }
+        
+          }).catch(err=>{
+              console.log("出错了");
+              console.log(err);
+              wx.showToast({
+                  title: '获取分享信息失败',
+                  duration: 2000,
+                  icon: 'none'
+              })
+      })
+  
+        this.onCloseSharePop();
+    },
 })

@@ -4,8 +4,13 @@
 		"mp-half-screen-dialog": "weui-miniprogram/half-screen-dialog/half-screen-dialog",
 		"mp-cells": "weui-miniprogram/cells/cells",
 		"mp-cell": "weui-miniprogram/cell/cell",
-    "van-dialog": "@vant/weapp/dialog/index",
-    "van-icon":"@vant/weapp/icon/index",
-    "publish-activity": "../../components/publish-activity/publish-activity"
+        "van-dialog": "@vant/weapp/dialog/index",
+        "van-icon":"@vant/weapp/icon/index",
+        "publish-activity": "../../components/publish-activity/publish-activity",
+        "van-grid": "@vant/weapp/grid/index",
+        "van-grid-item": "@vant/weapp/grid-item/index",
+        "van-row": "@vant/weapp/row/index",
+        "van-col": "@vant/weapp/col/index",
+        "van-cell": "@vant/weapp/cell/index"
 	}
 }

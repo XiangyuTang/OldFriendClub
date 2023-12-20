@@ -231,3 +231,40 @@
 .custom-class {
   color: #000;
 }
+
+.share_icon {
+    position:relative;
+    bottom: 0;
+    margin-left: 270px;
+    margin-bottom: -40px;
+  }
+
+  .share_pop {
+    width: 100%;
+    margin-top: 50px;
+    margin-left: 5px;
+    position:absolute;
+}
+
+.free-btn-bordernone{
+    background: none !important;
+    color: #000 !important;
+  }
+  .free-btn-bordernone::after{
+    border: none;
+  }
+
+  button::after {
+    border-style: none;
+}
+
+button[plain] {
+    border:none; 
+  }
+
+  .share_pop_title {
+    width: 100%;
+    font-size: 25px;
+    margin-left: 36%;
+    position:absolute;
+}

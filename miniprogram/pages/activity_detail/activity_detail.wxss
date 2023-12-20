@@ -50,6 +50,7 @@ page {
   position: absolute;
   bottom: 0;
   margin-left: 290px;
+  margin-bottom: 5px;
   color: #FFFFFF;
 }
 
@@ -232,3 +233,33 @@ page {
   width: auto;
   font-weight: normal;
 }
+
+.share_pop_title {
+    width: 100%;
+    font-size: 25px;
+    margin-left: 36%;
+    position:absolute;
+}
+
+.share_pop {
+    width: 100%;
+    margin-top: 50px;
+    margin-left: 5px;
+    position:absolute;
+}
+
+.free-btn-bordernone{
+    background: none !important;
+    color: #000 !important;
+  }
+  .free-btn-bordernone::after{
+    border: none;
+  }
+
+  button::after {
+    border-style: none;
+}
+
+button[plain] {
+    border:none; 
+  }

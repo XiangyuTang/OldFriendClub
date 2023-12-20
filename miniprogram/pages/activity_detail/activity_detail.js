@@ -1,6 +1,6 @@
 const LoginBiz = require('../../common_biz/login.js')
 import {formatTime} from "../../utils/common.js"
-import {getActivityDetail,signActivity,cancelSignActivity,deleteActivity} from "../../api/apis"
+import {getActivityDetail,signActivity,cancelSignActivity,deleteActivity, generateScheme} from "../../api/apis"
 import { getActivityResult } from "../../utils/server/activity"
 import {hideButton} from "../../components/publish-activity/publish-activity"
 import Dialog from '@vant/weapp/dialog/dialog';
@@ -60,6 +60,7 @@ Page({
     sign_status:"",
     activity_club:{},
     creator_phone:'',
+    showSharePop: false,
 		// user: {
 		// 	open: 0
     // }
@@ -525,11 +526,11 @@ Page({
       var item = res.data.activity_data
 
       res.data.activity_data.activity_start_time_stamp = item.activity_start_time
-      res.data.activity_data.activity_start_time = formatTime(item.activity_start_time*1000,2)
+      res.data.activity_data.activity_start_time = formatTime(item.activity_start_time*1000,3)
       
       res.data.activity_data.activity_end_time_stamp = item.activity_end_time
       if (res.data.activity_data.activity_end_time != 0){
-        res.data.activity_data.activity_end_time = formatTime(item.activity_end_time*1000,2);
+        res.data.activity_data.activity_end_time = formatTime(item.activity_end_time*1000,3);
       }
      
       res.data.activity_data.sign_start_time_stamp = item.sign_start_time
@@ -718,7 +719,83 @@ Page({
   onClickShare(e) {
     console.log(e);
     var pages = getCurrentPages();
-    console.log(pages[pages.length-1])
+    console.log(pages[pages.length-1]);
+    console.log(this.data.activity_id);
+
+    this.onShowSharePop();
+  },
+
+  onShowSharePop() {
+      this.setData({
+        showSharePop: true,
+      })
+  },
+
+  onCloseSharePop() {
+    this.setData({
+      showSharePop: false,
+    })
+  },
+
+  onClickSharePage() {
+      console.log('sharePage')
+      this.onCloseSharePop();
+  },
+
+  assembleShareInfo(scheme) {
+      var shareInfo = this.data.activity.title+'\n'+'时间：'+this.data.activity.activity_start_time+'-'+this.data.activity.activity_end_time+'\n'+'地点：'+this.data.activity.activity_location+'\n'+'组织者：'+this.data.activity.author.nick_name+'\n'+'报名链接：'+scheme;
+      return shareInfo;
+  },
+
+  onCopyInfo() {
+      console.log('copyInfo');
+
+      that = this;
+
+      var pages = getCurrentPages();
+      console.log(pages[pages.length-1]);
+      let pagePath = '/' + pages[pages.length-1].route
+      
+    let data = {
+			token:LoginBiz.getToken(),
+			query:'acid='+this.data.activity_id,
+			path: pagePath
+		}
+		wx.showLoading({
+			title: '加载中',
+		})
+
+    generateScheme(data).then(res=>{
+      wx.hideLoading()
+
+      console.log(res);
+
+      if (res.err_no ===0) {
+          var openLink = res.data
+          wx.setClipboardData({
+            data: this.assembleShareInfo(openLink),
+          })
+      }else {
+        console.log("出错了");
+        console.log(res.err_msg);
+        wx.showToast({
+          title: '获取分享信息失败',
+          duration: 2000,
+          icon: 'none'
+        })
+      }
+      
+		}).catch(err=>{
+			console.log("出错了");
+            console.log(err);
+            wx.showToast({
+                title: '获取分享信息失败',
+                duration: 2000,
+                icon: 'none'
+            })
+    })
+
+      this.onCloseSharePop();
   },
 	/**
 	 * 页面相关事件处理函数--监听用户下拉动作
@@ -727,6 +804,20 @@ Page({
     var options = {"acid":this.data.activity_id};
     this.getActivityDetailData(this.data.activity_id)
 	},
+
+    // 用户分享
+    onShareAppMessage: function () {
+        console.log('share');
+        var pages = getCurrentPages();
+        let pagePath = pages[pages.length-1].route;
+
+        return {
+         title: this.data.activity.title===''?'我加入新活动啦！':this.data.activity.title,
+         desc: this.data.activity.content === ''?'这个活动真的很棒！':this.data.activity.content,
+         path: '/'+pagePath+'?acid='+ this.data.activity_id, // 路径，传递参数到指定页面。
+         imageUrl: this.data.activity.cover_image_url,
+        }
+    },
 
 	/**
 	 * 页面上拉触底事件的处理函数

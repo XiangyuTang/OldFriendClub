@@ -17,7 +17,11 @@
         <van-tag wx:if="{{clubData.audit_status=== -1 || clubData.audit_status=== -2 || clubData.audit_status=== -3}}" type="danger" style="position: relative; bottom: 100%;" >审核未通过</van-tag>
       </view>
 
+    <view class="share_icon">
+        <van-icon name="share-o" size="20px" bind:click="onClickShare" />
+    </view>
     <view class="club-detail-name">{{clubData.club_name}}</view>
+   
     <block wx:if="{{clubData.join_status === 0 || clubData.join_status === 3 || clubData.join_status === 5 || clubData.join_status === 7}}">
       <view  class="club-detail-ability" bindtap="onClubJoin">申请加入</view>
     </block>
@@ -49,7 +53,7 @@
 		</van-popup> -->
   <view class="club-detail-list">
     <scroll-view scroll-y bindscrolltolower="onScrollRefresh" style="height:{{scrollviewHeight}}px">
-      <view wx:for="{{clubList}}">
+      <view wx:for="{{clubList}}" wx:key="_id">
         <view class="club-item {{hideBorder ? '': 'club-item-border'}}" data-acid="{{item.activity_id}}" bindtap="onJumpAct">
           <view class="pic">
             <image class="img" src="{{item.cover_image_url==''?'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/8f7a5758df4d810ff236798a2c103267.jpg':item.cover_image_url}}" mode="aspectFill" />
@@ -88,6 +92,31 @@
 <view wx:if="{{clubData.club_status==1 && (clubData.join_status === 1 || clubData.join_status === 4) }}">
   <publish-activity id="publish-activity" activity_club_id = "{{clubData.club_id}}"></publish-activity>
 </view>
+
+<van-popup show="{{ showSharePop }}" position="bottom" bind:close="onCloseSharePop" custom-style="height: 50%;" round>
+    <view class="share_pop_title">分享社团</view>
+    <!-- <van-grid direction="horizontal" column-num="2">
+  <van-grid-item icon="photo-o" text="文字" />
+  <van-grid-item icon="photo-o" text="文字" />
+  <van-grid-item icon="photo-o" text="文字" />
+</van-grid> -->
+    <van-grid column-num="2" gutter="{{ 30 }}" clickable class="share_pop" >
+
+        <van-grid-item use-slot>
+            <button plain="true" style="width: 60%;height: 60px; background-image:url(../../static/images/icons/Chat-02-512.png); background-image:width(60%); background-image:height(60px); background-size:100% 100%;" open-type="share"> 
+            </button>
+            分享页面
+        </van-grid-item>
+   
+        <van-grid-item use-slot bind:click="onCopyInfo">
+            <image
+            style="width: 60%; height: 60px;"
+            src="../../static/images/icons/Note-Memo-512.png"
+            />
+            复制社团信息
+        </van-grid-item>
+    </van-grid>
+</van-popup>
 
 
 <view>
