@@ -49,7 +49,7 @@ page {
 .share_icon {
   position: absolute;
   bottom: 0;
-  margin-left: 290px;
+  margin-left: 87%;
   margin-bottom: 5px;
   color: #FFFFFF;
 }
@@ -244,7 +244,7 @@ page {
 .share_pop {
     width: 100%;
     margin-top: 50px;
-    margin-left: 5px;
+    margin-left: 1%;
     position:absolute;
 }
 
