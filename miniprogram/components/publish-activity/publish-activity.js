@@ -4,9 +4,11 @@ import {publishActivity,wxGetAddress} from "../../api/apis"
 const LoginBiz = require('../../common_biz/login.js')
 const WxNotificationCenter = require('../../utils/WxNotificationCenter.js')
 import { verifyPhoneNum }from  "../../utils/util"
-import { serverURL } from "../../utils/request.js"
 
 let choose_date_idx = ""
+
+var app = getApp()
+
 Component({
 	/**
 	 * 组件的属性列表
@@ -897,7 +899,7 @@ Component({
     uploadImg(fileUrl) {
       return new Promise((resolve, reject) => {
         wx.uploadFile({
-          url: serverURL + '/api/uploadStream',
+          url: app.globalData.serverURL + '/api/uploadStream',
           // url: 'http://124.220.84.200:5455/api/uploadStream',
           filePath: fileUrl,
           name: "file",

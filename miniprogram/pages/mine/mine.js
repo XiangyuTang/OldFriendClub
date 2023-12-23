@@ -8,7 +8,8 @@ import {
   editUser
 } from "../../utils/server/club";
 import LoginBiz from "../../common_biz/login"
-import { serverURL } from "../../utils/request";
+
+var app = getApp()
 
 Page({
 
@@ -558,7 +559,7 @@ Page({
     });
 
     wx.uploadFile({
-      url: serverURL + '/api/uploadStream',
+      url: app.globalData.serverURL + '/api/uploadStream',
       // url: 'http://124.220.84.200:5455/api/uploadStream',
       filePath: file.file.url,
       name: "file",

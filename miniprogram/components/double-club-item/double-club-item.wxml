@@ -9,7 +9,7 @@
     <view wx:if="{{club.audit_status === 0 || club.audit_status===1}}" class="double-club-item-btn-auditing">审核中</view>
     <view wx:elif="{{club.audit_status=== -1 || club.audit_status=== -2 || club.audit_status=== -3}}" class="double-club-item-btn-reject">审核未通过</view>
     <view wx:else>
-      <view wx:if="{{club.join_status === 0}}" bindtap="onClubJoin" class="double-club-item-btn">申请加入</view>
+      <view wx:if="{{club.join_status === 0 || club.join_status === 5}}" bindtap="onClubJoin" class="double-club-item-btn">申请加入</view>
       <view wx:if="{{club.join_status === 1}}" class="double-club-item-btn disable">已加入</view>
       <view wx:if="{{club.join_status === 2}}" class="double-club-item-btn btn-done">审核中</view>
       <view wx:if="{{club.join_status === 4}}" class="double-club-item-btn btn-done">我创建的</view>
