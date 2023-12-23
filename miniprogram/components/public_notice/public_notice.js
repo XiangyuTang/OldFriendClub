@@ -17,6 +17,7 @@ Component({
     noticeText:'',
     noticeMode:'closeable',
     noticeJumpUrl : '',
+    jumpType: 0,
 	},
 
 	/**
@@ -38,6 +39,7 @@ Component({
               noticeText:res.data.notice_text,
               noticeMode: notice_mode,
               noticeJumpUrl: res.data.notice_jump_url,
+              jumpType: res.data.jump_type,
             })
           }
         } else {
@@ -54,7 +56,7 @@ Component({
 
       if (this.data.noticeJumpUrl != '') {
         wx.navigateTo({
-          url: '../../pages/out_web/out_web?src=' + encodeURIComponent(this.data.noticeJumpUrl),
+          url: '../../pages/out_web/out_web?src=' + encodeURIComponent(this.data.noticeJumpUrl)+"&jump_type="+this.data.jumpType,
         })
       }
     },

@@ -17,18 +17,23 @@ Page({
     bannerConfig:[
       {
         url:"https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/3ff64a2e4f5f288c5dbbc49bd4ca475c.jpg",
-        jump_url:'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20231214232903.jpg',
+        jump_url:'',
+        jump_type: 0,
       },
       {
         url:"https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/c506fcc9a2c14fdc1594e542e4886a10.jpg",
         jump_url:'',
+        jump_type: 0,
       },
       {
-        url:"https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/8f7a5758df4d810ff236798a2c103267.jpg", jump_url:'',
+        url:"https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/8f7a5758df4d810ff236798a2c103267.jpg", 
+        jump_url:'',
+        jump_type: 0,
       },
       {
         url:"https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/2ceadb2e8b9eccf958f6a50f73f51701.png",
         jump_url:'',
+        jump_type: 0,
       }
     ],
 
@@ -359,9 +364,10 @@ Page({
 
     console.log(this.data.bannerConfig[e.currentTarget.dataset.index]);
     var jumpUrl = this.data.bannerConfig[e.currentTarget.dataset.index].jump_url;
+    var jumpType = this.data.bannerConfig[e.currentTarget.dataset.index].jump_type;
     if (jumpUrl != '') {
       wx.navigateTo({
-        url: '../../pages/out_web/out_web?src=' + encodeURIComponent(jumpUrl),
+        url: '../../pages/out_web/out_web?src=' + encodeURIComponent(jumpUrl)+'&jump_type='+jumpType,
       })
     }
   },
@@ -378,6 +384,7 @@ Page({
               banner_list.push({
                 url:res.data.banner_list[i].banner_img_url,
                 jump_url:res.data.banner_list[i].banner_jump_url,
+                jump_type: res.data.banner_list[i].jump_type,
               })
             }
             

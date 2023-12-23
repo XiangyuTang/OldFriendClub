@@ -1,2 +1,12 @@
 <!--pages/out_web/out_web.wxml-->
-<web-view src="{{src}}"> </web-view>
+<view wx:if="{{ jump_type === '0' }}">
+  <web-view src="{{src}}"> </web-view>
+</view>
+<view wx:if="{{ jump_type === '1' }}">
+<scroll-view scroll-y="{{true}}" style="width:100%;height:{{sysheight}}px;">
+     <view class="img-size">
+        <image src="{{src}}" mode="widthFix" class="liucheng-img"></image>
+     </view>
+ </scroll-view>
+
+</view>
