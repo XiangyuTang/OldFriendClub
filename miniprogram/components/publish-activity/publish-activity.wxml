@@ -3,7 +3,7 @@
 <view class="publishActivity" hover-class="btn-hover" hidden="{{hideBtn}}" >
 	<button class="btn" bindtap="onclickPublish"></button>
 	<!-- open-type="contact"  -->
-	<image src="../../static/images/icons/plus.png" mode="aspectFill" class="pic" />
+	<image src="/static/images/icons/plus.png" mode="aspectFill" class="pic" />
 	<view class="line"></view>
 </view>
 
@@ -134,7 +134,7 @@
 							<view class="item" wx:for="{{imgs}}" wx:key="item">
 								<image src="{{item}}" alt=""></image>
 								<view class='delete' bindtap='deleteImg' data-index="{{index}}">
-									<image src="../../static/images/icons/delete.png"></image>
+									<image src="/static/images/icons/delete.png"></image>
 								</view>
 							</view>
 							<view class="last-item" wx:if="{{imgs.length >= 3 ? false : true}}" bindtap="bindUpload">

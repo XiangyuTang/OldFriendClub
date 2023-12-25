@@ -41,8 +41,8 @@ Page({
     clubNoMore: false,
     activityNoMore: false,
 
-    defaultClubIcon:'../../static/images/icons/club.png',
-    defaultClubBackImg:'../../static/images/navicons/photos.png',
+    defaultClubIcon:'/static/images/icons/club.png',
+    defaultClubBackImg:'/static/images/navicons/photos.png',
   },
 
   selectGender(e) {
@@ -245,7 +245,12 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    if (typeof this.getTabBar === 'function' &&
+    this.getTabBar()) {
+    this.getTabBar().setData({
+      active: 3
+    })
+  }
   },
 
   /**

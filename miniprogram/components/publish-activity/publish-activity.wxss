@@ -13,7 +13,7 @@
   height: 100rpx;
   background-color: var(--themeColor);
   position: fixed;
-  bottom: 100rpx;
+  bottom: 140rpx;
   right: 60rpx;
   border-radius: 50%;
   box-shadow: 0 0 50rpx #e18a39;

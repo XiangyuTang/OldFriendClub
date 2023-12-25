@@ -305,7 +305,12 @@ Page({
 	 * 生命周期函数--监听页面显示
 	 */
 	onShow() {
-  
+    if (typeof this.getTabBar === 'function' &&
+    this.getTabBar()) {
+    this.getTabBar().setData({
+      active: 0
+    })
+  }
 	},
 
 	/**
@@ -324,7 +329,14 @@ Page({
 	},
 	//通知处理
 	didNotification: function () {
-		console.log("主页收到其他页面的通知");
+    console.log("主页收到其他页面的通知");
+    this.setData({
+      activatiesArr: [],
+      page_no: 1,
+      isLoading: false,
+		  finishLoading: false,
+    })
+    this.onLoad();
 		// this.onLoad();
 	},
 	/**

@@ -14,7 +14,8 @@
 		"pages/edit_activity_result/edit_activity_result",
 		"pages/out_web/out_web",
 		"pages/sign_activity/sign_activity",
-		"pages/user_notice/user_notice"
+		"pages/user_notice/user_notice",
+		"pages/publish-activity/publish-activity"
 	],
 	"permission": {
 		"scope.userFuzzyLocation": {
@@ -35,6 +36,7 @@
 	},
 	"sitemapLocation": "sitemap.json",
 	"tabBar": {
+		"custom": true,
 		"selectedColor": "#ef851a",
 		"color": "#8a8a8a",
 		"list": [

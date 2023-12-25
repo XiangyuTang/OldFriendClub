@@ -98,7 +98,7 @@
     <van-grid column-num="2" gutter="{{ 30 }}" clickable class="share_pop" >
 
         <van-grid-item use-slot>
-            <button plain="true" style="width: 60%;height: 60px; background-image:url(../../static/images/icons/Chat-02-512.png); background-image:width(60%); background-image:height(60px); background-size:100% 100%;" open-type="share"> 
+            <button plain="true" style="width: 60%;height: 60px; background-image:url(/static/images/icons/Chat-02-512.png); background-image:width(60%); background-image:height(60px); background-size:100% 100%;" open-type="share"> 
             </button>
             分享页面
         </van-grid-item>
@@ -106,7 +106,7 @@
         <van-grid-item use-slot bind:click="onCopyInfo">
             <image
             style="width: 60%; height: 60px;"
-            src="../../static/images/icons/Note-Memo-512.png"
+            src="/static/images/icons/Note-Memo-512.png"
             />
             复制社团信息
         </van-grid-item>

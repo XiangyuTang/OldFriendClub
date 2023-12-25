@@ -131,7 +131,7 @@ App({
   getServerUrl () {
     const DOMAIN = {
         develop: 'http://124.220.84.200:5455', //开发地址
-        trial: 'http://124.220.84.200:5455', // 体验地址
+        trial: 'https://miniprogram.mirthdata.com', // 体验地址
         release: 'https://miniprogram.mirthdata.com', //上线地址
     }
     const ACCOUNT_INFO = wx.getAccountInfoSync() // 获取微信 信息对象
