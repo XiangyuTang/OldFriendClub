@@ -530,6 +530,23 @@ Page({
       wx.hideLoading()
       console.log("活动详情")
       console.log(res);
+
+      if (!res.data.activity_data || res.data.activity_data.activity_id === '') {
+        WxNotificationCenter.postNotificationName('refresh');
+        wx.showToast({
+          title: '活动不存在',
+          duration: 2000,
+          mask: true,
+          complete: function () {
+            setTimeout(() => {
+              wx.navigateTo({
+                url: '/pages/home/home',
+              })
+            }, 2000)
+          }
+        });
+      }
+
       var item = res.data.activity_data
 
       res.data.activity_data.activity_start_time_stamp = item.activity_start_time

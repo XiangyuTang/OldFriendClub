@@ -40,7 +40,7 @@
   <!-- <view class="publishClub" hover-class="btn-hover">
     <button class="btn" bindtap="onclickPublishClub"></button> -->
     <!-- open-type="contact"  -->
-    <!-- <image src="../../static/images/icons/plus.png" mode="aspectFill" class="pic" />
+    <!-- <image src="/static/images/icons/plus.png" mode="aspectFill" class="pic" />
     <view class="line"></view>
   </view> -->
   <!-- <van-dialog use-slot title="创建社团" show="{{ showPublishClub }}" messageAlign="left" closeOnClickOverlay showConfirmButton showCancelButton bind:close="onClose" bind:confirm="confirmPublish" confirmButtonText="创建" customStyle="myvan-dialog" before-close="onBeforeClose">
@@ -55,7 +55,7 @@
               <view class="item" wx:if="{{club_icon === '' ? false : true}}">
                 <image mode="aspectFill" src="{{club_icon}}" alt=""></image>
                 <view class='delete' bindtap='deleteImg' data-img-type="logo">
-                  <image src="../../static/images/icons/delete.png"></image>
+                  <image src="/static/images/icons/delete.png"></image>
                 </view>
               </view>
               <view class="last-item" wx:if="{{club_icon !== '' ? false : true}}" bindtap="bindUpload" data-img-type="logo">
@@ -71,7 +71,7 @@
               <view class="item" wx:if="{{club_back_img === '' ? false : true}}">
                 <image class="img-logo" mode="aspectFill" src="{{club_back_img}}" alt=""></image>
                 <view class='delete' bindtap='deleteImg' data-img-type="background">
-                  <image src="../../static/images/icons/delete.png"></image>
+                  <image src="/static/images/icons/delete.png"></image>
                 </view>
               </view>
               <view class="last-item" wx:if="{{club_back_img !== '' ? false : true}}" bindtap="bindUpload" data-img-type="background">

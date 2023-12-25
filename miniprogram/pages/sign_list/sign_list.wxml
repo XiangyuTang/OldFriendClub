@@ -4,7 +4,7 @@
   <view class="sign_card">
     <van-card
       title="{{applicantList[index].display_name}}"
-      thumb="{{applicantList[index].user_avatar ===''?'../../../../static/images/icons/user.png':applicantList[index].user_avatar}}"
+      thumb="{{applicantList[index].user_avatar ===''?'/static/images/icons/user.png':applicantList[index].user_avatar}}"
     > 
 
       <view slot="desc" wx:if="{{applicantList[index].enroll_status != 4}}">

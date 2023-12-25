@@ -1,9 +1,11 @@
 import LoginBiz from '../common_biz/login'
-import { serverURL } from '../utils/request';
+
 import {wxGetAddress} from '../api/apis'
 
 const serverLoginInterface = '/wxApi/miniProgram/login'
 const refreshTokenInterface = '/login/refreshToken'
+
+var app = getApp();
 
 function getFuzzyLocation() {
     wx.getSetting({
@@ -62,7 +64,7 @@ async function serverLogin(address,city_id) {
                 console.log("用户的code:" + res.code);
 
                 wx.request({
-                    url: serverURL + serverLoginInterface,
+                    url: app.globalData.serverURL + serverLoginInterface,
                     data: {
                         code: res.code,
                         login_address: address,
@@ -99,7 +101,7 @@ async function refreshToken(oldToken) {
   return new Promise(function(resolve, reject) {
           
         wx.request({
-            url: serverURL + refreshTokenInterface,
+            url: app.globalData.serverURL + refreshTokenInterface,
             data: {
               token: oldToken,
             },

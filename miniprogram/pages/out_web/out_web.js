@@ -6,13 +6,28 @@ Page({
 	 */
 	data: {
     src:'',
+    jump_type: '',
+    sysheight: 0,
 	},
 
 	/**
 	 * 生命周期函数--监听页面加载
 	 */
 	onLoad(options) {
-    this.setData({src: decodeURIComponent(options.src)})
+    console.log(options);
+
+    this.setData({
+      src: decodeURIComponent(options.src),
+      jump_type: options.jump_type,
+    });
+
+    wx.getSystemInfo({
+      success: (result) => {
+        this.setData({
+          sysheight: result.windowHeight,
+        })
+      }
+    })
 	},
 
 	/**

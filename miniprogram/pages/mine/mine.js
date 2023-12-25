@@ -8,7 +8,8 @@ import {
   editUser
 } from "../../utils/server/club";
 import LoginBiz from "../../common_biz/login"
-import { serverURL } from "../../utils/request";
+
+var app = getApp()
 
 Page({
 
@@ -40,8 +41,8 @@ Page({
     clubNoMore: false,
     activityNoMore: false,
 
-    defaultClubIcon:'../../static/images/icons/club.png',
-    defaultClubBackImg:'../../static/images/navicons/photos.png',
+    defaultClubIcon:'/static/images/icons/club.png',
+    defaultClubBackImg:'/static/images/navicons/photos.png',
   },
 
   selectGender(e) {
@@ -244,7 +245,12 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    if (typeof this.getTabBar === 'function' &&
+    this.getTabBar()) {
+    this.getTabBar().setData({
+      active: 3
+    })
+  }
   },
 
   /**
@@ -558,7 +564,7 @@ Page({
     });
 
     wx.uploadFile({
-      url: serverURL + '/api/uploadStream',
+      url: app.globalData.serverURL + '/api/uploadStream',
       // url: 'http://124.220.84.200:5455/api/uploadStream',
       filePath: file.file.url,
       name: "file",

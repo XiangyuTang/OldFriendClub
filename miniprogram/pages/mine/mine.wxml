@@ -17,7 +17,7 @@
     <van-tab title="{{tabs}}">
       <view class="club-detail-list">
         <scroll-view wx:if="{{!isLoading && activeTab === 1}}" scroll-y="true" bindscrolltolower="onActivityScrollRefresh" style="height:{{scrollviewHeight}}px">
-          <view wx:for="{{clubList}}">
+          <view wx:for="{{clubList}}" wx:key="index">
             <view class="club-item {{hideBorder ? '': 'club-item-border'}}" data-acid="{{item.activity_id}}" bindtap="onJumpAct">
               <view class="pic">
                 <image class="img" src="{{item.cover_image_url==''?'https://hermes-activity-1259481177.cos.ap-shanghai.myqcloud.com/8f7a5758df4d810ff236798a2c103267.jpg':item.cover_image_url}}" mode="aspectFill" />
@@ -52,7 +52,7 @@
           <view class="no-more" wx:if="{{activityNoMore}}">没有更多了~</view>
         </scroll-view>
         <scroll-view wx:if="{{!isLoading && activeTab === 0}}" scroll-y="true" bindscrolltolower="onScrollRefresh" style="height:{{scrollviewHeight}}px">
-          <view wx:for="{{clubList}}">
+          <view wx:for="{{clubList}}" wx:key="index">
             <view class="club-item {{hideBorder ? '': 'club-item-border'}}" data-clubid="{{item.club_id}}" bindtap="onJumpClub">
               <view class="pic">
                 <image class="img" src="{{item.club_back_img === ''?defaultClubBackImg:item.club_back_img}}" mode="aspectFill" />
@@ -114,7 +114,7 @@
               <view class="item" wx:if="{{userAvatar === '' ? false : true}}">
                 <image mode="aspectFill" src="{{userAvatar}}" alt=""></image>
                 <view class='delete' bindtap='deleteImg' data-img-type="logo">
-                  <image src="../../static/images/icons/delete.png"></image>
+                  <image src="/static/images/icons/delete.png"></image>
                 </view>
               </view>
               <view class="last-item" wx:if="{{userAvatar !== '' ? false : true}}" bindtap="bindUpload" data-img-type="logo">

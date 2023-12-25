@@ -58,8 +58,8 @@ Page({
     ],
     showAction: [],
 
-    defaultClubIcon:'../../static/images/icons/club.png',
-    defaultClubBackImg:'../../static/images/navicons/photos.png',
+    defaultClubIcon:'/static/images/icons/club.png',
+    defaultClubBackImg:'/static/images/navicons/photos.png',
 
     showShare: false,
     shareOptions:[
@@ -300,11 +300,20 @@ Page({
       clubId: clubId
     }).then((res) => {
       if (!res.data.club_data || res.data.club_data.club_id == '') {
+        WxNotificationCenter.postNotificationName('refreshClubList');
         wx.showToast({
           title: '社团不存在！',
-          icon: 'none',
-          duration: 800
-        })
+          duration: 2000,
+          mask: true,
+          complete: function () {
+            setTimeout(() => {
+              wx.navigateTo({
+                url: '/pages/club/club',
+              })
+            }, 2000)
+          }
+        });
+
         return
       }
 
@@ -374,6 +383,7 @@ Page({
     }
   },
   onClose() {},
+
   onJumpAct(e) {
     console.log(e.currentTarget.dataset.acid)
     wx.navigateTo({

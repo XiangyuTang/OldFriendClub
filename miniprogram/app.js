@@ -1,8 +1,13 @@
 App({
   flag: false,
+  globalData: {
+    serverURL: '',
+  },
   async onLaunch (e) {
 		wx.cloud.init()
     this.initcloud()
+
+    this.globalData.serverURL = this.getServerUrl();
   },
   /**
    * 初始化云开发环境（支持环境共享和正常两种模式）
@@ -121,5 +126,19 @@ App({
       }
     }
     return stylecss
-  }
+  },
+
+  getServerUrl () {
+    const DOMAIN = {
+        develop: 'http://124.220.84.200:5455', //开发地址
+        trial: 'https://miniprogram.mirthdata.com', // 体验地址
+        release: 'https://miniprogram.mirthdata.com', //上线地址
+    }
+    const ACCOUNT_INFO = wx.getAccountInfoSync() // 获取微信 信息对象
+    console.log(ACCOUNT_INFO);
+    const ENV_VERSION = ACCOUNT_INFO.miniProgram.envVersion //获取信息 对象的 运行环境标识
+    console.log(ENV_VERSION);
+    const prefix = DOMAIN[ENV_VERSION || 'develop'] //此时是 根据 运行环境判断完的 请求接口地址
+    return prefix;
+  } 
 })

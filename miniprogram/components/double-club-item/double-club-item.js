@@ -26,8 +26,8 @@ Component({
    * 组件的初始数据
    */
   data: {
-    defaultClubIcon:'../../static/images/icons/club.png',
-    defaultClubBackImg:'../../static/images/navicons/photos.png',
+    defaultClubIcon:'/static/images/icons/club.png',
+    defaultClubBackImg:'/static/images/navicons/photos.png',
   },
 
   /**

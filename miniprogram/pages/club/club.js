@@ -7,11 +7,11 @@ import {
   clearHeight
 } from "../../utils/styleCount";
 import LoginBiz from "../../common_biz/login"
-import { serverURL } from "../../utils/request";
 const WxNotificationCenter = require('../../utils/WxNotificationCenter.js');
 
 // pages/club/club.js
 const db = wx.cloud.database()
+var app = getApp()
 
 Page({
 
@@ -198,7 +198,7 @@ Page({
             continue;
           }
           wx.uploadFile({
-            url: serverURL + '/api/uploadStream',
+            url: app.globalData.serverURL + '/api/uploadStream',
             // url: 'http://124.220.84.200:5455/api/uploadStream',
             filePath: tempFilePaths[i],
             name: "file",
@@ -431,7 +431,12 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    if (typeof this.getTabBar === 'function' &&
+    this.getTabBar()) {
+    this.getTabBar().setData({
+      active: 1
+    })
+  }
   },
 
   /**
